@@ -11,7 +11,7 @@
 			   id="checkers.eclipse"
 			   label="Checker Framework"
 			   path="additions"/>
-		 <action
+		<action
 			   class="checkers.eclipse.actions.ClearMarkersAction"
 			   id="checkers.eclipse.removeMarkers"
 			   label="Clear Checkers Markers"
@@ -45,6 +45,12 @@
 			   label="Run IGJ Checker"
 			   menubarPath="checkers.eclipse/additions"
 			   tooltip="Run the IGJ checker on the selected element."/>
+		<action
+			class = "checkers.eclipse.actions.CheckerActions$CurrentAction"
+			id    = "checkers.eclipse.runCheckers.runCurrent"
+			label = "Run selected checkers"
+			menubarPath = "checkers.eclipse/additions"
+			tooltip = "Run currently selected checkers" />
 <!--Commented out because you need an option to pass arguments. Custom checher want -Aquals
 		<action
 			   class="checkers.eclipse.actions.RunCustomCheckerAction"
@@ -91,6 +97,17 @@
 	  </objectContribution>
 
    </extension>
+   
+   <extension point="org.eclipse.ui.preferencePages">
+ 	<page id="CheckerPreferencePage"
+ 		name="Checker"
+    	class="checkers.eclipse.ui.PreferencePage">
+   	</page>
+   </extension>
+   
+   <extension point="org.eclipse.core.runtime.preferences">
+			<initializer class="checkers.eclipse.core.PreferenceInitializer" />
+	</extension>
       
    <extension
 		 id="checkers.eclipse.marker"

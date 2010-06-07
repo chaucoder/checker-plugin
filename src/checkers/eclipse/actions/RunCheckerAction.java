@@ -13,7 +13,7 @@ import checkers.eclipse.util.*;
  */
 public abstract class RunCheckerAction implements IObjectActionDelegate {
 
-    private final String checkerName;
+    private List<String> checkerNames;
 
     /** The current selection. */
     protected IStructuredSelection selection;
@@ -21,13 +21,33 @@ public abstract class RunCheckerAction implements IObjectActionDelegate {
     /** true if this action is used from editor */
     protected boolean usedInEditor;
 
+    protected RunCheckerAction(){
+        super();
+        initClasses();
+    }
+
     protected RunCheckerAction(Class<?> checker) {
         this(checker.getCanonicalName());
     }
 
     protected RunCheckerAction(String checkerName) {
         super();
-        this.checkerName = checkerName;
+        this.checkerNames = new ArrayList<String>();
+        checkerNames.add(checkerName);
+    }
+
+    /**
+     * If constructed with a no-arg constructor, then we get the list of classes to use from the preferences system
+     */
+    private void initClasses(){
+        String checkers = Activator.getDefault().getPreferenceStore()
+                .getString(Activator.CHECKER_CLASS_PREFERENCE);
+
+        if (checkers.equals(Activator.CHECKER_CLASS_ALL)){
+            checkerNames = CheckerActionManager.getInstance().getCheckerNames();
+        }else{
+            checkerNames = checkers;
+        }
     }
 
     @Override

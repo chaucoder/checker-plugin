@@ -1,6 +1,7 @@
 package checkers.eclipse;
 
 import org.eclipse.core.runtime.*;
+import org.eclipse.jface.resource.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
 import org.eclipse.ui.console.*;
@@ -10,7 +11,7 @@ import org.osgi.framework.*;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin {
+public class Activator extends AbstractUIPlugin{
 
     /** Controls debugging of the plugin */
     public static boolean DEBUG = false;
@@ -18,22 +19,29 @@ public class Activator extends AbstractUIPlugin {
     /** The plug-in ID */
     public static final String PLUGIN_ID = "checkers.eclipse";
 
+    // Preference keys
+    /** A key for the checker classes to run */
+    public static final String CHECKER_CLASS_PREFERENCE = "checker_class";
+
+    // Preference values
+    /** A value to indicate all checkers should be run */
+    public static final String CHECKER_CLASS_ALL = "checker_all";
+
     /** The shared instance */
     private static Activator plugin;
 
-    // default constructor is required
-    public Activator() {
-        // empty
-    }
-
-    @Override
-    public void start(BundleContext context) throws Exception {
-        super.start(context);
+    public Activator(){
+        super();
         plugin = this;
     }
 
     @Override
-    public void stop(BundleContext context) throws Exception {
+    public void start(BundleContext context) throws Exception{
+        super.start(context);
+    }
+
+    @Override
+    public void stop(BundleContext context) throws Exception{
         plugin = null;
         super.stop(context);
     }
@@ -43,8 +51,19 @@ public class Activator extends AbstractUIPlugin {
      * 
      * @return the shared instance
      */
-    public static Activator getDefault() {
+    public static Activator getDefault(){
         return plugin;
+    }
+
+    /**
+     * Returns an image descriptor for the image file at the given plug-in relative path
+     * 
+     * @param path
+     *            the path
+     * @return the image descriptor
+     */
+    public static ImageDescriptor getImageDescriptor(String path){
+        return imageDescriptorFromPlugin(PLUGIN_ID, path);
     }
 
     /**
@@ -55,16 +74,17 @@ public class Activator extends AbstractUIPlugin {
      * @param message
      *            message describing how/why the exception occurred
      */
-    public static void logException(Throwable e, String message) {
+    public static void logException(Throwable e, String message){
         getDefault().logMessage(IStatus.ERROR, message, e);
     }
 
-    private void logMessage(int severity, String message, Throwable e) {
-        if (DEBUG) {
-            String status = (severity == IStatus.ERROR) ? "Exception"
+    public void logMessage(int severity, String message, Throwable e){
+        if (DEBUG){
+            String what = (severity == IStatus.ERROR) ? (e != null ? "Exception"
+                    : "Error")
                     : "Warning";
-            System.out.println(status + " in JSR 308 plugin: " + message);
-            if (e != null) {
+            System.out.println(what + " in JSR 308 plugin: " + message);
+            if (e != null){
                 e.printStackTrace();
             }
         }
@@ -74,15 +94,13 @@ public class Activator extends AbstractUIPlugin {
     }
 
     /**
-     * Returns the SWT Shell of the active workbench window or <code>null</code>
-     * if no workbench window is active.
+     * Returns the SWT Shell of the active workbench window or <code>null</code> if no workbench window is active.
      * 
-     * @return the SWT Shell of the active workbench window, or
-     *         <code>null</code> if no workbench window is active
+     * @return the SWT Shell of the active workbench window, or <code>null</code> if no workbench window is active
      */
-    public static Shell getShell() {
+    public static Shell getShell(){
         IWorkbenchWindow window = getActiveWorkbenchWindow();
-        if (window == null) {
+        if (window == null){
             return null;
         }
         return window.getShell();
@@ -91,15 +109,15 @@ public class Activator extends AbstractUIPlugin {
     /**
      * @return active window instance, never null
      */
-    public static IWorkbenchWindow getActiveWorkbenchWindow() {
-        if (Display.getCurrent() != null) {
+    public static IWorkbenchWindow getActiveWorkbenchWindow(){
+        if (Display.getCurrent() != null){
             return getDefault().getWorkbench().getActiveWorkbenchWindow();
         }
         // need to call from UI thread
         final IWorkbenchWindow[] window = new IWorkbenchWindow[1];
         Display.getDefault().syncExec(new Runnable() {
             @Override
-            public void run() {
+            public void run(){
                 window[0] = getDefault().getWorkbench()
                         .getActiveWorkbenchWindow();
             }
@@ -107,18 +125,20 @@ public class Activator extends AbstractUIPlugin {
         return window[0];
     }
 
-    public static MessageConsole findConsole() {
+    public static MessageConsole findConsole(){
         String name = "Checkers Plugins";
         ConsolePlugin plugin = ConsolePlugin.getDefault();
         IConsoleManager conMan = plugin.getConsoleManager();
-        for (IConsole console : conMan.getConsoles()) {
-            if (name.equals(console.getName()))
-                return (MessageConsole) console;
+        IConsole[] existing = conMan.getConsoles();
+        for (IConsole element : existing){
+            if (name.equals(element.getName())){
+                return (MessageConsole) element;
+            }
         }
-
         // no console found, so create a new one
         MessageConsole myConsole = new MessageConsole(name, null);
         conMan.addConsoles(new IConsole[] { myConsole });
         return myConsole;
     }
+
 }
