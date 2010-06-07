@@ -22,9 +22,9 @@ public class CheckerActionManager{
     private final List<String> checkerNames;
 
     private CheckerActionManager(){
-        checkerClasses = new ArrayList<String>();
+        checkerNames = new ArrayList<String>();
         for (Class<?> cls : initialClasses){
-            checkerClasses.add(cls.getCanonicalName());
+            checkerNames.add(cls.getCanonicalName());
         }
     }
 
@@ -47,7 +47,7 @@ public class CheckerActionManager{
      * @return a list of class names
      */
     public List<String> getCheckerNames(){
-        return checkerClasses;
-    }
+        return checkerNames;
+    }    
 
 }

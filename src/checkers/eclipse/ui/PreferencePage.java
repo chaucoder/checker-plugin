@@ -2,14 +2,13 @@ package checkers.eclipse.ui;
 
 import org.eclipse.jface.preference.*;
 import org.eclipse.ui.*;
-import org.eclipse.ui.plugin.*;
-
 import checkers.eclipse.*;
 import checkers.eclipse.actions.*;
 
 public class PreferencePage extends FieldEditorPreferencePage implements
         IWorkbenchPreferencePage{
 
+    // TODO: this should get labels from the manager
     @Override
     protected void createFieldEditors(){
         this.addField(new ComboFieldEditor(Activator.CHECKER_CLASS_PREFERENCE,
@@ -24,8 +23,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements
 
     @Override
     protected IPreferenceStore doGetPreferenceStore(){
-        AbstractUIPlugin plug = Activator.getDefault();
-        return plug.getPreferenceStore();
+        return Activator.getDefault().getPreferenceStore();
     }
 
 }

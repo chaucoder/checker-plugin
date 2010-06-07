@@ -1,11 +1,15 @@
 package checkers.eclipse.actions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.runtime.jobs.*;
 import org.eclipse.jdt.core.*;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.ui.*;
 
+import checkers.eclipse.Activator;
 import checkers.eclipse.util.*;
 
 /**
@@ -13,7 +17,8 @@ import checkers.eclipse.util.*;
  */
 public abstract class RunCheckerAction implements IObjectActionDelegate {
 
-    private List<String> checkerNames;
+    private final String checkerName;
+    private boolean usePrefs;
 
     /** The current selection. */
     protected IStructuredSelection selection;
@@ -23,7 +28,8 @@ public abstract class RunCheckerAction implements IObjectActionDelegate {
 
     protected RunCheckerAction(){
         super();
-        initClasses();
+        this.checkerName = null;
+        this.usePrefs = true;
     }
 
     protected RunCheckerAction(Class<?> checker) {
@@ -32,21 +38,23 @@ public abstract class RunCheckerAction implements IObjectActionDelegate {
 
     protected RunCheckerAction(String checkerName) {
         super();
-        this.checkerNames = new ArrayList<String>();
-        checkerNames.add(checkerName);
+        this.checkerName = checkerName;
+        this.usePrefs = false;
     }
 
     /**
      * If constructed with a no-arg constructor, then we get the list of classes to use from the preferences system
      */
-    private void initClasses(){
+    private List<String> getClassNameFromPrefs(){
         String checkers = Activator.getDefault().getPreferenceStore()
                 .getString(Activator.CHECKER_CLASS_PREFERENCE);
 
         if (checkers.equals(Activator.CHECKER_CLASS_ALL)){
-            checkerNames = CheckerActionManager.getInstance().getCheckerNames();
+            return CheckerActionManager.getInstance().getCheckerNames();
         }else{
-            checkerNames = checkers;
+            List<String> ret = new ArrayList<String>();
+            ret.add(checkers);
+            return ret;
         }
     }
 
@@ -79,7 +87,15 @@ public abstract class RunCheckerAction implements IObjectActionDelegate {
     public void run(IAction action) {
         IJavaProject project = project();
         if (project != null) {
-            Job checkerJob = new CheckerWorker(project, checkerName);
+            Job checkerJob;
+            
+        	// TODO: this should handle the case of multiple checkers
+            if (!usePrefs) {
+                checkerJob = new CheckerWorker(project, checkerName);
+            } else {
+                String name = getClassNameFromPrefs().get(0);
+                checkerJob = new CheckerWorker(project, name);
+            }
             checkerJob.setUser(true);
             checkerJob.setPriority(Job.BUILD);
             checkerJob.setRule(new MutexSchedulingRule());

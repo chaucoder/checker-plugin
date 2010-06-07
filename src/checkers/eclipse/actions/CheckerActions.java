@@ -8,19 +8,15 @@ import checkers.javari.*;
 import checkers.nullness.*;
 
 public class CheckerActions{
-    // TODO: this representation may need to change if custom
-    // checkers are supported
+    // TODO: put these representation details inside of a class
+	// once it is working and let the manager take care of it
     public static final String[][] ACTION_LABELS_AND_NAMES = {
             { "All", Activator.CHECKER_CLASS_ALL },
-            { "Nullness checker", NullnessChecker.class.toString() },
-            { "Interning checker", InterningChecker.class.toString() },
-            { "IGJ checker", IGJChecker.class.toString() },
-            { "Basic checker", BasicChecker.class.toString() },
-            { "Javari checker", JavariChecker.class.toString() } };
-    public static final String[] ACTION_CLASS_NAMES = {
-            Activator.CHECKER_CLASS_ALL, NullnessChecker.class.toString(),
-            JavariChecker.class.toString(), InterningChecker.class.toString(),
-            IGJChecker.class.toString(), BasicChecker.class.toString() };
+            { "Nullness checker", NullnessChecker.class.getCanonicalName() },
+            { "Interning checker", InterningChecker.class.getCanonicalName() },
+            { "IGJ checker", IGJChecker.class.getCanonicalName() },
+            { "Basic checker", BasicChecker.class.getCanonicalName() },
+            { "Javari checker", JavariChecker.class.getCanonicalName() } };
 
     private CheckerActions(){
         throw new AssertionError("not to be instantiated");
