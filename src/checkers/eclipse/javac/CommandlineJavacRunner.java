@@ -23,10 +23,10 @@ public class CommandlineJavacRunner {
 
     public static boolean VERBOSE = true;
 
-    public List<JavacError> callJavac(List<String> fileNames, String processor,
+    public List<JavacError> callJavac(List<String> fileNames, List<String> processors,
             String classpath) {
         try {
-            String[] cmd = options(fileNames, processor, classpath);
+            String[] cmd = options(fileNames, processors, classpath);
             if (VERBOSE)
                 System.out.println(JavaUtils.join("\n", cmd));
 
@@ -50,7 +50,7 @@ public class CommandlineJavacRunner {
         return JavaUtils.join(File.pathSeparator, IMPLICIT_ARGS);
     }
 
-    private String[] options(List<String> fileNames, String processor,
+    private String[] options(List<String> fileNames, List<String> processors,
             String classpath) throws IOException {
         List<String> opts = new ArrayList<String>();
         opts.add(javaVM());
@@ -66,8 +66,21 @@ public class CommandlineJavacRunner {
         opts.add("-proc:only");
         opts.add("-classpath");
         opts.add(classpath(classpath));
+        
+        // Build the processor arguments, comma separated
+        StringBuilder processorStr = new StringBuilder();
+        Iterator<String> itr = processors.iterator();
+        
+        while (itr.hasNext()) {
+            processorStr.append(itr.next());
+            if (itr.hasNext()) {
+                processorStr.append(",");
+            }
+        }
+        
         opts.add("-processor");
-        opts.add(processor);
+        opts.add(processorStr.toString());
+        
         // opts.add("-J-Xms256M");
         // opts.add("-J-Xmx515M");
         opts.addAll(fileNames);

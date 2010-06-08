@@ -15,12 +15,19 @@ import checkers.eclipse.util.Paths.ClasspathBuilder;
 public class CheckerWorker extends Job {
 
     private final IJavaProject project;
-    private final String checkerName;
-
+    private final List<String> checkerNames;
+    
     public CheckerWorker(IJavaProject project, String checkerName) {
         super("Running checker on " + project.getElementName());
         this.project = project;
-        this.checkerName = checkerName;
+        this.checkerNames = new ArrayList<String>();
+        this.checkerNames.add(checkerName);
+    }
+
+    public CheckerWorker(IJavaProject project, List<String> checkerNames) {
+        super("Running checker on " + project.getElementName());
+        this.project = project;
+        this.checkerNames = checkerNames;
     }
 
     @Override
@@ -36,7 +43,7 @@ public class CheckerWorker extends Job {
 
     private void work(IProgressMonitor pm) throws CoreException {
         pm.beginTask(
-                "Running checker " + checkerName + " on "
+                "Running checkers " + checkerNames.toString() + " on "
                         + project.getElementName(), 10);
 
         pm.setTaskName("Removing old markers");
@@ -44,7 +51,7 @@ public class CheckerWorker extends Job {
         pm.worked(1);
 
         pm.setTaskName("Running checker");
-        List<JavacError> callJavac = runChecker(project, checkerName);
+        List<JavacError> callJavac = runChecker(project, checkerNames);
         pm.worked(6);
 
         pm.setTaskName("Updating problem list");
@@ -54,7 +61,7 @@ public class CheckerWorker extends Job {
         pm.done();
     }
 
-    private List<JavacError> runChecker(IJavaProject project, String checkerName)
+    private List<JavacError> runChecker(IJavaProject project, List<String> checkerNames)
             throws CoreException, JavaModelException {
         List<String> javaFileNames = ResourceUtils.sourceFilesOf(project);
         String cp = classPathOf(project);
@@ -62,7 +69,7 @@ public class CheckerWorker extends Job {
         // XXX it is very annoying that we run commandline javac rather than
         // directly. But otherwise there's a classpath hell.
         List<JavacError> callJavac = new CommandlineJavacRunner().callJavac(
-                javaFileNames, checkerName, cp);
+                javaFileNames, checkerNames, cp);
         return callJavac;
     }
 

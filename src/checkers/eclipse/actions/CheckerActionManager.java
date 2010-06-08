@@ -17,8 +17,7 @@ import checkers.nullness.*;
 public class CheckerActionManager{
 
     private final Class<?>[] initialClasses = { NullnessChecker.class,
-            JavariChecker.class, InterningChecker.class, IGJChecker.class,
-            BasicChecker.class };
+            JavariChecker.class, InterningChecker.class, IGJChecker.class};
     private final List<String> checkerNames;
 
     private CheckerActionManager(){

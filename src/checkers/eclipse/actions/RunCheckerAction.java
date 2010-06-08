@@ -93,8 +93,8 @@ public abstract class RunCheckerAction implements IObjectActionDelegate {
             if (!usePrefs) {
                 checkerJob = new CheckerWorker(project, checkerName);
             } else {
-                String name = getClassNameFromPrefs().get(0);
-                checkerJob = new CheckerWorker(project, name);
+                List<String> names = getClassNameFromPrefs();
+                checkerJob = new CheckerWorker(project, names);
             }
             checkerJob.setUser(true);
             checkerJob.setPriority(Job.BUILD);
