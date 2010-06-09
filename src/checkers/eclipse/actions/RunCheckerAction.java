@@ -3,7 +3,7 @@ package checkers.eclipse.actions;
 import java.util.List;
 
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -92,10 +92,13 @@ public abstract class RunCheckerAction implements IObjectActionDelegate
         // do nothing
     }
 
-    private IJavaProject project()
+    private IJavaElement element()
     {
         if (selection != null && !selection.isEmpty())
-            return (IJavaProject) selection.getFirstElement();
+        {
+            return (IJavaElement) selection.getFirstElement();
+        }
+
         return null;
     }
 
@@ -105,20 +108,19 @@ public abstract class RunCheckerAction implements IObjectActionDelegate
     @Override
     public void run(IAction action)
     {
-        IJavaProject project = project();
-        if (project != null)
+        IJavaElement element = element();
+        if (element != null)
         {
             Job checkerJob;
 
-            // TODO: this should handle the case of multiple checkers
             if (!usePrefs)
             {
-                checkerJob = new CheckerWorker(project, checkerName);
+                checkerJob = new CheckerWorker(element, checkerName);
             }
             else
             {
                 List<String> names = getClassNameFromPrefs();
-                checkerJob = new CheckerWorker(project, names);
+                checkerJob = new CheckerWorker(element, names);
             }
             checkerJob.setUser(true);
             checkerJob.setPriority(Job.BUILD);

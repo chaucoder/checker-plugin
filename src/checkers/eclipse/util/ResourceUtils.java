@@ -1,19 +1,37 @@
 package checkers.eclipse.util;
 
-import static checkers.eclipse.util.JavaUtils.*;
-import static org.eclipse.core.resources.IResource.*;
+import static checkers.eclipse.util.JavaUtils.iterable;
+import static org.eclipse.core.resources.IResource.FILE;
+import static org.eclipse.core.resources.IResource.FOLDER;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import org.eclipse.core.resources.*;
-import org.eclipse.core.runtime.*;
-import org.eclipse.jdt.core.*;
-import org.eclipse.jface.viewers.*;
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jface.viewers.IStructuredSelection;
 
-public class ResourceUtils {
+public class ResourceUtils
+{
 
-    private ResourceUtils() {
+    private ResourceUtils()
+    {
         throw new AssertionError("Shouldn't be initialized");
     }
 
@@ -22,7 +40,8 @@ public class ResourceUtils {
      *            workspace relative path
      * @return given path if path is not known in workspace
      */
-    public static IPath relativeToAbsolute(IPath relativePath) {
+    public static IPath relativeToAbsolute(IPath relativePath)
+    {
         IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
         IResource resource = root.findMember(relativePath);
         return (resource != null) ? resource.getLocation() : relativePath;
@@ -34,31 +53,42 @@ public class ResourceUtils {
      * 
      * @return Collection A list of all files to be built.
      */
-    public static List<IResource> collectIncremental(IResourceDelta delta) {
+    public static List<IResource> collectIncremental(IResourceDelta delta)
+    {
         // XXX deleted packages should be considered to remove markers
         List<IResource> result = new ArrayList<IResource>();
         List<IResourceDelta> foldersDelta = new ArrayList<IResourceDelta>();
 
-        for (IResourceDelta childDelta : delta.getAffectedChildren()) {
+        for (IResourceDelta childDelta : delta.getAffectedChildren())
+        {
             IResource child = childDelta.getResource();
-            if (child.isDerived()) {
+            if (child.isDerived())
+            {
                 continue;
             }
             int childType = child.getType();
             int deltaKind = childDelta.getKind();
 
-            if (childType == FILE) {
+            if (childType == FILE)
+            {
                 if ((deltaKind == IResourceDelta.ADDED || deltaKind == IResourceDelta.CHANGED)
-                        && Util.isJavaArtifact(child)) {
+                        && Util.isJavaArtifact(child))
+                {
                     result.add(child);
                 }
-            } else if (childType == FOLDER) {
-                if (deltaKind == IResourceDelta.ADDED) {
+            }
+            else if (childType == FOLDER)
+            {
+                if (deltaKind == IResourceDelta.ADDED)
+                {
                     result.add(child);
-                } else if (deltaKind == IResourceDelta.REMOVED) {
+                }
+                else if (deltaKind == IResourceDelta.REMOVED)
+                {
                     // TODO should just remove markers....
                     IContainer parent = child.getParent();
-                    if (parent instanceof IProject) {
+                    if (parent instanceof IProject)
+                    {
                         // have to recompute entire project if one of root
                         // folders is removed
                         result.clear();
@@ -66,13 +96,16 @@ public class ResourceUtils {
                         return result;
                     }
                     result.add(parent);
-                } else {
+                }
+                else
+                {
                     foldersDelta.add(childDelta);
                 }
             }
         }
 
-        for (IResourceDelta childDelta : foldersDelta) {
+        for (IResourceDelta childDelta : foldersDelta)
+        {
             result.addAll(collectIncremental(childDelta));
         }
         return result;
@@ -86,12 +119,15 @@ public class ResourceUtils {
      *            IResource
      * @return resource object or null
      */
-    public static IResource getResource(Object element) {
-        if (element instanceof IResource) {
+    public static IResource getResource(Object element)
+    {
+        if (element instanceof IResource)
+        {
             return (IResource) element;
         }
 
-        if (element instanceof IAdaptable) {
+        if (element instanceof IAdaptable)
+        {
             IAdaptable adaptable = (IAdaptable) element;
             return (IResource) adaptable.getAdapter(IResource.class);
         }
@@ -116,14 +152,16 @@ public class ResourceUtils {
      *         If project itself was selected, then key is the same as value.
      */
     public static Map<IProject, List<IResource>> getResourcesPerProject(
-            IStructuredSelection structuredSelection) {
+            IStructuredSelection structuredSelection)
+    {
 
         Map<IProject, List<IResource>> projectsMap = new HashMap<IProject, List<IResource>>();
 
         @SuppressWarnings("unchecked")
         Iterable<?> iterable = iterable(structuredSelection.iterator());
 
-        for (Object element : iterable) {
+        for (Object element : iterable)
+        {
             IResource resource = getResource(element);
             mapResource(resource, projectsMap, false);
         }
@@ -135,28 +173,33 @@ public class ResourceUtils {
      * Maps the resource into its project
      */
     private static void mapResource(IResource resource,
-            Map<IProject, List<IResource>> projectsMap, boolean checkJavaProject) {
+            Map<IProject, List<IResource>> projectsMap, boolean checkJavaProject)
+    {
 
-        if (resource.getType() == FILE && !Util.isJavaArtifact(resource)) {
+        if (resource.getType() == FILE && !Util.isJavaArtifact(resource))
+        {
             // Ignore non java files
             return;
         }
 
         IProject project = resource.getProject();
-        if (checkJavaProject && !Util.isJavaProject(project)) {
+        if (checkJavaProject && !Util.isJavaProject(project))
+        {
             // non java projects: can happen only for changesets
             return;
         }
 
         List<IResource> resources = projectsMap.get(project);
-        if (resources == null) {
+        if (resources == null)
+        {
             resources = new ArrayList<IResource>();
             projectsMap.put(project, resources);
         }
 
         // do not need to check for duplicates, cause user cannot select
         // the same element twice
-        if (!containsParents(resources, resource)) {
+        if (!containsParents(resources, resource))
+        {
             resources.add(resource);
         }
     }
@@ -168,11 +211,14 @@ public class ResourceUtils {
      *         candidate
      */
     private static boolean containsParents(List<IResource> resources,
-            IResource candidate) {
+            IResource candidate)
+    {
 
         IPath location = candidate.getLocation();
-        for (IResource resource : resources) {
-            if (resource.getType() == FILE) {
+        for (IResource resource : resources)
+        {
+            if (resource.getType() == FILE)
+            {
                 continue;
             }
 
@@ -183,15 +229,18 @@ public class ResourceUtils {
         return false;
     }
 
-    public static IWorkspaceRoot workspaceRoot() {
+    public static IWorkspaceRoot workspaceRoot()
+    {
         return ResourcesPlugin.getWorkspace().getRoot();
     }
 
-    public static List<String> sourceFilesOf(IJavaProject project)
-            throws CoreException {
+    public static List<String> sourceFilesOf(IJavaElement project)
+            throws CoreException
+    {
         final List<String> fileNames = new ArrayList<String>();
 
-        for (ICompilationUnit cu : Util.getAllCompilationUnits(project)) {
+        for (ICompilationUnit cu : Util.getAllCompilationUnits(project))
+        {
             fileNames.add(cu.getResource().getLocation().toOSString());
         }
         return fileNames;
@@ -202,7 +251,8 @@ public class ResourceUtils {
      * 
      * Returns null if the file isn't found.
      */
-    public static IResource getFile(IJavaProject jProject, File file) {
+    public static IResource getFile(IJavaProject jProject, File file)
+    {
         IProject project = jProject.getProject();
         IPath filePath = Path.fromOSString(file.getPath());
         int segCount = project.getLocation().segmentCount();
@@ -213,7 +263,8 @@ public class ResourceUtils {
     /**
      * Returns the path of the output directory of the project
      */
-    public static String outputLocation(IClasspathEntry cp, IJavaProject project) {
+    public static String outputLocation(IClasspathEntry cp, IJavaProject project)
+    {
         // TODO: should this be project.getOutputLocation()
         IPath out = cp.getOutputLocation();
 

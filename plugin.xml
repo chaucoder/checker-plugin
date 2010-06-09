@@ -6,7 +6,7 @@
 		 point="org.eclipse.ui.popupMenus">
 	  <objectContribution
 			id="checkers.eclipse.JavaElementActions"
-			objectClass="org.eclipse.jdt.core.IJavaProject">
+			objectClass="org.eclipse.jdt.core.IJavaElement">
 		 <menu
 			   id="checkers.eclipse"
 			   label="Checker Framework"
