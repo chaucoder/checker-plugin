@@ -101,7 +101,7 @@
    <extension point="org.eclipse.ui.preferencePages">
  	<page id="CheckerPreferencePage"
  		name="Checker"
-    	class="checkers.eclipse.ui.PreferencePage">
+    	class="checkers.eclipse.ui.CheckerPreferencePage">
    	</page>
    </extension>
    
