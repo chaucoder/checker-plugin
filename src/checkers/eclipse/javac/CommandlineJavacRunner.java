@@ -14,7 +14,8 @@ import checkers.eclipse.util.*;
 /**
  * Runs the compiler and parses the output.
  */
-public class CommandlineJavacRunner {
+public class CommandlineJavacRunner
+{
     public static final String CHECKERS_LOCATION = "lib/checkers.jar";
     public static final String JAVAC_LOCATION = "lib/javac.jar";
     public static final List<String> IMPLICIT_ARGS = Arrays.asList(
@@ -23,9 +24,11 @@ public class CommandlineJavacRunner {
 
     public static boolean VERBOSE = true;
 
-    public List<JavacError> callJavac(List<String> fileNames, List<String> processors,
-            String classpath) {
-        try {
+    public List<JavacError> callJavac(List<String> fileNames,
+            List<String> processors, String classpath)
+    {
+        try
+        {
             String[] cmd = options(fileNames, processors, classpath);
             if (VERBOSE)
                 System.out.println(JavaUtils.join("\n", cmd));
@@ -39,19 +42,22 @@ public class CommandlineJavacRunner {
                 out.println(result);
 
             return JavacError.parse(result);
-        } catch (IOException e) {
+        }catch (IOException e)
+        {
             Activator.logException(e, "Error calling javac");
             return null;
         }
     }
 
     @SuppressWarnings("unused")
-    private String implicitAnnotations() {
+    private String implicitAnnotations()
+    {
         return JavaUtils.join(File.pathSeparator, IMPLICIT_ARGS);
     }
 
     private String[] options(List<String> fileNames, List<String> processors,
-            String classpath) throws IOException {
+            String classpath) throws IOException
+    {
         List<String> opts = new ArrayList<String>();
         opts.add(javaVM());
         opts.add("-ea:com.sun.tools");
@@ -66,37 +72,42 @@ public class CommandlineJavacRunner {
         opts.add("-proc:only");
         opts.add("-classpath");
         opts.add(classpath(classpath));
-        
+
         // Build the processor arguments, comma separated
         StringBuilder processorStr = new StringBuilder();
         Iterator<String> itr = processors.iterator();
-        
-        while (itr.hasNext()) {
+
+        while (itr.hasNext())
+        {
             processorStr.append(itr.next());
-            if (itr.hasNext()) {
+            if (itr.hasNext())
+            {
                 processorStr.append(",");
             }
         }
-        
+
         opts.add("-processor");
         opts.add(processorStr.toString());
-        
+
         // opts.add("-J-Xms256M");
         // opts.add("-J-Xmx515M");
         opts.addAll(fileNames);
         return opts.toArray(new String[opts.size()]);
     }
 
-    private String javaVM() {
+    private String javaVM()
+    {
         String sep = System.getProperty("file.separator");
         return System.getProperty("java.home") + sep + "bin" + sep + "java";
     }
 
-    private String classpath(String classpath) {
+    private String classpath(String classpath)
+    {
         return classpath;
     }
 
-    private String javacJARlocation() throws IOException {
+    private String javacJARlocation() throws IOException
+    {
         Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
 
         Path javacJAR = new Path(JAVAC_LOCATION);
@@ -109,15 +120,18 @@ public class CommandlineJavacRunner {
     // must be on the classpath anyway.
     // XXX The problem is what to do if the checkers.jar on the classpath is
     // different from the one in the plugin.
-    public static String checkersJARlocation() {
+    public static String checkersJARlocation()
+    {
         Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
 
         Path checkersJAR = new Path(CHECKERS_LOCATION);
         URL checkersJarURL;
-        try {
+        try
+        {
             checkersJarURL = FileLocator.toFileURL(FileLocator.find(bundle,
                     checkersJAR, null));
-        } catch (IOException e) {
+        }catch (IOException e)
+        {
             // TODO Auto-generated catch block
             e.printStackTrace();
             return "";

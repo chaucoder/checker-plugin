@@ -1,5 +1,8 @@
 package checkers.eclipse.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
@@ -57,7 +60,42 @@ public class CheckerPreferencePage extends PreferencePage implements
             item.setText(label);
         }
 
+        initValues();
+
         return tableComposite;
     }
 
+    /**
+     * Initialize the values in the table to the preference values
+     */
+    private void initValues()
+    {
+        IPreferenceStore store = doGetPreferenceStore();
+        List<TableItem> selected = new ArrayList<TableItem>();
+
+        for (TableItem item : table.getItems())
+        {
+            if (store.getBoolean(item.getText()))
+            {
+                selected.add(item);
+                item.setChecked(true);
+            }
+        }
+    }
+
+    public boolean performOk()
+    {
+        IPreferenceStore store = doGetPreferenceStore();
+
+        for (TableItem item : table.getItems())
+        {
+            // TODO: make sure uninitialized or removed checkers
+            // won't screw this up
+            store.setValue(item.getText(), item.getChecked());
+        }
+
+        store.setValue(Activator.PREF_CHECKER_PREFS_SET, true);
+
+        return true;
+    }
 }

@@ -1,25 +1,23 @@
 package checkers.eclipse.core;
 
-import org.eclipse.core.runtime.preferences.*;
-import org.eclipse.jface.preference.*;
+import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
+import org.eclipse.jface.preference.IPreferenceStore;
 
-import checkers.eclipse.*;
+import checkers.eclipse.Activator;
 
-public class PreferenceInitializer extends AbstractPreferenceInitializer{
+public class PreferenceInitializer extends AbstractPreferenceInitializer
+{
 
-    public PreferenceInitializer(){
+    public PreferenceInitializer()
+    {
         // TODO Auto-generated constructor stub
     }
 
     @Override
-    public void initializeDefaultPreferences(){
-        // TODO: using default scope temporarily
-        // IEclipsePreferences node = new DefaultScope().getNode(Activator.PLUGIN_ID);
-        // node.put(Activator.CHECKER_CLASS_PREFERENCE, Activator.CHECKER_CLASS_ALL);
-
+    public void initializeDefaultPreferences()
+    {
         IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
-        prefs.setDefault(Activator.CHECKER_CLASS_PREFERENCE,
-                Activator.CHECKER_CLASS_ALL);
+        prefs.setDefault(Activator.PREF_CHECKER_PREFS_SET, false);
     }
 
 }

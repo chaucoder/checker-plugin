@@ -1,17 +1,23 @@
 package checkers.eclipse;
 
-import org.eclipse.core.runtime.*;
-import org.eclipse.jface.resource.*;
-import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.*;
-import org.eclipse.ui.console.*;
-import org.eclipse.ui.plugin.*;
-import org.osgi.framework.*;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.console.ConsolePlugin;
+import org.eclipse.ui.console.IConsole;
+import org.eclipse.ui.console.IConsoleManager;
+import org.eclipse.ui.console.MessageConsole;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin{
+public class Activator extends AbstractUIPlugin
+{
 
     /** Controls debugging of the plugin */
     public static boolean DEBUG = false;
@@ -20,28 +26,27 @@ public class Activator extends AbstractUIPlugin{
     public static final String PLUGIN_ID = "checkers.eclipse";
 
     // Preference keys
-    /** A key for the checker classes to run */
-    public static final String CHECKER_CLASS_PREFERENCE = "checker_class";
-
-    // Preference values
-    /** A value to indicate all checkers should be run */
-    public static final String CHECKER_CLASS_ALL = "checker_all";
+    /** A key for determining if individual class prefs should be checked */
+    public static final String PREF_CHECKER_PREFS_SET = "checker_prefs";
 
     /** The shared instance */
     private static Activator plugin;
 
-    public Activator(){
+    public Activator()
+    {
         super();
         plugin = this;
     }
 
     @Override
-    public void start(BundleContext context) throws Exception{
+    public void start(BundleContext context) throws Exception
+    {
         super.start(context);
     }
 
     @Override
-    public void stop(BundleContext context) throws Exception{
+    public void stop(BundleContext context) throws Exception
+    {
         plugin = null;
         super.stop(context);
     }
@@ -51,18 +56,21 @@ public class Activator extends AbstractUIPlugin{
      * 
      * @return the shared instance
      */
-    public static Activator getDefault(){
+    public static Activator getDefault()
+    {
         return plugin;
     }
 
     /**
-     * Returns an image descriptor for the image file at the given plug-in relative path
+     * Returns an image descriptor for the image file at the given plug-in
+     * relative path
      * 
      * @param path
      *            the path
      * @return the image descriptor
      */
-    public static ImageDescriptor getImageDescriptor(String path){
+    public static ImageDescriptor getImageDescriptor(String path)
+    {
         return imageDescriptorFromPlugin(PLUGIN_ID, path);
     }
 
@@ -74,17 +82,21 @@ public class Activator extends AbstractUIPlugin{
      * @param message
      *            message describing how/why the exception occurred
      */
-    public static void logException(Throwable e, String message){
+    public static void logException(Throwable e, String message)
+    {
         getDefault().logMessage(IStatus.ERROR, message, e);
     }
 
-    public void logMessage(int severity, String message, Throwable e){
-        if (DEBUG){
+    public void logMessage(int severity, String message, Throwable e)
+    {
+        if (DEBUG)
+        {
             String what = (severity == IStatus.ERROR) ? (e != null ? "Exception"
                     : "Error")
                     : "Warning";
             System.out.println(what + " in JSR 308 plugin: " + message);
-            if (e != null){
+            if (e != null)
+            {
                 e.printStackTrace();
             }
         }
@@ -94,13 +106,17 @@ public class Activator extends AbstractUIPlugin{
     }
 
     /**
-     * Returns the SWT Shell of the active workbench window or <code>null</code> if no workbench window is active.
+     * Returns the SWT Shell of the active workbench window or <code>null</code>
+     * if no workbench window is active.
      * 
-     * @return the SWT Shell of the active workbench window, or <code>null</code> if no workbench window is active
+     * @return the SWT Shell of the active workbench window, or
+     *         <code>null</code> if no workbench window is active
      */
-    public static Shell getShell(){
+    public static Shell getShell()
+    {
         IWorkbenchWindow window = getActiveWorkbenchWindow();
-        if (window == null){
+        if (window == null)
+        {
             return null;
         }
         return window.getShell();
@@ -109,15 +125,19 @@ public class Activator extends AbstractUIPlugin{
     /**
      * @return active window instance, never null
      */
-    public static IWorkbenchWindow getActiveWorkbenchWindow(){
-        if (Display.getCurrent() != null){
+    public static IWorkbenchWindow getActiveWorkbenchWindow()
+    {
+        if (Display.getCurrent() != null)
+        {
             return getDefault().getWorkbench().getActiveWorkbenchWindow();
         }
         // need to call from UI thread
         final IWorkbenchWindow[] window = new IWorkbenchWindow[1];
-        Display.getDefault().syncExec(new Runnable() {
+        Display.getDefault().syncExec(new Runnable()
+        {
             @Override
-            public void run(){
+            public void run()
+            {
                 window[0] = getDefault().getWorkbench()
                         .getActiveWorkbenchWindow();
             }
@@ -125,13 +145,16 @@ public class Activator extends AbstractUIPlugin{
         return window[0];
     }
 
-    public static MessageConsole findConsole(){
+    public static MessageConsole findConsole()
+    {
         String name = "Checkers Plugins";
         ConsolePlugin plugin = ConsolePlugin.getDefault();
         IConsoleManager conMan = plugin.getConsoleManager();
         IConsole[] existing = conMan.getConsoles();
-        for (IConsole element : existing){
-            if (name.equals(element.getName())){
+        for (IConsole element : existing)
+        {
+            if (name.equals(element.getName()))
+            {
                 return (MessageConsole) element;
             }
         }
