@@ -108,6 +108,29 @@
    <extension point="org.eclipse.core.runtime.preferences">
 			<initializer class="checkers.eclipse.core.PreferenceInitializer" />
 	</extension>
+	
+	<extension 
+   	id="buildnature" 
+   	name="Checker Build Nature" 
+   	point="org.eclipse.core.resources.natures"> 
+   	  <runtime> 
+         <run class="checkers.eclipse.natures.CheckerBuildNature"/> 
+      </runtime> 
+      <builder id="checkers.eclipse.checkerbuilder"/>
+      <requires-nature id="org.eclipse.jdt.core.javanature"/>
+   </extension> 
+   
+	<extension 
+         id="checkerbuilder" 
+         name="Checker Builder" 
+         point="org.eclipse.core.resources.builders">
+      <builder hasNature="true">
+         <run class="checkers.eclipse.builder.CheckerBuilder">
+            <parameter name="optimize" value="true"/>
+            <parameter name="comment" value="CheckerBuilder"/>
+         </run>
+      </builder>
+   </extension>
       
    <extension
 		 id="checkers.eclipse.marker"

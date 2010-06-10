@@ -27,22 +27,60 @@ import checkers.eclipse.util.Paths.ClasspathBuilder;
 public class CheckerWorker extends Job
 {
 
-    private final IJavaElement element;
+    private final IJavaProject project;
     private final List<String> checkerNames;
+    private List<String> sourceFiles;
+
+    /**
+     * This constructor is intended for use from an incremental builder that has
+     * a list of updated source files to check
+     * 
+     * @param project
+     * @param sourceFiles
+     * @param checkerNames
+     */
+    public CheckerWorker(IJavaProject project, List<String> sourceFiles,
+            List<String> checkerNames)
+    {
+        super("Running checker on " + sourceFiles.toString());
+        this.project = project;
+        this.sourceFiles = sourceFiles;
+        this.checkerNames = checkerNames;
+    }
 
     public CheckerWorker(IJavaElement element, String checkerName)
     {
         super("Running checker on " + element.getElementName());
-        this.element = element;
+        this.project = element.getJavaProject();
         this.checkerNames = new ArrayList<String>();
         this.checkerNames.add(checkerName);
+
+        try
+        {
+            this.sourceFiles = ResourceUtils.sourceFilesOf(element);
+        }catch (CoreException e)
+        {
+            // TODO: Better error handling here, right now the
+            // runner just assumes nothing to do if empty
+            this.sourceFiles = new ArrayList<String>();
+        }
     }
 
     public CheckerWorker(IJavaElement element, List<String> checkerNames)
     {
         super("Running checker on " + element.getElementName());
-        this.element = element;
+        this.project = element.getJavaProject();
         this.checkerNames = checkerNames;
+
+        try
+        {
+            this.sourceFiles = ResourceUtils.sourceFilesOf(element);
+        }catch (CoreException e)
+        {
+            // TODO: Better error handling here, right now the
+            // runner just assumes nothing to do if empty
+            this.sourceFiles = new ArrayList<String>();
+        }
     }
 
     @Override
@@ -62,33 +100,31 @@ public class CheckerWorker extends Job
     private void work(IProgressMonitor pm) throws CoreException
     {
         pm.beginTask("Running checkers " + checkerNames.toString() + " on "
-                + element.getElementName(), 10);
+                + sourceFiles.toString(), 10);
 
         pm.setTaskName("Removing old markers");
-        MarkerUtil.removeMarkers(element.getJavaProject().getResource());
+        MarkerUtil.removeMarkers(project.getResource());
         pm.worked(1);
 
         pm.setTaskName("Running checker");
-        List<JavacError> callJavac = runChecker(element, checkerNames);
+        List<JavacError> callJavac = runChecker();
         pm.worked(6);
 
         pm.setTaskName("Updating problem list");
-        markErrors(element.getJavaProject(), callJavac);
+        markErrors(project, callJavac);
         pm.worked(3);
 
         pm.done();
     }
 
-    private List<JavacError> runChecker(IJavaElement element,
-            List<String> checkerNames) throws CoreException, JavaModelException
+    private List<JavacError> runChecker() throws JavaModelException
     {
-        List<String> javaFileNames = ResourceUtils.sourceFilesOf(element);
-        String cp = classPathOf(element.getJavaProject());
+        String cp = classPathOf(project);
 
         // XXX it is very annoying that we run commandline javac rather than
         // directly. But otherwise there's a classpath hell.
         List<JavacError> callJavac = new CommandlineJavacRunner().callJavac(
-                javaFileNames, checkerNames, cp);
+                sourceFiles, checkerNames, cp);
         return callJavac;
     }
 
