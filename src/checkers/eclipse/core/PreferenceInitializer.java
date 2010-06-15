@@ -18,6 +18,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
     {
         IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
         prefs.setDefault(Activator.PREF_CHECKER_PREFS_SET, false);
+        prefs.setDefault(Activator.PREF_CHECKER_ARGS, "");
     }
 
 }

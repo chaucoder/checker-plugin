@@ -1,15 +1,22 @@
 package checkers.eclipse.javac;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
-import org.eclipse.core.runtime.*;
-import org.eclipse.ui.console.*;
-import org.osgi.framework.*;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.ui.console.MessageConsoleStream;
+import org.osgi.framework.Bundle;
 
-import checkers.eclipse.*;
-import checkers.eclipse.util.*;
+import checkers.eclipse.Activator;
+import checkers.eclipse.util.Command;
+import checkers.eclipse.util.JavaUtils;
 
 /**
  * Runs the compiler and parses the output.
@@ -89,9 +96,24 @@ public class CommandlineJavacRunner
         opts.add("-processor");
         opts.add(processorStr.toString());
 
+        // add options from preferences
+        String argStr = Activator.getDefault().getPreferenceStore().getString(
+                Activator.PREF_CHECKER_ARGS);
+
+        if (!argStr.isEmpty())
+        {
+            String[] prefOpts = argStr.split("\\s+");
+
+            for (String opt : prefOpts)
+            {
+                opts.add(opt);
+            }
+        }
+
         // opts.add("-J-Xms256M");
         // opts.add("-J-Xmx515M");
         opts.addAll(fileNames);
+
         return opts.toArray(new String[opts.size()]);
     }
 
