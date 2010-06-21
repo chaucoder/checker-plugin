@@ -2,9 +2,6 @@ package checkers.eclipse.actions;
 
 import java.util.List;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jface.action.IAction;
@@ -15,7 +12,6 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
 import checkers.eclipse.Activator;
-import checkers.eclipse.natures.CheckerBuildNature;
 import checkers.eclipse.util.MutexSchedulingRule;
 
 /**
@@ -113,7 +109,6 @@ public abstract class RunCheckerAction implements IObjectActionDelegate
     public void run(IAction action)
     {
         IJavaElement element = element();
-        setNature(element);
 
         if (element != null)
         {
@@ -135,44 +130,4 @@ public abstract class RunCheckerAction implements IObjectActionDelegate
         }
     }
 
-    private void setNature(IJavaElement element)
-    {
-        // TODO: Should this initialization be done here or
-        // upon plugin load or what?
-
-        IProject project = element.getJavaProject().getProject();
-        IProjectDescription desc;
-        try
-        {
-            desc = project.getDescription();
-        }catch (CoreException e1)
-        {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-            return;
-        }
-        String[] natures = desc.getNatureIds();
-
-        for (String nature : natures)
-        {
-            if (CheckerBuildNature.NATURE_ID.equals(nature))
-            {
-                return;
-            }
-        }
-
-        String[] newNatures = new String[natures.length + 1];
-        System.arraycopy(natures, 0, newNatures, 0, natures.length);
-        newNatures[newNatures.length - 1] = CheckerBuildNature.NATURE_ID;
-
-        desc.setNatureIds(newNatures);
-        try
-        {
-            project.setDescription(desc, null);
-        }catch (CoreException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
 }

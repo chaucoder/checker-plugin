@@ -17,6 +17,12 @@
 			   label="Clear Checkers Markers"
 			   menubarPath="checkers.eclipse/additions"
 			   tooltip="Removes all Checker Framework markers from the selected element."/>
+		<action
+			   class="checkers.eclipse.actions.ConvertProjectAction"
+			   id="checkers.eclipse.convertProject"
+			   label="Convert to Checker Project"
+			   menubarPath="checkers.eclipse/additions"
+			   tooltip="Adds a Checker Nature to this project to enable autobuild."/>
 
 		<action
 			   class="checkers.eclipse.actions.CheckerActions$JavariAction"
