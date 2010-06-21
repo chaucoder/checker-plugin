@@ -7,23 +7,12 @@
 	  <objectContribution
 			id="checkers.eclipse.JavaElementActions"
 			objectClass="org.eclipse.jdt.core.IJavaElement">
-		 <menu
+		<menu
 			   id="checkers.eclipse"
 			   label="Checker Framework"
-			   path="additions"/>
-		<action
-			   class="checkers.eclipse.actions.ClearMarkersAction"
-			   id="checkers.eclipse.removeMarkers"
-			   label="Clear Checkers Markers"
-			   menubarPath="checkers.eclipse/additions"
-			   tooltip="Removes all Checker Framework markers from the selected element."/>
-		<action
-			   class="checkers.eclipse.actions.ConvertProjectAction"
-			   id="checkers.eclipse.convertProject"
-			   label="Convert to Checker Project"
-			   menubarPath="checkers.eclipse/additions"
-			   tooltip="Adds a Checker Nature to this project to enable autobuild."/>
-
+			   path="additions">
+			   <separator name="main"/> 
+		</menu>
 		<action
 			   class="checkers.eclipse.actions.CheckerActions$JavariAction"
 			   id="checkers.eclipse.runCheckers.javari"
@@ -52,11 +41,24 @@
 			   menubarPath="checkers.eclipse/additions"
 			   tooltip="Run the IGJ checker on the selected element."/>
 		<action
+			   class="checkers.eclipse.actions.ConvertProjectAction"
+			   id="checkers.eclipse.convertProject"
+			   label="Convert to Checker Project"
+			   menubarPath="checkers.eclipse/main"
+			   tooltip="Adds a Checker Nature to this project to enable autobuild."/>
+	    <action
+			   class="checkers.eclipse.actions.ClearMarkersAction"
+			   id="checkers.eclipse.removeMarkers"
+			   label="Clear Checkers Markers"
+			   menubarPath="checkers.eclipse/main"
+			   tooltip="Removes all Checker Framework markers from the selected element."/>
+		<action
 			class = "checkers.eclipse.actions.CheckerActions$CurrentAction"
 			id    = "checkers.eclipse.runCheckers.runCurrent"
 			label = "Run selected checkers"
-			menubarPath = "checkers.eclipse/additions"
+			menubarPath = "checkers.eclipse/main"
 			tooltip = "Run currently selected checkers" />
+			
 <!--Commented out because you need an option to pass arguments. Custom checher want -Aquals
 		<action
 			   class="checkers.eclipse.actions.RunCustomCheckerAction"
@@ -71,9 +73,10 @@
 			objectClass="org.eclipse.core.resources.IProject"
 			id="checkers.eclipse.NavigatorActions">
 		 <menu
-			   id="checkers.eclipse"
-			   label="Checker Framework"
-			   path="additions"/>
+         id="checkers.eclipse"
+         label="Checker Framework"
+         path="additions">
+   </menu>
 		 <action
 			   class="checkers.eclipse.actions.ClearMarkersAction"
 			   id="checkers.eclipse.removeMarkers"
