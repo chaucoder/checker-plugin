@@ -15,19 +15,35 @@ import com.sun.source.util.*;
 import com.sun.tools.javac.api.*;
 import com.sun.tools.javac.file.*;
 
+/**
+ * This class is used to run the checker from the Sun Compiler API rather
+ * than using the commandline.
+ * 
+ * @author asumu
+ */
 public class JavacRunner{
-    public static final String CHECKERS_LOCATION = "lib/checkers/checkers.jar";
-    public static final String JAVAC_LOCATION = "lib/langtools/binary/javac.jar";
+    public static final String CHECKERS_LOCATION = "lib/checkers.jar";
+    public static final String JAVAC_LOCATION = "lib/javac.jar";
     public static final List<String> IMPLICIT_ARGS = Arrays.asList(
             "checkers.nullness.quals.*", "checkers.igj.quals.*",
             "checkers.javari.quals.*", "checkers.interning.quals.*");
 
-    DiagnosticCollector<JavaFileObject> collector;
+    private DiagnosticCollector<JavaFileObject> collector;
 
     public JavacRunner(){
         collector = new DiagnosticCollector<JavaFileObject>();
     }
 
+    /**
+     * Runs the compiler on the selected files using the given processor
+     * 
+     * @param fileNames
+     * @param processor
+     * @param classpath
+     * 
+     * TODO: adapt to the multiple processor setup used for the commandline
+     * version of this class
+     */
     public void run(List<String> fileNames, String processor, String classpath){
         Iterable<String> opts;
 
