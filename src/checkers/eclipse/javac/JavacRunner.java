@@ -44,11 +44,11 @@ public class JavacRunner{
      * TODO: adapt to the multiple processor setup used for the commandline
      * version of this class
      */
-    public void run(List<String> fileNames, String processor, String classpath){
+    public void run(List<String> fileNames, List<String> processors, String classpath){
         Iterable<String> opts;
 
         try{
-            opts = getOptions(processor, classpath);
+            opts = getOptions(processors, classpath);
 
             // JavaCompiler compiler = ServiceLoader.load(JavaCompiler.class).iterator().next();
             // JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -69,7 +69,7 @@ public class JavacRunner{
         }
     }
 
-    private Iterable<String> getOptions(String processor, String classpath)
+    private Iterable<String> getOptions(List<String> processors, String classpath)
             throws IOException{
         List<String> opts = new ArrayList<String>();
         opts.add("-verbose");
@@ -78,8 +78,23 @@ public class JavacRunner{
         opts.add("-Xbootclasspath/p:" + javacJARLocation());
         // opts.add("-jar");
         // opts.add(javacJARLocation());
+        
+        // Build the processor arguments, comma separated
+        StringBuilder processorStr = new StringBuilder();
+        Iterator<String> itr = processors.iterator();
+
+        while (itr.hasNext())
+        {
+            processorStr.append(itr.next());
+            if (itr.hasNext())
+            {
+                processorStr.append(",");
+            }
+        }
+        
         opts.add("-processor");
-        opts.add(processor);
+        opts.add(processorStr.toString());
+        
         opts.add("-cp");
         opts.add(classpath);
 
