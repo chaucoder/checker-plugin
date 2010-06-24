@@ -1,0 +1,164 @@
+package checkers.eclipse.javac;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.ui.console.MessageConsoleStream;
+import org.osgi.framework.Bundle;
+
+import checkers.eclipse.Activator;
+import checkers.eclipse.util.Command;
+import checkers.eclipse.util.JavaUtils;
+
+/**
+ * Runs the compiler and parses the output.
+ */
+public class CommandlineJavacRunner
+{
+    public static final String CHECKERS_LOCATION = "lib/checkers.jar";
+    public static final String JAVAC_LOCATION = "lib/javac.jar";
+    public static final List<String> IMPLICIT_ARGS = Arrays.asList(
+            "checkers.nullness.quals.*", "checkers.igj.quals.*",
+            "checkers.javari.quals.*", "checkers.interning.quals.*");
+
+    public static boolean VERBOSE = true;
+
+    public List<JavacError> callJavac(List<String> fileNames,
+            List<String> processors, String classpath)
+    {
+        try
+        {
+            String[] cmd = options(fileNames, processors, classpath);
+            if (VERBOSE)
+                System.out.println(JavaUtils.join("\n", cmd));
+
+            MessageConsoleStream out = Activator.findConsole()
+                    .newMessageStream();
+
+            String result = Command.exec(cmd);
+
+            if (VERBOSE)
+                out.println(result);
+
+            return JavacError.parse(result);
+        }catch (IOException e)
+        {
+            Activator.logException(e, "Error calling javac");
+            return null;
+        }
+    }
+
+    @SuppressWarnings("unused")
+    private String implicitAnnotations()
+    {
+        return JavaUtils.join(File.pathSeparator, IMPLICIT_ARGS);
+    }
+
+    private String[] options(List<String> fileNames, List<String> processors,
+            String classpath) throws IOException
+    {
+        List<String> opts = new ArrayList<String>();
+        opts.add(javaVM());
+        opts.add("-ea:com.sun.tools");
+        opts.add("-Xbootclasspath/p:" + javacJARlocation());
+
+        // opts.add("-Djsr308_imports=\"" + implicitAnnotations() + "\"");
+
+        opts.add("-jar");
+        opts.add(javacJARlocation());
+        // if (VERBOSE)
+        // opts.add("-verbose");
+        opts.add("-proc:only");
+        opts.add("-classpath");
+        opts.add(classpath(classpath));
+
+        // Build the processor arguments, comma separated
+        StringBuilder processorStr = new StringBuilder();
+        Iterator<String> itr = processors.iterator();
+
+        while (itr.hasNext())
+        {
+            processorStr.append(itr.next());
+            if (itr.hasNext())
+            {
+                processorStr.append(",");
+            }
+        }
+
+        opts.add("-processor");
+        opts.add(processorStr.toString());
+
+        // add options from preferences
+        String argStr = Activator.getDefault().getPreferenceStore().getString(
+                Activator.PREF_CHECKER_ARGS);
+
+        if (!argStr.isEmpty())
+        {
+            String[] prefOpts = argStr.split("\\s+");
+
+            for (String opt : prefOpts)
+            {
+                opts.add(opt);
+            }
+        }
+
+        // opts.add("-J-Xms256M");
+        // opts.add("-J-Xmx515M");
+        opts.addAll(fileNames);
+
+        return opts.toArray(new String[opts.size()]);
+    }
+
+    private String javaVM()
+    {
+        String sep = System.getProperty("file.separator");
+        return System.getProperty("java.home") + sep + "bin" + sep + "java";
+    }
+
+    private String classpath(String classpath)
+    {
+        return classpath;
+    }
+
+    private String javacJARlocation() throws IOException
+    {
+        Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
+
+        Path javacJAR = new Path(JAVAC_LOCATION);
+        URL javacJarURL = FileLocator.toFileURL(FileLocator.find(bundle,
+                javacJAR, null));
+        return javacJarURL.getPath();
+    }
+
+    // This used to be used. Now we just scan the classpath. The checkers.jar
+    // must be on the classpath anyway.
+    // XXX The problem is what to do if the checkers.jar on the classpath is
+    // different from the one in the plugin.
+    public static String checkersJARlocation()
+    {
+        Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
+
+        Path checkersJAR = new Path(CHECKERS_LOCATION);
+        URL checkersJarURL;
+        try
+        {
+            checkersJarURL = FileLocator.toFileURL(FileLocator.find(bundle,
+                    checkersJAR, null));
+        }catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return "";
+        }
+
+        return checkersJarURL.getPath();
+    }
+}
