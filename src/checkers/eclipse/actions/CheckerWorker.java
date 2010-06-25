@@ -1,7 +1,11 @@
 package checkers.eclipse.actions;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.tools.Diagnostic;
+import javax.tools.JavaFileObject;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -17,8 +21,8 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
 import checkers.eclipse.Activator;
-import checkers.eclipse.javac.CommandlineJavacRunner;
 import checkers.eclipse.javac.JavacError;
+import checkers.eclipse.javac.JavacRunner;
 import checkers.eclipse.util.MarkerUtil;
 import checkers.eclipse.util.Paths;
 import checkers.eclipse.util.ResourceUtils;
@@ -120,12 +124,26 @@ public class CheckerWorker extends Job
     private List<JavacError> runChecker() throws JavaModelException
     {
         String cp = classPathOf(project);
+        JavacRunner runner = new JavacRunner();
 
-        // XXX it is very annoying that we run commandline javac rather than
-        // directly. But otherwise there's a classpath hell.
-        List<JavacError> callJavac = new CommandlineJavacRunner().callJavac(
-                sourceFiles, checkerNames, cp);
-        return callJavac;
+        runner.run(sourceFiles, checkerNames, cp);
+
+        List<Diagnostic<? extends JavaFileObject>> diagnostics = runner
+                .getErrors();
+
+        // convert Diagnostics to JavacErrors
+        List<JavacError> errors = new ArrayList<JavacError>();
+
+        for (Diagnostic<? extends JavaFileObject> diag : diagnostics)
+        {
+            errors
+                    .add(new JavacError(new File(diag.getSource().toUri()),
+                            (int) diag.getLineNumber(), diag.getMessage(null),
+                            (int) diag.getStartPosition(), (int) diag
+                                    .getEndPosition()));
+        }
+
+        return errors;
     }
 
     /**
@@ -142,7 +160,7 @@ public class CheckerWorker extends Job
             if (file == null)
                 continue;
             MarkerUtil.addMarker(error.message, project.getProject(), file,
-                    error.lineNumber);
+                    error.lineNumber, error.startChar, error.endChar);
         }
     }
 
@@ -202,7 +220,7 @@ public class CheckerWorker extends Job
             classpath.append(path);
         }
 
-        classpath.append(CommandlineJavacRunner.checkersJARlocation());
+        // TODO: do we need to append the checkers.jar here?
         return classpath.toString();
     }
 }
