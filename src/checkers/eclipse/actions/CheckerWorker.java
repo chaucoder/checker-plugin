@@ -25,8 +25,8 @@ import checkers.eclipse.javac.JavacError;
 import checkers.eclipse.javac.JavacRunner;
 import checkers.eclipse.util.MarkerUtil;
 import checkers.eclipse.util.Paths;
-import checkers.eclipse.util.ResourceUtils;
 import checkers.eclipse.util.Paths.ClasspathBuilder;
+import checkers.eclipse.util.ResourceUtils;
 
 public class CheckerWorker extends Job
 {
@@ -136,11 +136,13 @@ public class CheckerWorker extends Job
 
         for (Diagnostic<? extends JavaFileObject> diag : diagnostics)
         {
-            errors
-                    .add(new JavacError(new File(diag.getSource().toUri()),
-                            (int) diag.getLineNumber(), diag.getMessage(null),
-                            (int) diag.getStartPosition(), (int) diag
-                                    .getEndPosition()));
+            if (diag.getPosition() != Diagnostic.NOPOS)
+            {
+                errors.add(new JavacError(new File(diag.getSource().toUri()),
+                        (int) diag.getLineNumber(), diag.getMessage(null),
+                        (int) diag.getStartPosition(), (int) diag
+                                .getEndPosition()));
+            }
         }
 
         return errors;
