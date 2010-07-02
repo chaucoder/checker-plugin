@@ -37,6 +37,7 @@ public class JavacRunner
             "checkers.nullness.quals.*", "checkers.igj.quals.*",
             "checkers.javari.quals.*", "checkers.interning.quals.*");
 
+    // TODO: commented out for reasons documented below
     // private static final SourceVersion REQUIRED_RELEASE =
     // SourceVersion.RELEASE_7;
 
