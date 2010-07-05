@@ -14,9 +14,11 @@ import javax.tools.JavaFileObject;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.osgi.framework.Bundle;
 
 import checkers.eclipse.Activator;
+import checkers.eclipse.prefs.CheckerPreferences;
 
 import com.sun.source.util.JavacTask;
 import com.sun.tools.javac.api.JavacTool;
@@ -36,6 +38,10 @@ public class JavacRunner
     public static final List<String> IMPLICIT_ARGS = Arrays.asList(
             "checkers.nullness.quals.*", "checkers.igj.quals.*",
             "checkers.javari.quals.*", "checkers.interning.quals.*");
+    
+    private final Iterable<String> fileNames;
+    private final Iterable<String> processors;
+    private final String classpath;
 
     // TODO: commented out for reasons documented below
     // private static final SourceVersion REQUIRED_RELEASE =
@@ -43,9 +49,13 @@ public class JavacRunner
 
     private final DiagnosticCollector<JavaFileObject> collector;
 
-    public JavacRunner()
+    public JavacRunner(String[] fileNames, String[] processors,
+            String classpath)
     {
-        collector = new DiagnosticCollector<JavaFileObject>();
+        this.collector = new DiagnosticCollector<JavaFileObject>();
+        this.fileNames = Arrays.asList(fileNames);
+        this.processors = Arrays.asList(processors);
+        this.classpath = classpath;
     }
 
     /**
@@ -58,8 +68,7 @@ public class JavacRunner
      * @param classpath
      *            The classpath to reference in compilation
      */
-    public void run(List<String> fileNames, List<String> processors,
-            String classpath)
+    public void run()
     {
         Iterable<String> opts;
 
@@ -118,10 +127,11 @@ public class JavacRunner
 
     }
 
-    private Iterable<String> getOptions(List<String> processors,
+    private Iterable<String> getOptions(Iterable<String> processors,
             String classpath)
     {
         List<String> opts = new ArrayList<String>();
+        
         opts.add("-verbose");
         opts.add("-Xlint:all");
         opts.add("-proc:only");
@@ -151,11 +161,45 @@ public class JavacRunner
 
         opts.add("-processor");
         opts.add(processorStr.toString());
-
+        
+        // Processor options
+        addProcessorOptions(opts);
+        
+        // Classpath
         opts.add("-cp");
         opts.add(classpath);
 
         return opts;
+    }
+    
+    /**
+     * Add options for type processing from the preferences
+     * @param opts
+     */
+    private void addProcessorOptions(List<String> opts)
+    {
+    	IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+    	
+        String skipClasses = store.getString(CheckerPreferences.PREF_CHECKER_A_SKIP_CLASSES);
+        if (!skipClasses.isEmpty()) 
+        {
+        	opts.add("-AskipClasses=" + skipClasses);
+        }
+        
+        String lintOpts = store.getString(CheckerPreferences.PREF_CHECKER_A_LINT);
+        if (!lintOpts.isEmpty())
+        {
+        	opts.add("-Alint" + lintOpts);
+        }
+        
+        if (store.getBoolean(CheckerPreferences.PREF_CHECKER_A_WARNS))
+        	opts.add("-Awarns");
+        if (store.getBoolean(CheckerPreferences.PREF_CHECKER_A_NO_MSG_TEXT))
+        	opts.add("-Anomsgtext");
+        if (store.getBoolean(CheckerPreferences.PREF_CHECKER_A_SHOW_CHECKS))
+        	opts.add("-Ashowchecks");
+        if (store.getBoolean(CheckerPreferences.PREF_CHECKER_A_FILENAMES))
+        	opts.add("-Afilenames");
     }
 
     private String getLocation(String path) throws IOException

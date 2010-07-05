@@ -9,6 +9,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
@@ -21,12 +22,20 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import checkers.eclipse.Activator;
 import checkers.eclipse.actions.CheckerActionManager;
+import checkers.eclipse.prefs.CheckerPreferences;
 
 public class CheckerPreferencePage extends PreferencePage implements
         IWorkbenchPreferencePage
 {
     private Table procTable;
     private Text argText;
+    private Text optSkipClasses;
+    private Text optALint;
+    private Button optUIWarning;
+    private Button optWarning;
+    private Button optFilenames;
+    private Button optNoMsgText;
+    private Button optShowChecks;
 
     @Override
     public void init(IWorkbench workbench)
@@ -43,10 +52,12 @@ public class CheckerPreferencePage extends PreferencePage implements
     @Override
     protected Control createContents(Composite parent)
     {
+    	// Layout for pref page
         Composite tableComposite = new Composite(parent, SWT.None);
         GridLayout layout = new GridLayout();
         tableComposite.setLayout(layout);
 
+    	// Option table for checker processors
         Label lbl = new Label(tableComposite, SWT.LEFT);
         lbl.setText("Checkers:");
         GridData data = new GridData();
@@ -64,20 +75,59 @@ public class CheckerPreferencePage extends PreferencePage implements
             TableItem item = new TableItem(procTable, SWT.None);
             item.setText(label);
         }
+        
+        // UI options
+        Group uiGroup = new Group(tableComposite, SWT.None);
+        uiGroup.setText("UI options");
+        FillLayout uiLayout = new FillLayout();
+        uiLayout.marginWidth = uiLayout.marginHeight = 5;
+        uiGroup.setLayout(uiLayout);
+        
+        optUIWarning = new Button(uiGroup, SWT.CHECK);
+        optUIWarning.setText("Show type errors as warnings in Eclipse");
+        
+        GridData uiGridData = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
+        uiGroup.setLayoutData(uiGridData);
+        
+        // Processor options
+        Group procGroup = new Group(tableComposite, SWT.None);
+        procGroup.setText("Processor options");
+        FillLayout procLayout = new FillLayout(SWT.VERTICAL);
+        procLayout.marginWidth = procLayout.marginHeight = 5;
+        procGroup.setLayout(procLayout);
+        
+        Label skipLabel = new Label(procGroup, SWT.None);
+        skipLabel.setText("Classes to skip:");
+        optSkipClasses = new Text(procGroup, SWT.SINGLE | SWT.BORDER);
+        optSkipClasses.setToolTipText("Classes to skip during type checking (-AskipClasses)");
+        Label lintLabel = new Label(procGroup, SWT.None);
+        lintLabel.setText("Lint options:");
+        optALint = new Text(procGroup, SWT.SINGLE | SWT.BORDER);
+        optALint.setToolTipText("Enable or disable optional checks (-Alint)");
+        optWarning = new Button(procGroup, SWT.CHECK);
+        optWarning.setText("Show errors as warnings (-Awarns)");
+        optFilenames = new Button(procGroup, SWT.CHECK);
+        optFilenames.setText("Print the name of each file (-Afilenames");
+        optNoMsgText = new Button(procGroup, SWT.CHECK);
+        optNoMsgText.setText("Use message keys instead of text (-Anomsgtext)");
+        optShowChecks = new Button(procGroup, SWT.CHECK);
+        optShowChecks.setText("Print debugging info for pseudo-checks (-Ashowchecks)");
+        
+        GridData procGridData = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
+        procGroup.setLayoutData(procGridData);
 
-        Group group = new Group(tableComposite, SWT.None);
-        group.setText("Javac Arguments");
-        FillLayout fill = new FillLayout();
-        fill.marginWidth = fill.marginHeight = 5;
-        group.setLayout(fill);
+        // Additional arguments to javac
+        Group javacGroup = new Group(tableComposite, SWT.None);
+        javacGroup.setText("Additional compiler parameters");
+        FillLayout javacLayout = new FillLayout();
+        javacLayout.marginWidth = javacLayout.marginHeight = 5;
+        javacGroup.setLayout(javacLayout);
 
-        // TODO: it would be nice if this had a label warning the
-        // user about overriding checker arguments
-        argText = new Text(group, SWT.SINGLE | SWT.BORDER);
+        argText = new Text(javacGroup, SWT.SINGLE | SWT.BORDER);
         argText.setTextLimit(Text.LIMIT);
 
-        GridData data3 = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
-        group.setLayoutData(data3);
+        GridData javacGridData = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
+        javacGroup.setLayoutData(javacGridData);
 
         initValues();
 
@@ -101,7 +151,13 @@ public class CheckerPreferencePage extends PreferencePage implements
             }
         }
 
-        argText.setText(store.getString(Activator.PREF_CHECKER_ARGS));
+        argText.setText(store.getString(CheckerPreferences.PREF_CHECKER_ARGS));
+        optSkipClasses.setText(store.getString(CheckerPreferences.PREF_CHECKER_A_SKIP_CLASSES));
+        optALint.setText(store.getString(CheckerPreferences.PREF_CHECKER_A_LINT));
+        optWarning.setSelection(store.getBoolean(CheckerPreferences.PREF_CHECKER_A_WARNS));
+        optFilenames.setSelection(store.getBoolean(CheckerPreferences.PREF_CHECKER_A_FILENAMES));
+        optNoMsgText.setSelection(store.getBoolean(CheckerPreferences.PREF_CHECKER_A_NO_MSG_TEXT));
+        optShowChecks.setSelection(store.getBoolean(CheckerPreferences.PREF_CHECKER_A_SHOW_CHECKS));
     }
 
     public boolean performOk()
@@ -115,8 +171,14 @@ public class CheckerPreferencePage extends PreferencePage implements
             store.setValue(item.getText(), item.getChecked());
         }
 
-        store.setValue(Activator.PREF_CHECKER_PREFS_SET, true);
-        store.setValue(Activator.PREF_CHECKER_ARGS, argText.getText());
+        store.setValue(CheckerPreferences.PREF_CHECKER_PREFS_SET, true);
+        store.setValue(CheckerPreferences.PREF_CHECKER_ARGS, argText.getText());
+        store.setValue(CheckerPreferences.PREF_CHECKER_A_SKIP_CLASSES, optSkipClasses.getText());
+        store.setValue(CheckerPreferences.PREF_CHECKER_A_LINT, optALint.getText());
+        store.setValue(CheckerPreferences.PREF_CHECKER_A_WARNS, optWarning.getSelection());
+        store.setValue(CheckerPreferences.PREF_CHECKER_A_FILENAMES, optFilenames.getSelection());
+        store.setValue(CheckerPreferences.PREF_CHECKER_A_NO_MSG_TEXT, optNoMsgText.getSelection());
+        store.setValue(CheckerPreferences.PREF_CHECKER_A_SHOW_CHECKS, optShowChecks.getSelection());
 
         return true;
     }
