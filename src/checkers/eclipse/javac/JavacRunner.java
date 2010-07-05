@@ -119,14 +119,20 @@ public class JavacRunner
     }
 
     private Iterable<String> getOptions(List<String> processors,
-            String classpath) throws IOException
+            String classpath)
     {
         List<String> opts = new ArrayList<String>();
         opts.add("-verbose");
         opts.add("-Xlint:all");
         opts.add("-proc:only");
-        opts.add("-Xbootclasspath/p:" + getLocation(JAVAC_LOCATION) + ":"
-                + getLocation(JDK_LOCATION));
+        
+        try {
+			opts.add("-Xbootclasspath/p:" + getLocation(JAVAC_LOCATION) + ":"
+			        + getLocation(JDK_LOCATION));
+		} catch (IOException e) {
+			Activator.logException(e, e.getMessage());
+		}
+		
         opts.add("-XprintProcessorInfo");
         opts.add("-Xprefer:source");
 
