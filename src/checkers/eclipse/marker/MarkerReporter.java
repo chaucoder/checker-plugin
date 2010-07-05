@@ -51,6 +51,6 @@ public class MarkerReporter implements IWorkspaceRunnable
         marker.setAttribute(IMarker.MESSAGE, message);
         marker.setAttribute(IMarker.CHAR_START, startChar);
         marker.setAttribute(IMarker.CHAR_END, endChar);
-        marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING);
+        marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
     }
 }
