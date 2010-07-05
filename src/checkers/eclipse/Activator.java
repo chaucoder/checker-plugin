@@ -25,12 +25,6 @@ public class Activator extends AbstractUIPlugin
     /** The plug-in ID */
     public static final String PLUGIN_ID = "checkers.eclipse";
 
-    // Preference keys
-    /** A key for determining if individual class prefs should be checked */
-    public static final String PREF_CHECKER_PREFS_SET = "checker_prefs";
-    /** A key for additional arguments to pass the checker */
-    public static final String PREF_CHECKER_ARGS = "checker_args";
-
     /** The shared instance */
     private static Activator plugin;
 
