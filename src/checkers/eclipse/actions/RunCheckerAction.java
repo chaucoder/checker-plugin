@@ -12,6 +12,7 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
 import checkers.eclipse.Activator;
+import checkers.eclipse.prefs.CheckerPreferences;
 import checkers.eclipse.util.MutexSchedulingRule;
 
 /**
@@ -55,7 +56,7 @@ public abstract class RunCheckerAction implements IObjectActionDelegate
     private List<String> getClassNameFromPrefs()
     {
         boolean checkSelection = Activator.getDefault().getPreferenceStore()
-                .getBoolean(Activator.PREF_CHECKER_PREFS_SET);
+                .getBoolean(CheckerPreferences.PREF_CHECKER_PREFS_SET);
 
         // if preferences for individual checkers has not been set up
         // yet then by default run them all
@@ -121,7 +122,7 @@ public abstract class RunCheckerAction implements IObjectActionDelegate
             else
             {
                 List<String> names = getClassNameFromPrefs();
-                checkerJob = new CheckerWorker(element, names);
+                checkerJob = new CheckerWorker(element, names.toArray(new String[]{}));
             }
             checkerJob.setUser(true);
             checkerJob.setPriority(Job.BUILD);

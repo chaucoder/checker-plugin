@@ -79,7 +79,7 @@ public class CheckerBuilder extends IncrementalProjectBuilder
     private void runWorker(IJavaProject project, List<String> sourceNames,
             List<String> checkerNames)
     {
-        Job checkerJob = new CheckerWorker(project, sourceNames, checkerNames);
+        Job checkerJob = new CheckerWorker(project, sourceNames.toArray(new String[]{}), checkerNames.toArray(new String[]{}));
 
         checkerJob.setUser(true);
         checkerJob.setPriority(Job.BUILD);

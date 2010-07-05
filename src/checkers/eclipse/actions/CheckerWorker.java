@@ -2,6 +2,7 @@ package checkers.eclipse.actions;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.tools.Diagnostic;
@@ -32,8 +33,8 @@ public class CheckerWorker extends Job
 {
 
     private final IJavaProject project;
-    private final List<String> checkerNames;
-    private List<String> sourceFiles;
+    private final String[] checkerNames;
+    private String[] sourceFiles;
 
     /**
      * This constructor is intended for use from an incremental builder that has
@@ -43,8 +44,8 @@ public class CheckerWorker extends Job
      * @param sourceFiles
      * @param checkerNames
      */
-    public CheckerWorker(IJavaProject project, List<String> sourceFiles,
-            List<String> checkerNames)
+    public CheckerWorker(IJavaProject project, String[] sourceFiles,
+            String[] checkerNames)
     {
         super("Running checker on " + sourceFiles.toString());
         this.project = project;
@@ -52,25 +53,7 @@ public class CheckerWorker extends Job
         this.checkerNames = checkerNames;
     }
 
-    public CheckerWorker(IJavaElement element, String checkerName)
-    {
-        super("Running checker on " + element.getElementName());
-        this.project = element.getJavaProject();
-        this.checkerNames = new ArrayList<String>();
-        this.checkerNames.add(checkerName);
-
-        try
-        {
-            this.sourceFiles = ResourceUtils.sourceFilesOf(element);
-        }catch (CoreException e)
-        {
-            // TODO: Better error handling here, right now the
-            // runner just assumes nothing to do if empty
-            this.sourceFiles = new ArrayList<String>();
-        }
-    }
-
-    public CheckerWorker(IJavaElement element, List<String> checkerNames)
+    public CheckerWorker(IJavaElement element, String[] checkerNames)
     {
         super("Running checker on " + element.getElementName());
         this.project = element.getJavaProject();
@@ -78,13 +61,16 @@ public class CheckerWorker extends Job
 
         try
         {
-            this.sourceFiles = ResourceUtils.sourceFilesOf(element);
+            this.sourceFiles = ResourceUtils.sourceFilesOf(element).toArray(new String[]{});
         }catch (CoreException e)
         {
-            // TODO: Better error handling here, right now the
-            // runner just assumes nothing to do if empty
-            this.sourceFiles = new ArrayList<String>();
+        	Activator.logException(e, e.getMessage());
         }
+    }
+    
+    public CheckerWorker(IJavaElement element, String checkerName)
+    {
+    	this(element, new String[] {checkerName});
     }
 
     @Override
@@ -124,9 +110,9 @@ public class CheckerWorker extends Job
     private List<JavacError> runChecker() throws JavaModelException
     {
         String cp = classPathOf(project);
-        JavacRunner runner = new JavacRunner();
+        JavacRunner runner = new JavacRunner(sourceFiles, checkerNames, cp);
 
-        runner.run(sourceFiles, checkerNames, cp);
+        runner.run();
 
         List<Diagnostic<? extends JavaFileObject>> diagnostics = runner
                 .getErrors();
