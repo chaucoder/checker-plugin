@@ -20,7 +20,6 @@ import checkers.eclipse.util.MutexSchedulingRule;
  */
 public abstract class RunCheckerAction implements IObjectActionDelegate
 {
-
     private final String checkerName;
     private boolean usePrefs;
 
@@ -122,7 +121,8 @@ public abstract class RunCheckerAction implements IObjectActionDelegate
             else
             {
                 List<String> names = getClassNameFromPrefs();
-                checkerJob = new CheckerWorker(element, names.toArray(new String[]{}));
+                checkerJob = new CheckerWorker(element,
+                        names.toArray(new String[] {}));
             }
             checkerJob.setUser(true);
             checkerJob.setPriority(Job.BUILD);

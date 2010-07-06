@@ -1,8 +1,6 @@
 package checkers.eclipse.actions;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.tools.Diagnostic;
@@ -22,7 +20,6 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
 import checkers.eclipse.Activator;
-import checkers.eclipse.javac.JavacError;
 import checkers.eclipse.javac.JavacRunner;
 import checkers.eclipse.util.MarkerUtil;
 import checkers.eclipse.util.Paths;
@@ -61,16 +58,17 @@ public class CheckerWorker extends Job
 
         try
         {
-            this.sourceFiles = ResourceUtils.sourceFilesOf(element).toArray(new String[]{});
+            this.sourceFiles = ResourceUtils.sourceFilesOf(element).toArray(
+                    new String[] {});
         }catch (CoreException e)
         {
-        	Activator.logException(e, e.getMessage());
+            Activator.logException(e, e.getMessage());
         }
     }
-    
+
     public CheckerWorker(IJavaElement element, String checkerName)
     {
-    	this(element, new String[] {checkerName});
+        this(element, new String[] { checkerName });
     }
 
     @Override
@@ -97,7 +95,7 @@ public class CheckerWorker extends Job
         pm.worked(1);
 
         pm.setTaskName("Running checker");
-        List<JavacError> callJavac = runChecker();
+        List<Diagnostic<? extends JavaFileObject>> callJavac = runChecker();
         pm.worked(6);
 
         pm.setTaskName("Updating problem list");
@@ -107,48 +105,37 @@ public class CheckerWorker extends Job
         pm.done();
     }
 
-    private List<JavacError> runChecker() throws JavaModelException
+    private List<Diagnostic<? extends JavaFileObject>> runChecker()
+            throws JavaModelException
     {
         String cp = classPathOf(project);
         JavacRunner runner = new JavacRunner(sourceFiles, checkerNames, cp);
 
         runner.run();
 
-        List<Diagnostic<? extends JavaFileObject>> diagnostics = runner
-                .getErrors();
-
-        // convert Diagnostics to JavacErrors
-        List<JavacError> errors = new ArrayList<JavacError>();
-
-        for (Diagnostic<? extends JavaFileObject> diag : diagnostics)
-        {
-            if (diag.getPosition() != Diagnostic.NOPOS)
-            {
-                errors.add(new JavacError(new File(diag.getSource().toUri()),
-                        (int) diag.getLineNumber(), diag.getMessage(null),
-                        (int) diag.getStartPosition(), (int) diag
-                                .getEndPosition()));
-            }
-        }
-
-        return errors;
+        return runner.getErrors();
     }
 
     /**
      * Mark errors for this project in the appropriate files
      * 
      * @param project
-     * @param errors
+     * @param callJavac
      */
-    private void markErrors(IJavaProject project, List<JavacError> errors)
+    private void markErrors(IJavaProject project,
+            List<Diagnostic<? extends JavaFileObject>> diags)
     {
-        for (JavacError error : errors)
+        for (Diagnostic<? extends JavaFileObject> diag : diags)
         {
-            IResource file = ResourceUtils.getFile(project, error.file);
+            JavaFileObject fobj = diag.getSource();
+            if (fobj == null)
+                continue;
+            IResource file = ResourceUtils.getFile(project, new File(diag
+                    .getSource().toUri()));
             if (file == null)
                 continue;
-            MarkerUtil.addMarker(error.message, project.getProject(), file,
-                    error.lineNumber, error.startChar, error.endChar);
+
+            MarkerUtil.addMarker(diag, project.getProject(), file);
         }
     }
 
