@@ -28,6 +28,9 @@ public class Activator extends AbstractUIPlugin
     /** The shared instance */
     private static Activator plugin;
 
+    /** The console name to use for this plugin */
+    private static final String consoleName = "Checkers Plugin Console";
+
     public Activator()
     {
         super();
@@ -141,21 +144,25 @@ public class Activator extends AbstractUIPlugin
         return window[0];
     }
 
+    /**
+     * Get the MessageConsole for the plugin
+     * 
+     * @return a MessageConsole (will create if it doesn't exist)
+     */
     public static MessageConsole findConsole()
     {
-        String name = "Checkers Plugins";
         ConsolePlugin plugin = ConsolePlugin.getDefault();
         IConsoleManager conMan = plugin.getConsoleManager();
         IConsole[] existing = conMan.getConsoles();
         for (IConsole element : existing)
         {
-            if (name.equals(element.getName()))
+            if (consoleName.equals(element.getName()))
             {
                 return (MessageConsole) element;
             }
         }
         // no console found, so create a new one
-        MessageConsole myConsole = new MessageConsole(name, null);
+        MessageConsole myConsole = new MessageConsole(consoleName, null);
         conMan.addConsoles(new IConsole[] { myConsole });
         return myConsole;
     }

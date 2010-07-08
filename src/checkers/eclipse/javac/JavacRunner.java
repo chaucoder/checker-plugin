@@ -1,6 +1,8 @@
 package checkers.eclipse.javac;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +17,8 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.ui.console.MessageConsole;
+import org.eclipse.ui.console.MessageConsoleStream;
 import org.osgi.framework.Bundle;
 
 import checkers.eclipse.Activator;
@@ -114,8 +118,13 @@ public class JavacRunner
             Iterable<? extends JavaFileObject> fileObjs = manager
                     .getJavaFileObjectsFromStrings(fileNames);
 
-            JavacTask task = tool.getTask(null, null, collector, opts,
-                    processors, fileObjs);
+            Activator.getDefault();
+            MessageConsole console = Activator.findConsole();
+            MessageConsoleStream stream = console.newMessageStream();
+            Writer writer = new OutputStreamWriter(stream);
+
+            JavacTask task = tool.getTask(writer, manager, collector, opts,
+                    Arrays.asList(Object.class.getCanonicalName()), fileObjs);
 
             task.call();
             manager.close();
