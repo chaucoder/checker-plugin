@@ -11,9 +11,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jface.preference.IPreferenceStore;
 
+import checkers.eclipse.Activator;
 import checkers.eclipse.actions.CheckerActionManager;
 import checkers.eclipse.actions.CheckerWorker;
+import checkers.eclipse.prefs.CheckerPreferences;
 import checkers.eclipse.util.MutexSchedulingRule;
 import checkers.eclipse.util.ResourceUtils;
 
@@ -30,25 +33,35 @@ public class CheckerBuilder extends IncrementalProjectBuilder
     protected IProject[] build(int kind, Map args, IProgressMonitor monitor)
             throws CoreException
     {
-        if (kind == FULL_BUILD)
+        if (isBuildEnabled())
         {
-            fullBuild();
-        }
-        else
-        {
-            IResourceDelta delta = getDelta(getProject());
-            if (delta == null)
+            if (kind == FULL_BUILD)
             {
                 fullBuild();
             }
             else
             {
-                incrementalBuild(delta);
-            }
+                IResourceDelta delta = getDelta(getProject());
+                if (delta == null)
+                {
+                    fullBuild();
+                }
+                else
+                {
+                    incrementalBuild(delta);
+                }
 
+            }
         }
 
         return null;
+    }
+
+    private boolean isBuildEnabled()
+    {
+        IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+
+        return store.getBoolean(CheckerPreferences.PREF_CHECKER_AUTO_BUILD);
     }
 
     private void incrementalBuild(IResourceDelta delta)

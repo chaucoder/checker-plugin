@@ -32,10 +32,12 @@ public class CheckerPreferencePage extends PreferencePage implements
     private Text optSkipClasses;
     private Text optALint;
     private Button optUIWarning;
+    private Button optAutoBuild;
     private Button optWarning;
     private Button optFilenames;
     private Button optNoMsgText;
     private Button optShowChecks;
+    private Button optImplicitImports;
 
     @Override
     public void init(IWorkbench workbench)
@@ -76,22 +78,25 @@ public class CheckerPreferencePage extends PreferencePage implements
             item.setText(label);
         }
 
-        // UI options
+        // UI/Eclipse options
         Group uiGroup = new Group(tableComposite, SWT.None);
-        uiGroup.setText("UI options");
-        FillLayout uiLayout = new FillLayout();
+        uiGroup.setText("Eclipse options");
+        FillLayout uiLayout = new FillLayout(SWT.VERTICAL);
         uiLayout.marginWidth = uiLayout.marginHeight = 5;
         uiGroup.setLayout(uiLayout);
 
         optUIWarning = new Button(uiGroup, SWT.CHECK);
         optUIWarning.setText("Show type errors as warnings in Eclipse");
 
+        optAutoBuild = new Button(uiGroup, SWT.CHECK);
+        optAutoBuild.setText("Automatically process annotations");
+
         GridData uiGridData = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
         uiGroup.setLayoutData(uiGridData);
 
         // Processor options
         Group procGroup = new Group(tableComposite, SWT.None);
-        procGroup.setText("Processor options");
+        procGroup.setText("Processor/build options");
         FillLayout procLayout = new FillLayout(SWT.VERTICAL);
         procLayout.marginWidth = procLayout.marginHeight = 5;
         procGroup.setLayout(procLayout);
@@ -108,12 +113,15 @@ public class CheckerPreferencePage extends PreferencePage implements
         optWarning = new Button(procGroup, SWT.CHECK);
         optWarning.setText("Show errors as warnings (-Awarns)");
         optFilenames = new Button(procGroup, SWT.CHECK);
-        optFilenames.setText("Print the name of each file (-Afilenames");
+        optFilenames.setText("Print the name of each file (-Afilenames)");
         optNoMsgText = new Button(procGroup, SWT.CHECK);
         optNoMsgText.setText("Use message keys instead of text (-Anomsgtext)");
         optShowChecks = new Button(procGroup, SWT.CHECK);
         optShowChecks
                 .setText("Print debugging info for pseudo-checks (-Ashowchecks)");
+        optImplicitImports = new Button(procGroup, SWT.CHECK);
+        optImplicitImports
+                .setText("Use implicit imports for annotation classes");
 
         GridData procGridData = new GridData(SWT.FILL, SWT.BEGINNING, true,
                 false);
@@ -156,6 +164,8 @@ public class CheckerPreferencePage extends PreferencePage implements
         }
 
         argText.setText(store.getString(CheckerPreferences.PREF_CHECKER_ARGS));
+        optAutoBuild.setSelection(store
+                .getBoolean(CheckerPreferences.PREF_CHECKER_AUTO_BUILD));
         optSkipClasses.setText(store
                 .getString(CheckerPreferences.PREF_CHECKER_A_SKIP_CLASSES));
         optALint.setText(store
@@ -168,6 +178,8 @@ public class CheckerPreferencePage extends PreferencePage implements
                 .getBoolean(CheckerPreferences.PREF_CHECKER_A_NO_MSG_TEXT));
         optShowChecks.setSelection(store
                 .getBoolean(CheckerPreferences.PREF_CHECKER_A_SHOW_CHECKS));
+        optImplicitImports.setSelection(store
+                .getBoolean(CheckerPreferences.PREF_CHECKER_IMPLICIT_IMPORTS));
     }
 
     public boolean performOk()
@@ -183,6 +195,8 @@ public class CheckerPreferencePage extends PreferencePage implements
 
         store.setValue(CheckerPreferences.PREF_CHECKER_PREFS_SET, true);
         store.setValue(CheckerPreferences.PREF_CHECKER_ARGS, argText.getText());
+        store.setValue(CheckerPreferences.PREF_CHECKER_AUTO_BUILD,
+                optAutoBuild.getSelection());
         store.setValue(CheckerPreferences.PREF_CHECKER_A_SKIP_CLASSES,
                 optSkipClasses.getText());
         store.setValue(CheckerPreferences.PREF_CHECKER_A_LINT,
@@ -195,6 +209,8 @@ public class CheckerPreferencePage extends PreferencePage implements
                 optNoMsgText.getSelection());
         store.setValue(CheckerPreferences.PREF_CHECKER_A_SHOW_CHECKS,
                 optShowChecks.getSelection());
+        store.setValue(CheckerPreferences.PREF_CHECKER_IMPLICIT_IMPORTS,
+                optImplicitImports.getSelection());
 
         return true;
     }

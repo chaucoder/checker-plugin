@@ -25,6 +25,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
         prefs.setDefault(CheckerPreferences.PREF_CHECKER_A_FILENAMES, false);
         prefs.setDefault(CheckerPreferences.PREF_CHECKER_A_NO_MSG_TEXT, false);
         prefs.setDefault(CheckerPreferences.PREF_CHECKER_A_SHOW_CHECKS, false);
+        prefs.setDefault(CheckerPreferences.PREF_CHECKER_AUTO_BUILD, true);
+        prefs.setDefault(CheckerPreferences.PREF_CHECKER_IMPLICIT_IMPORTS,
+                false);
     }
 
 }
