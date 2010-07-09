@@ -46,11 +46,6 @@ public class JavacRunner
     private final Iterable<String> fileNames;
     private final Iterable<String> processors;
     private final String classpath;
-
-    // TODO: commented out for reasons documented below
-    // private static final SourceVersion REQUIRED_RELEASE =
-    // SourceVersion.RELEASE_7;
-
     private final DiagnosticCollector<JavaFileObject> collector;
 
     public JavacRunner(String[] fileNames, String[] processors, String classpath)
@@ -75,64 +70,27 @@ public class JavacRunner
     {
         Iterable<String> opts;
 
-        try
-        {
-            opts = getOptions(processors, classpath);
+        opts = getOptions(processors, classpath);
 
-            // TODO: the following is the correct way to use the Compiler API,
-            // but unfortunately it's difficult to get working because of
-            // runtime classpath issues.
+        // The following code uses the compiler's internal APIs, which are
+        // volatile. (see warning in JavacTool source)
+        JavacTool tool = JavacTool.create();
+        JavacFileManager manager = tool.getStandardFileManager(collector, null,
+                null);
 
-            // Load installed compilers and make sure to select one that
-            // supports the correct release
-            /*
-             * JavaCompiler compiler = null; ServiceLoader<JavaCompiler>
-             * compilers = ServiceLoader .load(JavaCompiler.class);
-             * 
-             * for (JavaCompiler candidateCompiler : compilers) { if
-             * (candidateCompiler.getSourceVersions().contains(
-             * REQUIRED_RELEASE)) { compiler = candidateCompiler; break; } }
-             */
+        Iterable<? extends JavaFileObject> fileObjs = manager
+                .getJavaFileObjectsFromStrings(fileNames);
 
-            // TODO: raise error here that compiler can't be found
-            /*
-             * if (compiler == null) return;
-             */
+        Activator.getDefault();
+        MessageConsole console = Activator.findConsole();
+        MessageConsoleStream stream = console.newMessageStream();
+        Writer writer = new OutputStreamWriter(stream);
 
-            /*
-             * StandardJavaFileManager manager =
-             * compiler.getStandardFileManager( null, null, null); Iterable<?
-             * extends JavaFileObject> fileObjs = manager
-             * .getJavaFileObjectsFromStrings(fileNames);
-             * 
-             * CompilationTask task = compiler.getTask(null, null, collector,
-             * opts, processors, fileObjs);
-             */
+        JavacTask task = tool.getTask(writer, manager, collector, opts, null,
+                fileObjs);
 
-            // The following code uses the compiler's internal APIs, which are
-            // volatile. (see warning in JavacTool source)
-            JavacTool tool = JavacTool.create();
-            JavacFileManager manager = tool.getStandardFileManager(collector,
-                    null, null);
-
-            Iterable<? extends JavaFileObject> fileObjs = manager
-                    .getJavaFileObjectsFromStrings(fileNames);
-
-            Activator.getDefault();
-            MessageConsole console = Activator.findConsole();
-            MessageConsoleStream stream = console.newMessageStream();
-            Writer writer = new OutputStreamWriter(stream);
-
-            JavacTask task = tool.getTask(writer, manager, collector, opts,
-                    Arrays.asList(Object.class.getCanonicalName()), fileObjs);
-
-            task.call();
-            manager.close();
-        }catch (Exception e)
-        {
-            Activator.logException(e, "Error in running javac");
-        }
-
+        task.call();
+        manager.close();
     }
 
     private Iterable<String> getOptions(Iterable<String> processors,
@@ -141,13 +99,12 @@ public class JavacRunner
         List<String> opts = new ArrayList<String>();
 
         opts.add("-verbose");
-        opts.add("-Xlint:all");
         opts.add("-proc:only");
 
         try
         {
             opts.add("-Xbootclasspath/p:" + getLocation(JAVAC_LOCATION) + ":"
-                    + getLocation(JDK_LOCATION));
+                    + getLocation(JDK_LOCATION) + ":");
         }catch (IOException e)
         {
             Activator.logException(e, e.getMessage());
@@ -213,6 +170,23 @@ public class JavacRunner
             opts.add("-Ashowchecks");
         if (store.getBoolean(CheckerPreferences.PREF_CHECKER_A_FILENAMES))
             opts.add("-Afilenames");
+
+        if (store.getBoolean(CheckerPreferences.PREF_CHECKER_IMPLICIT_IMPORTS))
+        {
+            StringBuilder builder = new StringBuilder();
+            for (String annClass : IMPLICIT_ARGS)
+            {
+                builder.append(annClass);
+                builder.append(":");
+            }
+
+            // chop off the last :
+            builder.setLength(builder.length() - 1);
+            builder.trimToSize();
+
+            // TODO: this is disabled for now since it doesn't work
+            // opts.add("-J-Djsr308_imports=\"" + builder.toString() + "\"");
+        }
     }
 
     private String getLocation(String path) throws IOException
