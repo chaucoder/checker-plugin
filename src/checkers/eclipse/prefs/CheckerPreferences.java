@@ -38,4 +38,5 @@ public final class CheckerPreferences
 
     /** Key for implicit annotation imports */
     public static final String PREF_CHECKER_IMPLICIT_IMPORTS = "checker_implicit_imports";
+
 }
