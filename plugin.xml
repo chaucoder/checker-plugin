@@ -150,4 +150,12 @@
 	  <persistent value="true"/>
    </extension>
    
+   <extension
+         point="org.eclipse.ui.ide.markerResolution">
+      <markerResolutionGenerator
+      		markerType="checkers.eclipse.marker"
+            class="checkers.eclipse.marker.CheckerResolutionGenerator">
+      </markerResolutionGenerator>
+   </extension>
+   
 </plugin>
