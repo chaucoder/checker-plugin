@@ -31,7 +31,6 @@ public class CheckerPreferencePage extends PreferencePage implements
     private Text argText;
     private Text optSkipClasses;
     private Text optALint;
-    private Button optUIWarning;
     private Button optAutoBuild;
     private Button optWarning;
     private Button optFilenames;
@@ -84,9 +83,6 @@ public class CheckerPreferencePage extends PreferencePage implements
         FillLayout uiLayout = new FillLayout(SWT.VERTICAL);
         uiLayout.marginWidth = uiLayout.marginHeight = 5;
         uiGroup.setLayout(uiLayout);
-
-        optUIWarning = new Button(uiGroup, SWT.CHECK);
-        optUIWarning.setText("Show type errors as warnings in Eclipse");
 
         optAutoBuild = new Button(uiGroup, SWT.CHECK);
         optAutoBuild.setText("Automatically process annotations");
