@@ -49,7 +49,7 @@
 	    <action
 			   class="checkers.eclipse.actions.ClearMarkersAction"
 			   id="checkers.eclipse.removeMarkers"
-			   label="Clear Checkers Markers"
+			   label="Clear checker markers"
 			   menubarPath="checkers.eclipse/main"
 			   tooltip="Removes all Checker Framework markers from the selected element."/>
 		<action

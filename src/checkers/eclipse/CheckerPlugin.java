@@ -16,7 +16,7 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin
+public class CheckerPlugin extends AbstractUIPlugin
 {
 
     /** Controls debugging of the plugin */
@@ -26,12 +26,12 @@ public class Activator extends AbstractUIPlugin
     public static final String PLUGIN_ID = "checkers.eclipse";
 
     /** The shared instance */
-    private static Activator plugin;
+    private static CheckerPlugin plugin;
 
     /** The console name to use for this plugin */
     private static final String consoleName = "Checkers Plugin Console";
 
-    public Activator()
+    public CheckerPlugin()
     {
         super();
         plugin = this;
@@ -55,7 +55,7 @@ public class Activator extends AbstractUIPlugin
      * 
      * @return the shared instance
      */
-    public static Activator getDefault()
+    public static CheckerPlugin getDefault()
     {
         return plugin;
     }
@@ -99,7 +99,7 @@ public class Activator extends AbstractUIPlugin
                 e.printStackTrace();
             }
         }
-        IStatus status = new Status(severity, Activator.PLUGIN_ID, 0, message,
+        IStatus status = new Status(severity, CheckerPlugin.PLUGIN_ID, 0, message,
                 e);
         getLog().log(status);
     }
