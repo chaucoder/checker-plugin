@@ -3,7 +3,7 @@ package checkers.eclipse.prefs;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
-import checkers.eclipse.Activator;
+import checkers.eclipse.CheckerPlugin;
 
 public class PreferenceInitializer extends AbstractPreferenceInitializer
 {
@@ -16,7 +16,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
     @Override
     public void initializeDefaultPreferences()
     {
-        IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
+        IPreferenceStore prefs = CheckerPlugin.getDefault().getPreferenceStore();
         prefs.setDefault(CheckerPreferences.PREF_CHECKER_PREFS_SET, false);
         prefs.setDefault(CheckerPreferences.PREF_CHECKER_ARGS, "");
         prefs.setDefault(CheckerPreferences.PREF_CHECKER_A_SKIP_CLASSES, "");

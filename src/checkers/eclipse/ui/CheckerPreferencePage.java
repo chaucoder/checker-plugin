@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-import checkers.eclipse.Activator;
+import checkers.eclipse.CheckerPlugin;
 import checkers.eclipse.actions.CheckerActionManager;
 import checkers.eclipse.prefs.CheckerPreferences;
 
@@ -47,7 +47,7 @@ public class CheckerPreferencePage extends PreferencePage implements
     @Override
     protected IPreferenceStore doGetPreferenceStore()
     {
-        return Activator.getDefault().getPreferenceStore();
+        return CheckerPlugin.getDefault().getPreferenceStore();
     }
 
     @Override

@@ -66,7 +66,7 @@ public class Util {
             return project != null && project.isOpen()
                     && project.hasNature(JavaCore.NATURE_ID);
         } catch (CoreException e) {
-            Activator.logException(e, "couldn't determine project nature");
+            CheckerPlugin.logException(e, "couldn't determine project nature");
             return false;
         }
     }

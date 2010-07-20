@@ -21,7 +21,7 @@ import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 import org.osgi.framework.Bundle;
 
-import checkers.eclipse.Activator;
+import checkers.eclipse.CheckerPlugin;
 import checkers.eclipse.prefs.CheckerPreferences;
 
 import com.sun.source.util.JavacTask;
@@ -81,8 +81,8 @@ public class JavacRunner
         Iterable<? extends JavaFileObject> fileObjs = manager
                 .getJavaFileObjectsFromStrings(fileNames);
 
-        Activator.getDefault();
-        MessageConsole console = Activator.findConsole();
+        CheckerPlugin.getDefault();
+        MessageConsole console = CheckerPlugin.findConsole();
         MessageConsoleStream stream = console.newMessageStream();
         Writer writer = new OutputStreamWriter(stream);
 
@@ -107,7 +107,7 @@ public class JavacRunner
                     + getLocation(JDK_LOCATION) + ":");
         }catch (IOException e)
         {
-            Activator.logException(e, e.getMessage());
+            CheckerPlugin.logException(e, e.getMessage());
         }
 
         opts.add("-XprintProcessorInfo");
@@ -146,7 +146,7 @@ public class JavacRunner
      */
     private void addProcessorOptions(List<String> opts)
     {
-        IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+        IPreferenceStore store = CheckerPlugin.getDefault().getPreferenceStore();
 
         String skipClasses = store
                 .getString(CheckerPreferences.PREF_CHECKER_A_SKIP_CLASSES);
@@ -191,7 +191,7 @@ public class JavacRunner
 
     private String getLocation(String path) throws IOException
     {
-        Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
+        Bundle bundle = Platform.getBundle(CheckerPlugin.PLUGIN_ID);
 
         Path javacJAR = new Path(path);
         URL javacJarURL = FileLocator.toFileURL(FileLocator.find(bundle,

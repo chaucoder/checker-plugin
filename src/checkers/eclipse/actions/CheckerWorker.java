@@ -15,7 +15,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
-import checkers.eclipse.Activator;
+import checkers.eclipse.CheckerPlugin;
 import checkers.eclipse.javac.CommandlineJavacRunner;
 import checkers.eclipse.javac.JavacError;
 import checkers.eclipse.util.MarkerUtil;
@@ -59,7 +59,7 @@ public class CheckerWorker extends Job
                     new String[] {});
         }catch (CoreException e)
         {
-            Activator.logException(e, e.getMessage());
+            CheckerPlugin.logException(e, e.getMessage());
         }
     }
 
@@ -76,7 +76,7 @@ public class CheckerWorker extends Job
             work(monitor);
         }catch (Throwable e)
         {
-            Activator.logException(e, "Analysis exception");
+            CheckerPlugin.logException(e, "Analysis exception");
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;

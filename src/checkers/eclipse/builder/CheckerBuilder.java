@@ -13,7 +13,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.preference.IPreferenceStore;
 
-import checkers.eclipse.Activator;
+import checkers.eclipse.CheckerPlugin;
 import checkers.eclipse.actions.CheckerActionManager;
 import checkers.eclipse.actions.CheckerWorker;
 import checkers.eclipse.prefs.CheckerPreferences;
@@ -59,7 +59,7 @@ public class CheckerBuilder extends IncrementalProjectBuilder
 
     private boolean isBuildEnabled()
     {
-        IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+        IPreferenceStore store = CheckerPlugin.getDefault().getPreferenceStore();
 
         return store.getBoolean(CheckerPreferences.PREF_CHECKER_AUTO_BUILD);
     }
