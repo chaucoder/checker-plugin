@@ -92,7 +92,6 @@ public class CheckerWorker extends Job
         pm.worked(1);
 
         pm.setTaskName("Running checker");
-        // List<Diagnostic<? extends JavaFileObject>> callJavac = runChecker();
         List<JavacError> callJavac = runChecker();
         pm.worked(6);
 
@@ -103,12 +102,9 @@ public class CheckerWorker extends Job
         pm.done();
     }
 
-    // private List<Diagnostic<? extends JavaFileObject>> runChecker()
-    // throws JavaModelException
     private List<JavacError> runChecker() throws JavaModelException
     {
         String cp = classPathOf(project);
-        // JavacRunner runner = new JavacRunner(sourceFiles, checkerNames, cp);
         CommandlineJavacRunner runner = new CommandlineJavacRunner(sourceFiles,
                 checkerNames, cp);
 
@@ -122,15 +118,6 @@ public class CheckerWorker extends Job
      * 
      * @param project
      * @param callJavac
-     */
-    /*
-     * private void markErrors(IJavaProject project, List<Diagnostic<? extends
-     * JavaFileObject>> diags) { for (Diagnostic<? extends JavaFileObject> diag
-     * : diags) { JavaFileObject fobj = diag.getSource(); if (fobj == null)
-     * continue; IResource file = ResourceUtils.getFile(project, new File(diag
-     * .getSource().toUri())); if (file == null) continue;
-     * 
-     * MarkerUtil.addMarker(diag, project.getProject(), file); } }
      */
 
     private void markErrors(IJavaProject project, List<JavacError> errors)

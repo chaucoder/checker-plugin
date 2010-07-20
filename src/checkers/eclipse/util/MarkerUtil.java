@@ -34,17 +34,6 @@ public final class MarkerUtil
         res.deleteMarkers(MarkerReporter.NAME, true, IResource.DEPTH_INFINITE);
     }
 
-    /*
-     * public static void addMarker(Diagnostic<? extends JavaFileObject> diag,
-     * IProject project, IResource resource) { if (Activator.DEBUG) {
-     * System.out.println("Creating marker for " + resource.getLocation() +
-     * ": line " + diag.getLineNumber() + " " + diag.getMessage(null)); }
-     * 
-     * try { project.getWorkspace().run(new MarkerReporter(resource, diag),
-     * null, 0, null); }catch (CoreException e) { Activator.logException(e,
-     * "Core exception on add marker"); } }
-     */
-
     public static void addMarker(String message, IProject project,
             IResource resource, int startLine)
     {
