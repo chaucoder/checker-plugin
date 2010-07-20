@@ -56,7 +56,7 @@ public class CheckerBuildNature implements IProjectNature
             }
         }
 
-        desc.setBuildSpec((ICommand[]) newSpec.toArray());
+        desc.setBuildSpec(newSpec.toArray(new ICommand[] {}));
         project.setDescription(desc, null);
     }
 
