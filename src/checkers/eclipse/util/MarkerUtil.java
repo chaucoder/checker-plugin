@@ -1,5 +1,8 @@
 package checkers.eclipse.util;
 
+import javax.tools.Diagnostic;
+import javax.tools.JavaFileObject;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -34,31 +37,20 @@ public final class MarkerUtil
         res.deleteMarkers(MarkerReporter.NAME, true, IResource.DEPTH_INFINITE);
     }
 
-    /*
-     * public static void addMarker(Diagnostic<? extends JavaFileObject> diag,
-     * IProject project, IResource resource) { if (Activator.DEBUG) {
-     * System.out.println("Creating marker for " + resource.getLocation() +
-     * ": line " + diag.getLineNumber() + " " + diag.getMessage(null)); }
-     * 
-     * try { project.getWorkspace().run(new MarkerReporter(resource, diag),
-     * null, 0, null); }catch (CoreException e) { Activator.logException(e,
-     * "Core exception on add marker"); } }
-     */
-
-    public static void addMarker(String message, IProject project,
-            IResource resource, int startLine)
+    public static void addMarker(Diagnostic<? extends JavaFileObject> diag,
+            IProject project, IResource resource)
     {
         if (CheckerPlugin.DEBUG)
         {
             System.out.println("Creating marker for " + resource.getLocation()
-                    + ": line " + startLine + " " + message);
+                    + ": line " + diag.getLineNumber() + " "
+                    + diag.getMessage(null));
         }
 
         try
         {
-            project.getWorkspace().run(
-                    new MarkerReporter(resource, startLine, message), null, 0,
-                    null);
+            project.getWorkspace().run(new MarkerReporter(resource, diag),
+                    null, 0, null);
         }catch (CoreException e)
         {
             CheckerPlugin.logException(e, "Core exception on add marker");
