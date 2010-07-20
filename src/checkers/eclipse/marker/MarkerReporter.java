@@ -15,11 +15,6 @@ public class MarkerReporter implements IWorkspaceRunnable
 {
     public static final String NAME = CheckerPlugin.PLUGIN_ID + ".marker";
 
-    /*
-     * private final IResource resource; private final Diagnostic<? extends
-     * JavaFileObject> diag;
-     */
-
     private final IResource resource;
     private final int startLine;
     private final String message;
@@ -30,11 +25,6 @@ public class MarkerReporter implements IWorkspaceRunnable
         this.resource = resource;
         this.message = message;
     }
-
-    /*
-     * public MarkerReporter(IResource resource, Diagnostic<? extends
-     * JavaFileObject> diag) { this.resource = resource; this.diag = diag; }
-     */
 
     @Override
     public void run(IProgressMonitor monitor) throws CoreException
@@ -57,29 +47,4 @@ public class MarkerReporter implements IWorkspaceRunnable
         marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING);
     }
 
-    /*
-     * @Override public void run(IProgressMonitor monitor) throws CoreException
-     * {
-     * 
-     * if (Activator.DEBUG) { System.out.println("Creating marker for " +
-     * resource.getLocation()); }
-     * 
-     * IMarker marker = resource.createMarker(NAME); if (Activator.DEBUG) {
-     * System.out.println("Setting attibutes for marker in " +
-     * resource.getLocation()); }
-     * 
-     * marker.setAttribute(IMarker.LINE_NUMBER, (int) diag.getLineNumber());
-     * marker.setAttribute(IMarker.MESSAGE, diag.getMessage(null));
-     * 
-     * if (diag.getPosition() != Diagnostic.NOPOS) {
-     * marker.setAttribute(IMarker.CHAR_START, (int) diag.getStartPosition());
-     * marker.setAttribute(IMarker.CHAR_END, (int) diag.getEndPosition()); }
-     * 
-     * if (diag.getKind().equals(Diagnostic.Kind.ERROR)) {
-     * marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR); } else if
-     * (diag.getKind().equals(Diagnostic.Kind.WARNING) ||
-     * diag.getKind().equals(Diagnostic.Kind.MANDATORY_WARNING)) {
-     * marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING); } else {
-     * marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_INFO); } }
-     */
 }
