@@ -15,7 +15,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.console.MessageConsoleStream;
 import org.osgi.framework.Bundle;
 
-import checkers.eclipse.Activator;
+import checkers.eclipse.CheckerPlugin;
 import checkers.eclipse.prefs.CheckerPreferences;
 import checkers.eclipse.util.Command;
 import checkers.eclipse.util.JavaUtils;
@@ -55,7 +55,7 @@ public class CommandlineJavacRunner
             if (VERBOSE)
                 System.out.println(JavaUtils.join("\n", cmd));
 
-            MessageConsoleStream out = Activator.findConsole()
+            MessageConsoleStream out = CheckerPlugin.findConsole()
                     .newMessageStream();
 
             checkResult = Command.exec(cmd);
@@ -65,7 +65,7 @@ public class CommandlineJavacRunner
 
         }catch (IOException e)
         {
-            Activator.logException(e, "Error calling javac");
+            CheckerPlugin.logException(e, "Error calling javac");
         }
     }
 
@@ -107,7 +107,7 @@ public class CommandlineJavacRunner
         opts.add(processorStr.toString());
 
         // add options from preferences
-        String argStr = Activator.getDefault().getPreferenceStore()
+        String argStr = CheckerPlugin.getDefault().getPreferenceStore()
                 .getString(CheckerPreferences.PREF_CHECKER_ARGS);
 
         if (!argStr.isEmpty())
@@ -136,7 +136,7 @@ public class CommandlineJavacRunner
      */
     private void addProcessorOptions(List<String> opts)
     {
-        IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+        IPreferenceStore store = CheckerPlugin.getDefault().getPreferenceStore();
 
         String skipClasses = store
                 .getString(CheckerPreferences.PREF_CHECKER_A_SKIP_CLASSES);
@@ -180,7 +180,7 @@ public class CommandlineJavacRunner
 
     private String javacJARlocation() throws IOException
     {
-        Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
+        Bundle bundle = Platform.getBundle(CheckerPlugin.PLUGIN_ID);
 
         Path javacJAR = new Path(JAVAC_LOCATION);
         URL javacJarURL = FileLocator.toFileURL(FileLocator.find(bundle,
@@ -194,7 +194,7 @@ public class CommandlineJavacRunner
     // different from the one in the plugin.
     public static String checkersJARlocation()
     {
-        Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
+        Bundle bundle = Platform.getBundle(CheckerPlugin.PLUGIN_ID);
 
         Path checkersJAR = new Path(CHECKERS_LOCATION);
         URL checkersJarURL;

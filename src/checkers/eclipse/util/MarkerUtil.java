@@ -4,7 +4,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
-import checkers.eclipse.Activator;
+import checkers.eclipse.CheckerPlugin;
 import checkers.eclipse.marker.MarkerReporter;
 
 /**
@@ -26,7 +26,7 @@ public final class MarkerUtil
         // remove any markers added by our builder
         // This triggers resource update on IResourceChangeListener's
         // (BugTreeView)
-        if (Activator.DEBUG)
+        if (CheckerPlugin.DEBUG)
         {
             System.out.println("Removing JSR 308 markers in "
                     + res.getLocation());
@@ -48,7 +48,7 @@ public final class MarkerUtil
     public static void addMarker(String message, IProject project,
             IResource resource, int startLine)
     {
-        if (Activator.DEBUG)
+        if (CheckerPlugin.DEBUG)
         {
             System.out.println("Creating marker for " + resource.getLocation()
                     + ": line " + startLine + " " + message);
@@ -61,7 +61,7 @@ public final class MarkerUtil
                     null);
         }catch (CoreException e)
         {
-            Activator.logException(e, "Core exception on add marker");
+            CheckerPlugin.logException(e, "Core exception on add marker");
         }
     }
 

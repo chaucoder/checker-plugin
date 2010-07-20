@@ -6,14 +6,14 @@ import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import checkers.eclipse.Activator;
+import checkers.eclipse.CheckerPlugin;
 
 /**
  * Creates a JSR308 marker in a runnable window.
  */
 public class MarkerReporter implements IWorkspaceRunnable
 {
-    public static final String NAME = Activator.PLUGIN_ID + ".marker";
+    public static final String NAME = CheckerPlugin.PLUGIN_ID + ".marker";
 
     /*
      * private final IResource resource; private final Diagnostic<? extends
@@ -40,13 +40,13 @@ public class MarkerReporter implements IWorkspaceRunnable
     public void run(IProgressMonitor monitor) throws CoreException
     {
 
-        if (Activator.DEBUG)
+        if (CheckerPlugin.DEBUG)
         {
             System.out.println("Creating marker for " + resource.getLocation());
         }
 
         IMarker marker = resource.createMarker(NAME);
-        if (Activator.DEBUG)
+        if (CheckerPlugin.DEBUG)
         {
             System.out.println("Setting attibutes for marker in "
                     + resource.getLocation());

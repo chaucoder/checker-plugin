@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 
-import checkers.eclipse.Activator;
+import checkers.eclipse.CheckerPlugin;
 
 /**
  * This class manages the current checkers that can be run. Also keeps track of
@@ -98,7 +98,7 @@ public class CheckerActionManager
         // since that defaults to false)
         List<String> selected = new ArrayList<String>();
 
-        IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+        IPreferenceStore store = CheckerPlugin.getDefault().getPreferenceStore();
 
         for (CheckerProcessor processor : processors)
         {
