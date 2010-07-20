@@ -9,14 +9,13 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IActionDelegate;
 
+import checkers.eclipse.CheckerPlugin;
 import checkers.eclipse.natures.CheckerBuildNature;
-import checkers.nullness.quals.Nullable;
 
 public class ConvertProjectAction implements IActionDelegate
 {
 
-    private @Nullable
-    IStructuredSelection selection;
+    private IStructuredSelection selection;
 
     public ConvertProjectAction()
     {
@@ -26,45 +25,68 @@ public class ConvertProjectAction implements IActionDelegate
     @Override
     public void run(IAction action)
     {
-        setNature(element());
-    }
-
-    private void setNature(IJavaElement element)
-    {
-        IProject project = element.getJavaProject().getProject();
-        IProjectDescription desc;
         try
         {
-            desc = project.getDescription();
-        }catch (CoreException e1)
-        {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-            return;
-        }
-        String[] natures = desc.getNatureIds();
+            IProject project = element().getJavaProject().getProject();
+            IProjectDescription desc = project.getDescription();
+            String[] natures = desc.getNatureIds();
 
+            if (!hasNature(natures))
+                setNature(project, desc, natures);
+            else
+                removeNature(project, desc, natures);
+        }catch (CoreException e)
+        {
+            CheckerPlugin.logException(e, e.getMessage());
+        }
+    }
+
+    private boolean hasNature(String[] natures)
+    {
         for (String nature : natures)
         {
             if (CheckerBuildNature.NATURE_ID.equals(nature))
             {
-                return;
+                return true;
             }
         }
+
+        return false;
+    }
+
+    private void removeNature(IProject project, IProjectDescription desc,
+            String[] natures) throws CoreException
+    {
+        int skipIndex = 0;
+        String[] newNatures = new String[natures.length - 1];
+
+        for (int i = 0; i < natures.length; i++)
+        {
+            if (CheckerBuildNature.NATURE_ID.equals(natures[i]))
+            {
+                skipIndex = i;
+            }
+        }
+
+        System.arraycopy(natures, 0, newNatures, 0, skipIndex);
+        System.arraycopy(natures, skipIndex + 1, newNatures, skipIndex,
+                newNatures.length - skipIndex);
+
+        desc.setNatureIds(newNatures);
+        project.setDescription(desc, null);
+    }
+
+    private void setNature(IProject project, IProjectDescription desc,
+            String[] natures) throws CoreException
+    {
 
         String[] newNatures = new String[natures.length + 1];
         System.arraycopy(natures, 0, newNatures, 0, natures.length);
         newNatures[newNatures.length - 1] = CheckerBuildNature.NATURE_ID;
 
         desc.setNatureIds(newNatures);
-        try
-        {
-            project.setDescription(desc, null);
-        }catch (CoreException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+
+        project.setDescription(desc, null);
     }
 
     @Override

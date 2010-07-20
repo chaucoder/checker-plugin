@@ -43,9 +43,9 @@
 		<action
 			   class="checkers.eclipse.actions.ConvertProjectAction"
 			   id="checkers.eclipse.convertProject"
-			   label="Convert to Checker Project"
+			   label="Toggle checker nature on project"
 			   menubarPath="checkers.eclipse/main"
-			   tooltip="Adds a Checker Nature to this project to enable autobuild."/>
+			   tooltip="Adds or removes a Checker Nature to this project to enable/disable autobuild."/>
 	    <action
 			   class="checkers.eclipse.actions.ClearMarkersAction"
 			   id="checkers.eclipse.removeMarkers"
