@@ -1,6 +1,10 @@
 package checkers.eclipse.actions;
 
+import java.io.File;
 import java.util.List;
+
+import javax.tools.Diagnostic;
+import javax.tools.JavaFileObject;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -16,8 +20,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
 import checkers.eclipse.CheckerPlugin;
-import checkers.eclipse.javac.CommandlineJavacRunner;
-import checkers.eclipse.javac.JavacError;
+import checkers.eclipse.javac.JavacRunner;
 import checkers.eclipse.util.MarkerUtil;
 import checkers.eclipse.util.Paths;
 import checkers.eclipse.util.Paths.ClasspathBuilder;
@@ -92,8 +95,7 @@ public class CheckerWorker extends Job
         pm.worked(1);
 
         pm.setTaskName("Running checker");
-        // List<Diagnostic<? extends JavaFileObject>> callJavac = runChecker();
-        List<JavacError> callJavac = runChecker();
+        List<Diagnostic<? extends JavaFileObject>> callJavac = runChecker();
         pm.worked(6);
 
         pm.setTaskName("Updating problem list");
@@ -103,14 +105,11 @@ public class CheckerWorker extends Job
         pm.done();
     }
 
-    // private List<Diagnostic<? extends JavaFileObject>> runChecker()
-    // throws JavaModelException
-    private List<JavacError> runChecker() throws JavaModelException
+    private List<Diagnostic<? extends JavaFileObject>> runChecker()
+            throws JavaModelException
     {
         String cp = classPathOf(project);
-        // JavacRunner runner = new JavacRunner(sourceFiles, checkerNames, cp);
-        CommandlineJavacRunner runner = new CommandlineJavacRunner(sourceFiles,
-                checkerNames, cp);
+        JavacRunner runner = new JavacRunner(sourceFiles, checkerNames, cp);
 
         runner.run();
 
@@ -123,25 +122,21 @@ public class CheckerWorker extends Job
      * @param project
      * @param callJavac
      */
-    /*
-     * private void markErrors(IJavaProject project, List<Diagnostic<? extends
-     * JavaFileObject>> diags) { for (Diagnostic<? extends JavaFileObject> diag
-     * : diags) { JavaFileObject fobj = diag.getSource(); if (fobj == null)
-     * continue; IResource file = ResourceUtils.getFile(project, new File(diag
-     * .getSource().toUri())); if (file == null) continue;
-     * 
-     * MarkerUtil.addMarker(diag, project.getProject(), file); } }
-     */
 
-    private void markErrors(IJavaProject project, List<JavacError> errors)
+    private void markErrors(IJavaProject project,
+            List<Diagnostic<? extends JavaFileObject>> diags)
     {
-        for (JavacError error : errors)
+        for (Diagnostic<? extends JavaFileObject> diag : diags)
         {
-            IResource file = ResourceUtils.getFile(project, error.file);
+            JavaFileObject fobj = diag.getSource();
+            if (fobj == null)
+                continue;
+            IResource file = ResourceUtils.getFile(project, new File(diag
+                    .getSource().toUri()));
             if (file == null)
                 continue;
-            MarkerUtil.addMarker(error.message, project.getProject(), file,
-                    error.lineNumber);
+
+            MarkerUtil.addMarker(diag, project.getProject(), file);
         }
     }
 
