@@ -79,8 +79,16 @@ public class CommandlineJavacRunner
     {
         List<String> opts = new ArrayList<String>();
         opts.add(javaVM());
+
+        if (CheckerPlugin.getDefault().getPreferenceStore()
+                .getBoolean(CheckerPreferences.PREF_CHECKER_IMPLICIT_IMPORTS))
+        {
+            opts.add("-Djsr308_imports=\"" + implicitAnnotations() + "\"");
+        }
+
         opts.add("-ea:com.sun.tools");
-        opts.add("-Xbootclasspath/p:" + javacJARlocation());
+        opts.add("-Xbootclasspath/p:" + checkersJARlocation() + ":"
+                + javacJARlocation());
 
         opts.add("-jar");
         opts.add(javacJARlocation());
@@ -136,7 +144,8 @@ public class CommandlineJavacRunner
      */
     private void addProcessorOptions(List<String> opts)
     {
-        IPreferenceStore store = CheckerPlugin.getDefault().getPreferenceStore();
+        IPreferenceStore store = CheckerPlugin.getDefault()
+                .getPreferenceStore();
 
         String skipClasses = store
                 .getString(CheckerPreferences.PREF_CHECKER_A_SKIP_CLASSES);
@@ -160,11 +169,6 @@ public class CommandlineJavacRunner
             opts.add("-Ashowchecks");
         if (store.getBoolean(CheckerPreferences.PREF_CHECKER_A_FILENAMES))
             opts.add("-Afilenames");
-
-        if (store.getBoolean(CheckerPreferences.PREF_CHECKER_IMPLICIT_IMPORTS))
-        {
-            opts.add("-Djsr308_imports=\"" + implicitAnnotations() + "\"");
-        }
     }
 
     private String javaVM()
