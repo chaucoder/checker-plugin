@@ -9,55 +9,55 @@
 			objectClass="org.eclipse.jdt.core.IJavaElement">
 		<menu
 			   id="checkers.eclipse"
-			   label="Checker Framework"
+			   label="%menu.label"
 			   path="additions">
 			   <separator name="main"/> 
 		</menu>
 		<action
 			   class="checkers.eclipse.actions.CheckerActions$JavariAction"
 			   id="checkers.eclipse.runCheckers.javari"
-			   label="Run Javari Checker"
+			   label="%action.label"
 			   menubarPath="checkers.eclipse/additions"
-			   tooltip="Run the Javari checker on the selected element."/>
+			   tooltip="%action.tooltip"/>
 
 		<action
 			   class="checkers.eclipse.actions.CheckerActions$NullnessAction"
 			   id="checkers.eclipse.runCheckers.nonnull"
-			   label="Run Nullness Checker"
+			   label="%action.label.0"
 			   menubarPath="checkers.eclipse/additions"
-			   tooltip="Run the Nullness checker on the selected element."/>
+			   tooltip="%action.tooltip.0"/>
 
 		<action
 			   class="checkers.eclipse.actions.CheckerActions$InterningAction"
 			   id="checkers.eclipse.runCheckers.interning"
-			   label="Run Interning Checker"
+			   label="%action.label.1"
 			   menubarPath="checkers.eclipse/additions"
-			   tooltip="Run the Interned checker on the selected element."/>
+			   tooltip="%action.tooltip.1"/>
 
 		<action
 			   class="checkers.eclipse.actions.CheckerActions$IGJAction"
 			   id="checkers.eclipse.runCheckers.igj"
-			   label="Run IGJ Checker"
+			   label="%action.label.2"
 			   menubarPath="checkers.eclipse/additions"
-			   tooltip="Run the IGJ checker on the selected element."/>
+			   tooltip="%action.tooltip.2"/>
 		<action
 			   class="checkers.eclipse.actions.ConvertProjectAction"
 			   id="checkers.eclipse.convertProject"
-			   label="Toggle checker nature on project"
+			   label="%action.label.3"
 			   menubarPath="checkers.eclipse/main"
-			   tooltip="Adds or removes a Checker Nature to this project to enable/disable autobuild."/>
+			   tooltip="%action.tooltip.3"/>
 	    <action
 			   class="checkers.eclipse.actions.ClearMarkersAction"
 			   id="checkers.eclipse.removeMarkers"
-			   label="Clear checker markers"
+			   label="%action.label.4"
 			   menubarPath="checkers.eclipse/main"
-			   tooltip="Removes all Checker Framework markers from the selected element."/>
+			   tooltip="%action.tooltip.4"/>
 		<action
 			class = "checkers.eclipse.actions.CheckerActions$CurrentAction"
 			id    = "checkers.eclipse.runCheckers.runCurrent"
-			label = "Run selected checkers"
+			label = "%action.label.5"
 			menubarPath = "checkers.eclipse/main"
-			tooltip = "Run currently selected checkers" />
+			tooltip = "%action.tooltip.5" />
 			
 <!--Commented out because you need an option to pass arguments. Custom checher want -Aquals
 		<action
@@ -74,15 +74,15 @@
 			id="checkers.eclipse.NavigatorActions">
 		 <menu
          id="checkers.eclipse"
-         label="Checker Framework"
+         label="%menu.label.0"
          path="additions">
    </menu>
 		 <action
 			   class="checkers.eclipse.actions.ClearMarkersAction"
 			   id="checkers.eclipse.removeMarkers"
-			   label="Clear Checkers Markers"
+			   label="%action.label.6"
 			   menubarPath="checkers.eclipse/additions"
-			   tooltip="Removes all Checker Framework markers from the selected element.">
+			   tooltip="%action.tooltip.6">
 		 <enablement>
 			<objectState
 				  name="nature"
@@ -93,9 +93,9 @@
 		 <action
 			   class="checkers.eclipse.actions.RunCheckerAction"
 			   id="srunCheckers"
-			   label="Run Checkers"
+			   label="%action.label.7"
 			   menubarPath="checkers.eclipse/additions"
-			   tooltip="Run a checker on the selected element.">
+			   tooltip="%action.tooltip.7">
 		 <enablement>
 			<objectState
 				  name="nature"
@@ -109,7 +109,7 @@
    
    <extension point="org.eclipse.ui.preferencePages">
  	<page id="CheckerPreferencePage"
- 		name="Checker"
+ 		name="%page.name"
     	class="checkers.eclipse.ui.CheckerPreferencePage">
    	</page>
    </extension>
@@ -120,7 +120,7 @@
 	
 	<extension 
    	id="buildnature" 
-   	name="Checker Build Nature" 
+   	name="%extension.name" 
    	point="org.eclipse.core.resources.natures"> 
    	  <runtime> 
          <run class="checkers.eclipse.natures.CheckerBuildNature"/> 
@@ -131,7 +131,7 @@
    
 	<extension 
          id="checkerbuilder" 
-         name="Checker Builder" 
+         name="%extension.name.0" 
          point="org.eclipse.core.resources.builders">
       <builder hasNature="true">
          <run class="checkers.eclipse.builder.CheckerBuilder">
@@ -143,7 +143,7 @@
       
    <extension
 		 id="checkers.eclipse.marker"
-		 name="Checker Framework Problem"
+		 name="%extension.name.1"
 		 point="org.eclipse.core.resources.markers">
 	  <super type="org.eclipse.core.resources.problemmarker"/>
 	  <super type="org.eclipse.core.resources.textmarker"/>
