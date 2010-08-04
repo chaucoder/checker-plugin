@@ -27,6 +27,7 @@ public class CommandlineJavacRunner
 {
     public static final String CHECKERS_LOCATION = "lib/checkers.jar";
     public static final String JAVAC_LOCATION = "lib/javac.jar";
+    public static final String JSR308ALL_LOCATION = "lib/jsr308-all.jar";
     public static final List<String> IMPLICIT_ARGS = Arrays.asList(
             "checkers.nullness.quals.*", "checkers.igj.quals.*",
             "checkers.javari.quals.*", "checkers.interning.quals.*");
@@ -80,15 +81,13 @@ public class CommandlineJavacRunner
         List<String> opts = new ArrayList<String>();
         opts.add(javaVM());
 
-        if (CheckerPlugin.getDefault().getPreferenceStore()
-                .getBoolean(CheckerPreferences.PREF_CHECKER_IMPLICIT_IMPORTS))
+        if (usingImplicitAnnotations())
         {
             opts.add("-Djsr308_imports=\"" + implicitAnnotations() + "\"");
         }
 
         opts.add("-ea:com.sun.tools");
-        opts.add("-Xbootclasspath/p:" + checkersJARlocation() + ":"
-                + javacJARlocation());
+        opts.add("-Xbootclasspath/p:" + javacJARlocation());
 
         opts.add("-jar");
         opts.add(javacJARlocation());
@@ -96,7 +95,7 @@ public class CommandlineJavacRunner
         // opts.add("-verbose");
         opts.add("-proc:only");
         opts.add("-classpath");
-        opts.add(classpath(classpath));
+        opts.add(classpath);
 
         // Build the processor arguments, comma separated
         StringBuilder processorStr = new StringBuilder();
@@ -135,6 +134,12 @@ public class CommandlineJavacRunner
         opts.addAll(fileNames);
 
         return opts.toArray(new String[opts.size()]);
+    }
+
+    private boolean usingImplicitAnnotations()
+    {
+        return CheckerPlugin.getDefault().getPreferenceStore()
+                .getBoolean(CheckerPreferences.PREF_CHECKER_IMPLICIT_IMPORTS);
     }
 
     /**
@@ -177,16 +182,16 @@ public class CommandlineJavacRunner
         return System.getProperty("java.home") + sep + "bin" + sep + "java";
     }
 
-    private String classpath(String classpath)
-    {
-        return classpath;
-    }
-
     private String javacJARlocation() throws IOException
     {
         Bundle bundle = Platform.getBundle(CheckerPlugin.PLUGIN_ID);
+        Path javacJAR;
 
-        Path javacJAR = new Path(JAVAC_LOCATION);
+        if (usingImplicitAnnotations())
+            javacJAR = new Path(JSR308ALL_LOCATION);
+        else
+            javacJAR = new Path(JAVAC_LOCATION);
+
         URL javacJarURL = FileLocator.toFileURL(FileLocator.find(bundle,
                 javacJAR, null));
         return javacJarURL.getPath();
