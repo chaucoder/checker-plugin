@@ -36,7 +36,9 @@ public class CheckerPreferencePage extends PreferencePage implements
     private Button optFilenames;
     private Button optNoMsgText;
     private Button optShowChecks;
-    private Button optImplicitImports;
+
+    /* Disabled for this release */
+    /* private Button optImplicitImports; */
 
     @Override
     public void init(IWorkbench workbench)
@@ -98,7 +100,7 @@ public class CheckerPreferencePage extends PreferencePage implements
         procGroup.setLayout(procLayout);
 
         Label skipLabel = new Label(procGroup, SWT.None);
-        skipLabel.setText("Classes to skip:");
+        skipLabel.setText("Classes to skip (-AskipClasses):");
         optSkipClasses = new Text(procGroup, SWT.SINGLE | SWT.BORDER);
         optSkipClasses
                 .setToolTipText("Classes to skip during type checking (-AskipClasses)");
@@ -115,9 +117,13 @@ public class CheckerPreferencePage extends PreferencePage implements
         optShowChecks = new Button(procGroup, SWT.CHECK);
         optShowChecks
                 .setText("Print debugging info for pseudo-checks (-Ashowchecks)");
-        optImplicitImports = new Button(procGroup, SWT.CHECK);
-        optImplicitImports
-                .setText("Use implicit imports for annotation classes");
+
+        /* Disabled for this release */
+        /*
+         * optImplicitImports = new Button(procGroup, SWT.CHECK);
+         * optImplicitImports
+         * .setText("Use implicit imports for annotation classes");
+         */
 
         GridData procGridData = new GridData(SWT.FILL, SWT.BEGINNING, true,
                 false);
@@ -174,8 +180,12 @@ public class CheckerPreferencePage extends PreferencePage implements
                 .getBoolean(CheckerPreferences.PREF_CHECKER_A_NO_MSG_TEXT));
         optShowChecks.setSelection(store
                 .getBoolean(CheckerPreferences.PREF_CHECKER_A_SHOW_CHECKS));
-        optImplicitImports.setSelection(store
-                .getBoolean(CheckerPreferences.PREF_CHECKER_IMPLICIT_IMPORTS));
+
+        /* Disabled for this release */
+        /*
+         * optImplicitImports.setSelection(store
+         * .getBoolean(CheckerPreferences.PREF_CHECKER_IMPLICIT_IMPORTS));
+         */
     }
 
     public boolean performOk()
@@ -205,8 +215,12 @@ public class CheckerPreferencePage extends PreferencePage implements
                 optNoMsgText.getSelection());
         store.setValue(CheckerPreferences.PREF_CHECKER_A_SHOW_CHECKS,
                 optShowChecks.getSelection());
-        store.setValue(CheckerPreferences.PREF_CHECKER_IMPLICIT_IMPORTS,
-                optImplicitImports.getSelection());
+
+        /* Disabled for this release */
+        /*
+         * store.setValue(CheckerPreferences.PREF_CHECKER_IMPLICIT_IMPORTS,
+         * optImplicitImports.getSelection());
+         */
 
         return true;
     }
