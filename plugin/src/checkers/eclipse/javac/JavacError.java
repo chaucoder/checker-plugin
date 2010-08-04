@@ -59,7 +59,7 @@ public class JavacError
         do
         {
             String[] segments = line.split(":");
-            if (segments.length != 3 && segments.length != 4)
+            if (segments.length < 3 || segments.length > 5)
             {
                 if (iter.hasNext())
                     line = iter.next();
@@ -68,14 +68,23 @@ public class JavacError
             try
             {
                 int lineNumber = Integer.parseInt(segments[1]);
+
+                // Reconstruct error message
                 StringBuilder msg = new StringBuilder();
-                msg.append(segments[2].trim());
+                if (segments.length > 3)
+                    msg.append(segments[3].trim());
+                if (segments.length > 4)
+                {
+                    msg.append(": ");
+                    msg.append(segments[4].trim());
+                }
+
                 boolean foundNextEntry = false;
                 while (!foundNextEntry && iter.hasNext())
                 {
                     line = iter.next();
                     int splitLen = line.split(":").length;
-                    foundNextEntry = (splitLen == 3 || splitLen == 4)
+                    foundNextEntry = (splitLen >= 3 && splitLen <= 5)
                             && new File(line.split(":")[0]).exists();
                     if (!foundNextEntry
                             && !errorCountPattern.matcher(line).matches()
