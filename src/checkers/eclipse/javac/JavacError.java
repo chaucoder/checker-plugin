@@ -74,7 +74,8 @@ public class JavacError
                 while (!foundNextEntry && iter.hasNext())
                 {
                     line = iter.next();
-                    foundNextEntry = line.split(":").length == 3
+                    int splitLen = line.split(":").length;
+                    foundNextEntry = (splitLen == 3 || splitLen == 4)
                             && new File(line.split(":")[0]).exists();
                     if (!foundNextEntry
                             && !errorCountPattern.matcher(line).matches()
