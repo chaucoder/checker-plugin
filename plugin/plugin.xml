@@ -68,43 +68,6 @@
 			   tooltip="Run the custom checker on the selected element."/> -->
 			   
 	  </objectContribution>
-	  <!-- Special case context menu for simple projects that have java natures -->
-	  <objectContribution
-			objectClass="org.eclipse.core.resources.IProject"
-			id="checkers.eclipse.NavigatorActions">
-		 <menu
-         id="checkers.eclipse"
-         label="%menu.label.0"
-         path="additions">
-   </menu>
-		 <action
-			   class="checkers.eclipse.actions.ClearMarkersAction"
-			   id="checkers.eclipse.removeMarkers"
-			   label="%action.label.6"
-			   menubarPath="checkers.eclipse/additions"
-			   tooltip="%action.tooltip.6">
-		 <enablement>
-			<objectState
-				  name="nature"
-				  value="org.eclipse.jdt.core.javanature"/>
-		 </enablement>
-
-		 </action>
-		 <action
-			   class="checkers.eclipse.actions.RunCheckerAction"
-			   id="srunCheckers"
-			   label="%action.label.7"
-			   menubarPath="checkers.eclipse/additions"
-			   tooltip="%action.tooltip.7">
-		 <enablement>
-			<objectState
-				  name="nature"
-				  value="org.eclipse.jdt.core.javanature"/>
-		 </enablement>
-
-		 </action>
-	  </objectContribution>
-
    </extension>
    
    <extension point="org.eclipse.ui.preferencePages">
