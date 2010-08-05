@@ -52,11 +52,12 @@
 		}
 	}
       </script>
-<link rel="stylesheet" href="custom.css" />
+      <link rel="stylesheet" href="custom.css" />
+      <link href='http://fonts.googleapis.com/css?family=Josefin+Sans+Std+Light' rel='stylesheet' type='text/css'>
 </head>
 <body onload="init();">
-<!--[insert static HTML here]-->
-<div id="data"><!-- this is where the transformed data goes --></div>
+<div id="main-content">
+<h1 id="title">Checker Plugin for Eclipse</h1>
 <h2>What it is:</h2>
 <a href="http://types.cs.washington.edu/checker-framework/">Pluggable type-checkers</a>
 are bug-finding and verification tools.
@@ -65,33 +66,33 @@ equality operations, and side effect errors (and other errors).
 <br>
 <br>
 <h2>Requirements:</h2>
-The plugin has been tested on Linux, Eclipse 3.6.0 and Java 6.<br>
-Your Eclipse must be running on a Java 6 VM or newer.<br>
-To see what Java VM and Eclipse is running on, select from the menu <b>Help</b> -&gt; <b>About Eclipse Platform</b> -&gt; <b>Configuration Details</b>.<br>
-Depending on your installation, the menu may be <b>Help</b> -&gt; <b>About Eclipse SDK</b> -&gt; <b>Configuration Details</b>.<br>
-<!-- On the Mac, the menu <b>Eclipse</b> -&gt; <b>About Eclipse SDK</b> -&gt; <b>Configuration Details</b>.<br> -->
+<p>The plugin has been tested on Linux, <a href="http://www.eclipse.org/">Eclipse</a> 3.6.0 and <a href="http://www.java.com">Java</a> 6.</p>
+<p>Your Eclipse must be running on a Java 6 VM or newer.
+To see what Java VM and Eclipse is running on, select from the menu <b>Help</b> &rarr; <b>About Eclipse Platform</b> &rarr; <b>Installation Details</b>.
+Depending on your installation, the menu may be <b>Help</b> &rarr; <b>About Eclipse SDK</b> &rarr; <b>Installation Details</b>.</p>
+<p>You will also need the Checker Framework, which you can download <a href="http://types.cs.washington.edu/checker-framework/">here</a></p>
+<!-- On the Mac, the menu <b>Eclipse</b> &rarr; <b>About Eclipse SDK</b> &rarr; <b>Configuration Details</b>.<br> -->
 <br>
+<div id="data"><!-- this is where the transformed data goes --></div>
 <h2>How to install:</h2>
 <ol>
-<li> In Eclipse, select from the menu <b> Help </b> -&gt; <b> Install New Software... </b></li>
-<li> Choose the <b> Search for new features to install </b> option, and click <b> Next</b>.</li>
-<li> Click <b> New Remote Site</b>.</li>
+<li> In Eclipse, select from the menu <b> Help </b> &rarr; <b> Install New Software... </b></li>
+<li> Click <b>Add...</b>.</li>
 <li> Enter the following: </li>
   <ul>
   <li><b>Name: </b>Checker Framework</li>
-  <li><b>URL: </b>http://types.cs.washington.edu/checker-framework/eclipse</li>
+  <li><b>Location: </b>http://types.cs.washington.edu/checker-framework/eclipse</li>
   </ul>
 and click <b>OK</b>.</li>
 
-<li> Under <b> Sites to include in search</b>, you should see "Checker Framework".<br>
-Select the checkbox next to it and click <b>Finish</b>.</li>
-<li> Under <b> Select features to install</b>, you should see "Checker Framework" (for running the checkers)
-and "JSR 308 Skeleton Generator" (for generating skeleton files). <br>
+<li> Under <b> Work with:</b>, you should see "Checker Framework".<br>
+Select that entry and look at the selection area below.</li>
+<li> In the selection area, you should see the "Checker Framework Feature"
+under the "Uncategorized" category.<br>
 (You may have to expand the tree to make the feature visible.)<br>
 Select the checkbox next to it and click <b>Next</b>.</li>
 <li> Select the <b>I accept the terms in the license agreement</b> option and click <b> Next</b>.</li>
-<li> Select the location.
-The default (your workspace) should be fine. Click <b>Finish</b>.</li>
+<li> Then click <b>Finish</b>.</li>
 <li>The plugin is not digitally signed. Install it anyway.</li>
 <li> Click <b> Yes </b> to restart Eclipse.</li>
 </ol>
@@ -100,40 +101,46 @@ First, add <a href="lib/checkers.jar">checkers.jar</a> to your project's classpa
 (Eclipse may complain about unresolved classes referenced from a classfile.
 This does not affect the checking, but to make the warning go away,
 add <a href="lib/javac.jar">javac.jar</a> to the project's classpath.)<br>
-To perform the checking, select the checker from the context menu of a Java project, for example <b>Checker Framework</b> -&gt; <b>Run Nullness</b>.<br>
+To perform the checking, select the checker from the context menu of a Java project, for example <b>Checker Framework</b> &rarr; <b>Run Nullness</b>.<br>
 The checker will run and warnings will be added to the Problems view.<br>
-To remove the warning markers, run <b>Checker Framework</b> -&gt; <b>Remove Markers</b><br>
+To remove the warning markers, run <b>Checker Framework</b> &rarr; <b>Remove Markers</b><br>
+
+<p>You can also run checkers on individual packages or files. To do this, just right click on the
+package or file you want to typecheck and use the context menu as documented above.</p>
 
 <p>
 If you want to run multiple checkers at once, you can do so using the <b>Run selected checkers</b> action.
 This will run the checkers that are selected in the <b>Checkers</b> section in the preferences, which
-are accessible through <b>Window</b> -&gt; <b>Preferences</b>. These selections are also used for
+are accessible through <b>Window</b> &rarr; <b>Preferences</b>. These selections are also used for
 automatic build, which is described below.
 </p>
 
 <h3>Automatic build</h3>
 <p>
 The plugin also supports automatically typechecking your code when a change is detected. To enable
-this behavior for a project, right click on your project and run <b>Checker Framework</b> -&gt; <b>Toggle checker nature on project</b>.
+this behavior for a project, right click on your project and run <b>Checker Framework</b> &rarr; <b>Toggle checker nature on project</b>.
 This will add the checker nature to your project (assuming it is not already present), which will cause Eclipse to automatically run
 checkers on subsequent edits.
 </p>
 <p>
 The checkers that are run are those that are selected in the preferences.
 </p>
-<br>
-<h2>How to use the Skeleton Generator Feature:</h2>
-<ol>
-    <li>Create a new Eclipse project containing the desired packages. The plug-in performs in-place modifications to the files. They need to be in the source path (usually in <b>src</b> directory), but do not need to have the classpath configured properly.</li>
-    <li>Select (i.e. highlight) the packages (or individual source files) to be converted.</li>
-    <li>Choose <b>JSR308 Tools > Skeleton Files (With JavaDocs)</b> or <b>JSR308 Tools > Skeleton Files (No JavaDocs)</b> from their context menus. The documentation might be helpful when annotating the code.</li>
-    <li>The plug-in generates skeleton files in place of the input files.</li>
-</ol>
+
+<h3>Preferences</h3>
+<p>
+Most of the commandline options that can be supplied to the Checker Framework compiler are also supported
+by this plugin. To set the various options, go to <b>Window</b> &rarr; <b>Preferences</b> and select the
+<b>Checker</b> section. The options that correspond to commandline switches will be marked as such.
+</p>
+<p>For more information on the supported commandline options, see the <a href="http://types.cs.washington.edu/checker-framework/">Checker Framework
+  Documentation</a>
+</p>
 
 <h2>How to report problems:</h2>
-Submit bug reports at <a href="http://code.google.com/p/checker-framework/issues/list">http://code.google.com/p/checker-framework/issues/list</a> <br>
+Submit bug reports at <a href="http://code.google.com/a/eclipselabs.org/p/checker-plugin/issues/list ">http://code.google.com/a/eclipselabs.org/p/checker-plugin/issues/list </a> <br>
 <br>
 <h2>Currently supported checkers:</h2> NonNull, Javari, IGJ, Interned
 <br>
+</div>
 </body>
 </html>
