@@ -2,6 +2,8 @@ package checkers.eclipse.javac;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -184,17 +186,30 @@ public class CommandlineJavacRunner
 
     private String javacJARlocation() throws IOException
     {
-        Bundle bundle = Platform.getBundle(CheckerPlugin.PLUGIN_ID);
-        Path javacJAR;
+        Bundle bundle = CheckerPlugin.getDefault().getBundle();
+        URL javacJarURL;
 
         if (usingImplicitAnnotations())
-            javacJAR = new Path(JSR308ALL_LOCATION);
+            javacJarURL = bundle.getEntry(JSR308ALL_LOCATION);
         else
-            javacJAR = new Path(JAVAC_LOCATION);
+            javacJarURL = bundle.getEntry(JAVAC_LOCATION);
 
-        URL javacJarURL = FileLocator.toFileURL(FileLocator.find(bundle,
-                javacJAR, null));
-        return javacJarURL.getPath();
+        javacJarURL = FileLocator.toFileURL(javacJarURL);
+
+        // hack to get around broken URI encoding in FileLocator
+        // see bug #140596 in Eclipse
+        URI javacJarURI;
+        try
+        {
+            javacJarURI = new URI(javacJarURL.toString().replaceAll(" ", "%20"));
+        }catch (URISyntaxException e)
+        {
+            CheckerPlugin.getDefault().logException(e, e.getMessage());
+            return "";
+        }
+
+        File javacFile = new File(javacJarURI);
+        return javacFile.getAbsolutePath();
     }
 
     // This used to be used. Now we just scan the classpath. The checkers.jar

@@ -10,6 +10,8 @@ import java.util.regex.Pattern;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 
+import org.apache.commons.lang3.SystemUtils;
+
 import checkers.eclipse.util.Util;
 
 /**
@@ -67,7 +69,7 @@ public class JavacError
             }
             try
             {
-                int lineNumber = Integer.parseInt(segments[1]);
+                int lineNumber = getLineNum(segments);
 
                 // Reconstruct error message
                 StringBuilder msg = new StringBuilder();
@@ -85,7 +87,7 @@ public class JavacError
                     line = iter.next();
                     int splitLen = line.split(":").length;
                     foundNextEntry = (splitLen >= 3 && splitLen <= 5)
-                            && new File(line.split(":")[0]).exists();
+                            && fileExists(segments);
                     if (!foundNextEntry
                             && !errorCountPattern.matcher(line).matches()
                             && !line.trim().equals("^"))
@@ -103,5 +105,21 @@ public class JavacError
             }
         }while (iter.hasNext());
         return result;
+    }
+
+    private static int getLineNum(String[] segments)
+    {
+        if (SystemUtils.IS_OS_WINDOWS)
+            return Integer.parseInt(segments[2]);
+        else
+            return Integer.parseInt(segments[1]);
+    }
+
+    private static boolean fileExists(String[] segments)
+    {
+        if (SystemUtils.IS_OS_WINDOWS)
+            return new File(segments[0] + segments[1]).exists();
+        else
+            return new File(segments[0]).exists();
     }
 }
