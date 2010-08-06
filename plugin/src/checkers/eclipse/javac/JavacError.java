@@ -92,8 +92,8 @@ public class JavacError
                 while (!foundNextEntry && iter.hasNext())
                 {
                     line = iter.next();
-                    segments = line.split(":");
-                    foundNextEntry = hasFoundNextEntry(segments);
+                    String[] newSegments = line.split(":");
+                    foundNextEntry = hasFoundNextEntry(newSegments);
                     if (!foundNextEntry
                             && !errorCountPattern.matcher(line).matches()
                             && !line.trim().equals("^"))
