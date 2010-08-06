@@ -1,5 +1,10 @@
 /* Additional CSS rules for checker plugin index page */
 
+img { 
+  float: right; 
+  margin: 20px;
+}
+
 body {
   background: #eee;
   padding: 0;
