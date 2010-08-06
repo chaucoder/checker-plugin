@@ -44,7 +44,7 @@ public class JavacError
      */
     // XXX very nasty code - needs cleanup
     private static final Pattern errorCountPattern = Pattern
-            .compile("^[0-9]+ errors*$");
+            .compile("^[0-9]+ (errors|warnings)*$");
 
     public static List<JavacError> parse(String javacoutput)
     {
@@ -52,12 +52,17 @@ public class JavacError
             System.out.println("javac output:\n" + javacoutput);
         if (javacoutput == null)
             return null;
+
         List<JavacError> result = new ArrayList<JavacError>();
         List<String> lines = Arrays.asList(javacoutput.split(Util.NL));
         Iterator<String> iter = lines.iterator();
+        String line;
+
         if (!iter.hasNext())
             return result;
-        String line = iter.next();
+        else
+            line = iter.next();
+
         do
         {
             String[] segments = line.split(":");
@@ -81,13 +86,14 @@ public class JavacError
                     msg.append(segments[4].trim());
                 }
 
+                // Loop and capture all of this error's message until
+                // we hit the next error (or run out of chars)
                 boolean foundNextEntry = false;
                 while (!foundNextEntry && iter.hasNext())
                 {
                     line = iter.next();
-                    int splitLen = line.split(":").length;
-                    foundNextEntry = (splitLen >= 3 && splitLen <= 5)
-                            && fileExists(segments);
+                    segments = line.split(":");
+                    foundNextEntry = hasFoundNextEntry(segments);
                     if (!foundNextEntry
                             && !errorCountPattern.matcher(line).matches()
                             && !line.trim().equals("^"))
@@ -95,7 +101,7 @@ public class JavacError
                         msg.append(Util.NL).append(line);
                     }
                 }
-                File f = new File(segments[0]);
+                File f = fileFromSegments(segments);
                 result.add(new JavacError(f, lineNumber, msg.toString()));
             }catch (NumberFormatException e)
             {
@@ -121,5 +127,21 @@ public class JavacError
             return new File(segments[0] + ":" + segments[1]).exists();
         else
             return new File(segments[0]).exists();
+    }
+
+    private static File fileFromSegments(String[] segments)
+    {
+        if (SystemUtils.IS_OS_WINDOWS)
+            return new File(segments[0] + ":" + segments[1]);
+        else
+            return new File(segments[0]);
+    }
+
+    private static boolean hasFoundNextEntry(String[] segments)
+    {
+        int splitLen = segments.length;
+        boolean result = (splitLen >= 3 && splitLen <= 5)
+                && fileExists(segments);
+        return result;
     }
 }
