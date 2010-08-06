@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="checkers"
+      id="checkers.eclipse.feature"
       label="Checker Framework Feature"
       version="0.0.6"
       provider-name="Checker Framework Development Team">
