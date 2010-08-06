@@ -118,7 +118,7 @@ public class JavacError
     private static boolean fileExists(String[] segments)
     {
         if (SystemUtils.IS_OS_WINDOWS)
-            return new File(segments[0] + segments[1]).exists();
+            return new File(segments[0] + ":" + segments[1]).exists();
         else
             return new File(segments[0]).exists();
     }
