@@ -204,7 +204,7 @@ public class CommandlineJavacRunner
             javacJarURI = new URI(javacJarURL.toString().replaceAll(" ", "%20"));
         }catch (URISyntaxException e)
         {
-            CheckerPlugin.getDefault().logException(e, e.getMessage());
+            CheckerPlugin.logException(e, e.getMessage());
             return "";
         }
 
