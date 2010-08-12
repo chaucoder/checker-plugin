@@ -3,14 +3,12 @@ package checkers.eclipse.javac;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
-
-import org.apache.commons.lang3.SystemUtils;
 
 import checkers.eclipse.util.Util;
 
@@ -42,9 +40,10 @@ public class JavacError
     /**
      * Parses javac output and converts to a list of errors.
      */
-    // XXX very nasty code - needs cleanup
     private static final Pattern errorCountPattern = Pattern
-            .compile("^[0-9]+ (errors|warnings)*$");
+            .compile("^[0-9]+ (error|warning)*s?$");
+    private static final Pattern messagePattern = Pattern
+            .compile("(.*):(\\d*): (?:warning|error): (.*)");
 
     public static List<JavacError> parse(String javacoutput)
     {
@@ -55,93 +54,43 @@ public class JavacError
 
         List<JavacError> result = new ArrayList<JavacError>();
         List<String> lines = Arrays.asList(javacoutput.split(Util.NL));
-        Iterator<String> iter = lines.iterator();
-        String line;
 
-        if (!iter.hasNext())
-            return result;
-        else
-            line = iter.next();
+        File errorFile = null;
+        int lineNum = 0;
+        StringBuilder messageBuilder = new StringBuilder();
 
-        do
+        for (String line : lines)
         {
-            String[] segments = line.split(":");
-            if (segments.length < 3 || segments.length > 5)
+            Matcher matcher = messagePattern.matcher(line);
+            if (matcher.matches() && matcher.groupCount() == 3)
             {
-                if (iter.hasNext())
-                    line = iter.next();
-                continue; // ??
-            }
-            try
-            {
-                int lineNumber = getLineNum(segments);
-
-                // Reconstruct error message
-                StringBuilder msg = new StringBuilder();
-                if (segments.length > 3)
-                    msg.append(segments[3].trim());
-                if (segments.length > 4)
+                if (errorFile != null)
                 {
-                    msg.append(": ");
-                    msg.append(segments[4].trim());
+                    JavacError error = new JavacError(errorFile, lineNum,
+                            messageBuilder.toString());
+                    result.add(error);
                 }
-
-                // Loop and capture all of this error's message until
-                // we hit the next error (or run out of chars)
-                boolean foundNextEntry = false;
-                while (!foundNextEntry && iter.hasNext())
-                {
-                    line = iter.next();
-                    String[] newSegments = line.split(":");
-                    foundNextEntry = hasFoundNextEntry(newSegments);
-                    if (!foundNextEntry
-                            && !errorCountPattern.matcher(line).matches()
-                            && !line.trim().equals("^"))
-                    {
-                        msg.append(Util.NL).append(line);
-                    }
-                }
-                File f = fileFromSegments(segments);
-                result.add(new JavacError(f, lineNumber, msg.toString()));
-            }catch (NumberFormatException e)
-            {
-                if (iter.hasNext())
-                    line = iter.next();
-                continue;
+                errorFile = new File(matcher.group(1));
+                lineNum = Integer.parseInt(matcher.group(2));
+                messageBuilder = new StringBuilder().append(matcher.group(3));
+                messageBuilder.append(Util.NL);
             }
-        }while (iter.hasNext());
-        return result;
-    }
+            else
+            {
+                if (errorCountPattern.matcher(line).matches())
+                {
+                    JavacError error = new JavacError(errorFile, lineNum,
+                            messageBuilder.toString());
+                    result.add(error);
+                }
+                else if (!line.trim().equals("^"))
+                {
+                    messageBuilder.append(line);
+                    messageBuilder.append(Util.NL);
+                }
+            }
+        }
 
-    private static int getLineNum(String[] segments)
-    {
-        if (SystemUtils.IS_OS_WINDOWS)
-            return Integer.parseInt(segments[2]);
-        else
-            return Integer.parseInt(segments[1]);
-    }
-
-    private static boolean fileExists(String[] segments)
-    {
-        if (SystemUtils.IS_OS_WINDOWS)
-            return new File(segments[0] + ":" + segments[1]).exists();
-        else
-            return new File(segments[0]).exists();
-    }
-
-    private static File fileFromSegments(String[] segments)
-    {
-        if (SystemUtils.IS_OS_WINDOWS)
-            return new File(segments[0] + ":" + segments[1]);
-        else
-            return new File(segments[0]);
-    }
-
-    private static boolean hasFoundNextEntry(String[] segments)
-    {
-        int splitLen = segments.length;
-        boolean result = (splitLen >= 3 && splitLen <= 5)
-                && fileExists(segments);
         return result;
     }
 }
