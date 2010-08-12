@@ -1,6 +1,7 @@
 package checkers.eclipse.actions;
 
 import checkers.basic.BasicChecker;
+import checkers.fenum.FenumChecker;
 import checkers.igj.IGJChecker;
 import checkers.interning.InterningChecker;
 import checkers.javari.JavariChecker;
@@ -18,6 +19,8 @@ public class CheckerActions
     public static final Class<?> INTERNING_ACTION_CLASS = InterningChecker.class;
     public static final String IGJ_ACTION_LABEL = "IGJ checker";
     public static final Class<?> IGJ_ACTION_CLASS = IGJChecker.class;
+    public static final String FENUM_ACTION_LABEL = "Fenum checker";
+    public static final Class<?> FENUM_ACTION_CLASS = FenumChecker.class;
 
     private CheckerActions()
     {
@@ -61,6 +64,14 @@ public class CheckerActions
         public IGJAction()
         {
             super(IGJ_ACTION_CLASS);
+        }
+    }
+
+    public static class FenumAction extends RunCheckerAction
+    {
+        public FenumAction()
+        {
+            super(FENUM_ACTION_CLASS);
         }
     }
 

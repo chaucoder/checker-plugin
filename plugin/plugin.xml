@@ -41,6 +41,12 @@
 			   menubarPath="checkers.eclipse/additions"
 			   tooltip="%action.tooltip.2"/>
 		<action
+			   class="checkers.eclipse.actions.CheckerActions$FenumAction"
+			   id="checkers.eclipse.runCheckers.igj"
+			   label="%action.label.8"
+			   menubarPath="checkers.eclipse/additions"
+			   tooltip="%action.tooltip.8"/>
+		<action
 			   class="checkers.eclipse.actions.ConvertProjectAction"
 			   id="checkers.eclipse.convertProject"
 			   label="%action.label.3"
