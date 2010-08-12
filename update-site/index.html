@@ -59,12 +59,16 @@
 <div id="main-content">
 <h1 id="title">Checker Plugin for Eclipse</h1>
 <h2>What it is:</h2>
-<a href="http://types.cs.washington.edu/checker-framework/">Pluggable type-checkers</a>
+<p><a href="http://types.cs.washington.edu/checker-framework/">Pluggable type-checkers</a>
 are bug-finding and verification tools.
 They help you to detect and prevent null pointer errors, incorrect uses of
-equality operations, and side effect errors (and other errors).
-<br>
-<br>
+equality operations, and side effect errors (and other errors).</p>
+<h2>Where to get it:</h2>
+<p>The repository for the code is hosted on Eclipse Labs here: <a href="http://code.google.com/a/eclipselabs.org/p/checker-plugin/">
+  http://code.google.com/a/eclipselabs.org/p/checker-plugin/</a>. The repository is hosted using <a href="http://mercurial.selenic.com/">Mercurial</a>.
+To check the source out, use the following command:
+<code>hg clone https://hg.codespot.com/a/eclipselabs.org/checker-plugin/ checker-plugin</code></p>
+<p>Instructions on how to install the plugin from Eclipse can be found below.</p>
 <h2>Requirements:</h2>
 <p>The plugin has been tested on Linux, <a href="http://www.eclipse.org/">Eclipse</a> 3.6.0 and <a href="http://www.java.com">Java</a> 6.</p>
 <p>Your Eclipse must be running on a Java 6 VM or newer.
@@ -139,10 +143,12 @@ by this plugin. To set the various options, go to <b>Window</b> &rarr; <b>Prefer
 </p>
 
 <h2>How to report problems:</h2>
-Submit bug reports at <a href="http://code.google.com/a/eclipselabs.org/p/checker-plugin/issues/list ">http://code.google.com/a/eclipselabs.org/p/checker-plugin/issues/list </a> <br>
-<br>
-<h2>Currently supported checkers:</h2> NonNull, Javari, IGJ, Interned
-<br>
+<p>Submit bug reports at <a href="http://code.google.com/a/eclipselabs.org/p/checker-plugin/issues/list ">http://code.google.com/a/eclipselabs.org/p/checker-plugin/issues/list </a></p>
+<h3>Troubleshooting tips</h3>
+<p>If you are having problems with the output from the plugin, check to see what the output on the Eclipse console indicates. The console
+will get the raw output from the compiler. Attaching the console output to a bug report can also help us figure out which component
+is reponsible for the bug.</p>
+<h2>Currently supported checkers:</h2> NonNull, Javari, IGJ, Interned, Fake Enum.
 </div>
 </body>
 </html>
