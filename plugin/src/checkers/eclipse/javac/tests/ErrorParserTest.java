@@ -43,6 +43,17 @@ public class ErrorParserTest
     private static final String OTHER_ERROR_2 = new StringBuilder()
             .append("Region is internal proprietary API and may be removed in a future release\n")
             .append("import sun.java2d.pipe.Region;\n").toString();
+    private static final String W_TEST_INPUT = new StringBuilder()
+            .append("/foo/bar/Baz.java:35: warning: AttributesValues is internal proprietary API and may be removed in a future release\n")
+            .append("  private static void applyStyle(int style, AttributeValues values) {\n")
+            .append("/foo/bar/Baz.java:38: package sun.java2d.cmm does not exist\n")
+            .append("import sun.java2d.cmm.ColorTransform\n")
+            .append("/foo/bar/Baz.java:39: package sun.java2d.cmm does not exist\n")
+            .append("import sun.java2d.cmm.CMSManager\n").append("3 warnings")
+            .toString();
+    private static final String W_ERROR_2 = new StringBuilder()
+            .append("package sun.java2d.cmm does not exist\n")
+            .append("import sun.java2d.cmm.ColorTransform\n").toString();
 
     @Test
     public void simpleParseTest()
@@ -66,5 +77,14 @@ public class ErrorParserTest
         assertEquals(errors.get(0).lineNumber, 58);
         assertEquals(errors.get(1).message, OTHER_ERROR_2);
         assertEquals(errors.get(1).lineNumber, 59);
+    }
+
+    @Test
+    public void wParseTest()
+    {
+        List<JavacError> errors = JavacError.parse(W_TEST_INPUT);
+
+        assertEquals(errors.size(), 3);
+        assertEquals(errors.get(1).message, W_ERROR_2);
     }
 }

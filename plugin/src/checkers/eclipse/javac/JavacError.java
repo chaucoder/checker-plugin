@@ -10,6 +10,9 @@ import java.util.regex.Pattern;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 
+import org.eclipse.ui.statushandlers.StatusManager;
+
+import checkers.eclipse.error.CheckerErrorStatus;
 import checkers.eclipse.util.Util;
 
 /**
@@ -43,7 +46,9 @@ public class JavacError
     private static final Pattern errorCountPattern = Pattern
             .compile("^[0-9]+ (error|warning)*s?$");
     private static final Pattern messagePattern = Pattern
-            .compile("(.*):(\\d*): (?:warning|error): (.*)");
+            .compile("(.*):(\\d*): (?:(?:warning|error)?: ?)?(.*)");
+    private static final Pattern noProcessorPattern = Pattern
+            .compile("^error: Annotation processor (.*) not found$");
 
     public static List<JavacError> parse(String javacoutput)
     {
@@ -54,6 +59,18 @@ public class JavacError
 
         List<JavacError> result = new ArrayList<JavacError>();
         List<String> lines = Arrays.asList(javacoutput.split(Util.NL));
+
+        // special case for missing checkers.jar (or processor class)
+        Matcher procMatcher = noProcessorPattern.matcher(lines.get(0));
+        if (procMatcher.matches())
+        {
+            CheckerErrorStatus status = new CheckerErrorStatus(
+                    "Checker processor "
+                            + procMatcher.group(1)
+                            + " could not be found. Try adding checkers.jar to your project build path.");
+            StatusManager.getManager().handle(status, StatusManager.SHOW);
+            return result;
+        }
 
         File errorFile = null;
         int lineNum = 0;
