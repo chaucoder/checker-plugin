@@ -5,6 +5,14 @@ img {
   margin: 20px;
 }
 
+code {
+  background: #eef;
+  display: block;
+  font-family: monospace;
+  margin: 5px;
+  padding: 5px;
+}
+
 body {
   background: #eee;
   padding: 0;
