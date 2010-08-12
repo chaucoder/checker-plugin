@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/checkers.eclipse.feature_0.0.7.jar" id="checkers.eclipse.feature" version="0.0.7"/>
+   <feature url="features/checkers.eclipse.feature_0.0.8.jar" id="checkers.eclipse.feature" version="0.0.8"/>
 </site>

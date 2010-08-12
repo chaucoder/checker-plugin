@@ -35,6 +35,8 @@ public class CheckerActionManager
                 CheckerActions.INTERNING_ACTION_CLASS));
         processors.add(new CheckerProcessor(CheckerActions.IGJ_ACTION_LABEL,
                 CheckerActions.IGJ_ACTION_CLASS));
+        processors.add(new CheckerProcessor(CheckerActions.FENUM_ACTION_LABEL,
+                CheckerActions.FENUM_ACTION_CLASS));
     }
 
     private static class Holder
@@ -98,7 +100,8 @@ public class CheckerActionManager
         // since that defaults to false)
         List<String> selected = new ArrayList<String>();
 
-        IPreferenceStore store = CheckerPlugin.getDefault().getPreferenceStore();
+        IPreferenceStore store = CheckerPlugin.getDefault()
+                .getPreferenceStore();
 
         for (CheckerProcessor processor : processors)
         {

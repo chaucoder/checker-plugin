@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: checkers.eclipse;singleton:=true
-Bundle-Version: 0.0.7
+Bundle-Version: 0.0.8
 Bundle-ClassPath: lib/javac.jar,
  lib/checkers.jar,
  lib/jdk.jar,
@@ -100,7 +100,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.console;bundle-version="3.5.0",
  org.eclipse.jdt.ui;bundle-version="3.6.0",
- org.eclipse.ui.ide
+ org.eclipse.ui.ide,
+ org.junit
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Checker Framework Development Team
