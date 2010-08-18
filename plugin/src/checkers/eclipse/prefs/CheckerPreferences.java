@@ -39,4 +39,7 @@ public final class CheckerPreferences
     /** Key for implicit annotation imports */
     public static final String PREF_CHECKER_IMPLICIT_IMPORTS = "checker_implicit_imports";
 
+    /** Key for warning/error filter regex */
+    public static final String PREF_CHECKER_ERROR_FILTER_REGEX = "checker_error_filter_regex";
+
 }

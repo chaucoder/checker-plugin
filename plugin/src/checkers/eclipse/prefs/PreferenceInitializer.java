@@ -16,7 +16,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
     @Override
     public void initializeDefaultPreferences()
     {
-        IPreferenceStore prefs = CheckerPlugin.getDefault().getPreferenceStore();
+        IPreferenceStore prefs = CheckerPlugin.getDefault()
+                .getPreferenceStore();
         prefs.setDefault(CheckerPreferences.PREF_CHECKER_PREFS_SET, false);
         prefs.setDefault(CheckerPreferences.PREF_CHECKER_ARGS, "");
         prefs.setDefault(CheckerPreferences.PREF_CHECKER_A_SKIP_CLASSES, "");
@@ -28,6 +29,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
         prefs.setDefault(CheckerPreferences.PREF_CHECKER_AUTO_BUILD, true);
         prefs.setDefault(CheckerPreferences.PREF_CHECKER_IMPLICIT_IMPORTS,
                 false);
+        prefs.setDefault(CheckerPreferences.PREF_CHECKER_ERROR_FILTER_REGEX, "");
     }
 
 }

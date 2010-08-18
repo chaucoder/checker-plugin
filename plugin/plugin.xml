@@ -77,10 +77,17 @@
    </extension>
    
    <extension point="org.eclipse.ui.preferencePages">
- 	<page id="CheckerPreferencePage"
+ 	<page id="checkers.eclipse.prefs.CheckerPreferences"
  		name="%page.name"
     	class="checkers.eclipse.ui.CheckerPreferencePage">
    	</page>
+   	<!--
+   	<page id="checkers.eclipse"
+   		  name="Custom Checkers"
+   		  class="checkers.eclipse.ui.CustomPreferencesPage"
+   		  category="checkers.eclipse.prefs.CheckerPreferences">
+   	</page>
+   	-->
    </extension>
    
    <extension point="org.eclipse.core.runtime.preferences">

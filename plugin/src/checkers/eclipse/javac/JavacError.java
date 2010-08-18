@@ -12,7 +12,9 @@ import javax.tools.JavaFileObject;
 
 import org.eclipse.ui.statushandlers.StatusManager;
 
+import checkers.eclipse.CheckerPlugin;
 import checkers.eclipse.error.CheckerErrorStatus;
+import checkers.eclipse.prefs.CheckerPreferences;
 import checkers.eclipse.util.Util;
 
 /**
@@ -72,6 +74,17 @@ public class JavacError
             return result;
         }
 
+        // filter out for errors/warnings matching a regex
+        String filterRegex = CheckerPlugin.getDefault().getPreferenceStore()
+                .getString(CheckerPreferences.PREF_CHECKER_ERROR_FILTER_REGEX);
+        if (!filterRegex.isEmpty())
+        {
+            Matcher filterMatcher = Pattern.compile(filterRegex).matcher(
+                    javacoutput);
+            javacoutput = filterMatcher.replaceAll("");
+        }
+
+        lines = Arrays.asList(javacoutput.split(Util.NL));
         File errorFile = null;
         int lineNum = 0;
         StringBuilder messageBuilder = new StringBuilder();
@@ -84,7 +97,7 @@ public class JavacError
                 if (errorFile != null)
                 {
                     JavacError error = new JavacError(errorFile, lineNum,
-                            messageBuilder.toString());
+                            messageBuilder.toString().trim());
                     result.add(error);
                 }
                 errorFile = new File(matcher.group(1));
@@ -97,7 +110,7 @@ public class JavacError
                 if (errorCountPattern.matcher(line).matches())
                 {
                     JavacError error = new JavacError(errorFile, lineNum,
-                            messageBuilder.toString());
+                            messageBuilder.toString().trim());
                     result.add(error);
                 }
                 else if (!line.trim().equals("^"))

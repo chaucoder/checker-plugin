@@ -31,6 +31,7 @@ public class CheckerPreferencePage extends PreferencePage implements
     private Text argText;
     private Text optSkipClasses;
     private Text optALint;
+    private Text optFilter;
     private Button optAutoBuild;
     private Button optWarning;
     private Button optFilenames;
@@ -88,6 +89,10 @@ public class CheckerPreferencePage extends PreferencePage implements
 
         optAutoBuild = new Button(uiGroup, SWT.CHECK);
         optAutoBuild.setText("Automatically process annotations");
+
+        Label filterLabel = new Label(uiGroup, SWT.None);
+        filterLabel.setText("Regex for warning/error filter:");
+        optFilter = new Text(uiGroup, SWT.SINGLE | SWT.BORDER);
 
         GridData uiGridData = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
         uiGroup.setLayoutData(uiGridData);
@@ -180,6 +185,8 @@ public class CheckerPreferencePage extends PreferencePage implements
                 .getBoolean(CheckerPreferences.PREF_CHECKER_A_NO_MSG_TEXT));
         optShowChecks.setSelection(store
                 .getBoolean(CheckerPreferences.PREF_CHECKER_A_SHOW_CHECKS));
+        optFilter.setText(store
+                .getString(CheckerPreferences.PREF_CHECKER_ERROR_FILTER_REGEX));
 
         /* Disabled for this release */
         /*
@@ -215,6 +222,8 @@ public class CheckerPreferencePage extends PreferencePage implements
                 optNoMsgText.getSelection());
         store.setValue(CheckerPreferences.PREF_CHECKER_A_SHOW_CHECKS,
                 optShowChecks.getSelection());
+        store.setValue(CheckerPreferences.PREF_CHECKER_ERROR_FILTER_REGEX,
+                optFilter.getText());
 
         /* Disabled for this release */
         /*
