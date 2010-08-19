@@ -5,4 +5,6 @@
    <feature url="features/checkers.eclipse.feature_0.0.11.jar" id="checkers.eclipse.feature" version="0.0.11"/>
    <feature url="features/checkers.eclipse.feature_0.0.12.jar" id="checkers.eclipse.feature" version="0.0.12"/>
    <feature url="features/checkers.eclipse.feature_0.0.13.jar" id="checkers.eclipse.feature" version="0.0.13"/>
+   <feature url="features/checkers.eclipse.feature_0.0.14.jar" id="checkers.eclipse.feature" version="0.0.14"/>
+   <feature url="features/checkers.eclipse.feature_0.0.15.jar" id="checkers.eclipse.feature" version="0.0.15"/>
 </site>
