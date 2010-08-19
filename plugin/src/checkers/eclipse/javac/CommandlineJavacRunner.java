@@ -39,22 +39,25 @@ public class CommandlineJavacRunner
     private final List<String> fileNames;
     private final List<String> processors;
     private final String classpath;
+    private final String bootclasspath;
 
     private String checkResult;
 
     public CommandlineJavacRunner(String[] fileNames, String[] processors,
-            String classpath)
+            String classpath, String bootclasspath)
     {
         this.fileNames = Arrays.asList(fileNames);
         this.processors = Arrays.asList(processors);
         this.classpath = classpath;
+        this.bootclasspath = bootclasspath;
     }
 
     public void run()
     {
         try
         {
-            String[] cmd = options(fileNames, processors, classpath);
+            String[] cmd = options(fileNames, processors, classpath,
+                    bootclasspath);
             if (VERBOSE)
                 System.out.println(JavaUtils.join("\n", cmd));
 
@@ -78,7 +81,7 @@ public class CommandlineJavacRunner
     }
 
     private String[] options(List<String> fileNames, List<String> processors,
-            String classpath) throws IOException
+            String classpath, String bootclasspath) throws IOException
     {
         List<String> opts = new ArrayList<String>();
         opts.add(javaVM());
@@ -96,6 +99,8 @@ public class CommandlineJavacRunner
         // if (VERBOSE)
         // opts.add("-verbose");
         opts.add("-proc:only");
+        opts.add("-bootclasspath");
+        opts.add(bootclasspath + File.pathSeparator + javacJARlocation());
         opts.add("-classpath");
         opts.add(classpath);
 

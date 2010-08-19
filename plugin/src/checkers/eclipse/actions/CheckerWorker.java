@@ -25,6 +25,8 @@ import checkers.eclipse.util.Paths;
 import checkers.eclipse.util.Paths.ClasspathBuilder;
 import checkers.eclipse.util.ResourceUtils;
 
+import com.sun.tools.javac.util.Pair;
+
 public class CheckerWorker extends Job
 {
 
@@ -106,9 +108,9 @@ public class CheckerWorker extends Job
 
     private List<JavacError> runChecker() throws JavaModelException
     {
-        String cp = classPathOf(project);
+        Pair<String, String> classpaths = classPathOf(project);
         CommandlineJavacRunner runner = new CommandlineJavacRunner(sourceFiles,
-                checkerNames, cp);
+                checkerNames, classpaths.fst, classpaths.snd);
 
         runner.run();
 
@@ -134,38 +136,59 @@ public class CheckerWorker extends Job
         }
     }
 
-    private List<String> pathOf(IClasspathEntry cp, IJavaProject project)
-            throws JavaModelException
+    private Pair<List<String>, List<String>> pathOf(IClasspathEntry cp,
+            IJavaProject project) throws JavaModelException
     {
         int entryKind = cp.getEntryKind();
         switch (entryKind)
         {
         case IClasspathEntry.CPE_SOURCE:
-            return Arrays.asList(new String[] { ResourceUtils.outputLocation(
-                    cp, project) });
+            return new Pair<List<String>, List<String>>(
+                    Arrays.asList(new String[] { ResourceUtils.outputLocation(
+                            cp, project) }), new ArrayList<String>());
         case IClasspathEntry.CPE_LIBRARY:
-            return Arrays.asList(new String[] { Paths.absolutePathOf(cp) });
+            return new Pair<List<String>, List<String>>(
+                    Arrays.asList(new String[] { Paths.absolutePathOf(cp) }),
+                    new ArrayList<String>());
         case IClasspathEntry.CPE_PROJECT:
             // TODO unimplemented!
             break;
         case IClasspathEntry.CPE_CONTAINER:
             List<String> resultPaths = new ArrayList<String>();
+            List<String> resultBootPaths = new ArrayList<String>();
             IClasspathContainer c = JavaCore.getClasspathContainer(
                     cp.getPath(), project);
-            for (IClasspathEntry entry : c.getClasspathEntries())
+            if (c.getKind() == IClasspathContainer.K_DEFAULT_SYSTEM
+                    || c.getKind() == IClasspathContainer.K_SYSTEM)
             {
-                if (entry.getEntryKind() == IClasspathEntry.CPE_LIBRARY)
+                for (IClasspathEntry entry : c.getClasspathEntries())
                 {
-                    resultPaths.add(entry.getPath().makeAbsolute().toFile()
-                            .getAbsolutePath());
+                    if (entry.getEntryKind() == IClasspathEntry.CPE_LIBRARY)
+                    {
+                        resultBootPaths.add(entry.getPath().makeAbsolute()
+                                .toFile().getAbsolutePath());
+                    }
                 }
             }
-            return resultPaths;
+            else
+            {
+                for (IClasspathEntry entry : c.getClasspathEntries())
+                {
+                    if (entry.getEntryKind() == IClasspathEntry.CPE_LIBRARY)
+                    {
+                        resultPaths.add(entry.getPath().makeAbsolute().toFile()
+                                .getAbsolutePath());
+                    }
+                }
+            }
+            return new Pair<List<String>, List<String>>(resultPaths,
+                    resultBootPaths);
         case IClasspathEntry.CPE_VARIABLE:
             // TODO unimplemented!
             break;
         }
-        return new ArrayList<String>();
+        return new Pair<List<String>, List<String>>(new ArrayList<String>(),
+                new ArrayList<String>());
     }
 
     /**
@@ -175,18 +198,23 @@ public class CheckerWorker extends Job
      * @return the project's classpath as a string
      * @throws JavaModelException
      */
-    private String classPathOf(IJavaProject project) throws JavaModelException
+    private Pair<String, String> classPathOf(IJavaProject project)
+            throws JavaModelException
     {
         ClasspathBuilder classpath = new ClasspathBuilder();
+        ClasspathBuilder bootclasspath = new ClasspathBuilder();
 
         for (IClasspathEntry cp : project.getRawClasspath())
         {
-            List<String> paths = pathOf(cp, project);
-            for (String path : paths)
+            Pair<List<String>, List<String>> paths = pathOf(cp, project);
+            for (String path : paths.fst)
                 classpath.append(path);
+            for (String path : paths.snd)
+                bootclasspath.append(path);
         }
 
         // TODO: do we need to append the checkers.jar here?
-        return classpath.toString();
+        return new Pair<String, String>(classpath.toString(),
+                bootclasspath.toString());
     }
 }
