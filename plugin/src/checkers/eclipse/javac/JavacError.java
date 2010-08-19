@@ -3,6 +3,7 @@ package checkers.eclipse.javac;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -74,17 +75,6 @@ public class JavacError
             return result;
         }
 
-        // filter out for errors/warnings matching a regex
-        String filterRegex = CheckerPlugin.getDefault().getPreferenceStore()
-                .getString(CheckerPreferences.PREF_CHECKER_ERROR_FILTER_REGEX);
-        if (!filterRegex.isEmpty())
-        {
-            Matcher filterMatcher = Pattern.compile(filterRegex).matcher(
-                    javacoutput);
-            javacoutput = filterMatcher.replaceAll("");
-        }
-
-        lines = Arrays.asList(javacoutput.split(Util.NL));
         File errorFile = null;
         int lineNum = 0;
         StringBuilder messageBuilder = new StringBuilder();
@@ -117,6 +107,24 @@ public class JavacError
                 {
                     messageBuilder.append(line);
                     messageBuilder.append(Util.NL);
+                }
+            }
+        }
+
+        // filter out for errors/warnings matching a regex
+        String filterRegex = CheckerPlugin.getDefault().getPreferenceStore()
+                .getString(CheckerPreferences.PREF_CHECKER_ERROR_FILTER_REGEX);
+        if (!filterRegex.isEmpty())
+        {
+            Iterator<JavacError> iter = result.iterator();
+            while (iter.hasNext())
+            {
+                JavacError err = iter.next();
+                Matcher filterMatcher = Pattern.compile(filterRegex,
+                        Pattern.DOTALL).matcher(err.message);
+                if (filterMatcher.matches())
+                {
+                    iter.remove();
                 }
             }
         }
