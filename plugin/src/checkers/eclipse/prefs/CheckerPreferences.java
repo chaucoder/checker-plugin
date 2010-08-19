@@ -41,5 +41,8 @@ public final class CheckerPreferences
 
     /** Key for warning/error filter regex */
     public static final String PREF_CHECKER_ERROR_FILTER_REGEX = "checker_error_filter_regex";
+    
+    /** Key for JDK executable path */
+    public static final String PREF_CHECKER_JDK_PATH = "checker_jdk_path";
 
 }

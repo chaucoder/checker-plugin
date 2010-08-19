@@ -1,5 +1,7 @@
 package checkers.eclipse.actions;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.resources.IResource;
@@ -132,43 +134,38 @@ public class CheckerWorker extends Job
         }
     }
 
-    private String pathOf(IClasspathEntry cp, IJavaProject project)
+    private List<String> pathOf(IClasspathEntry cp, IJavaProject project)
             throws JavaModelException
     {
         int entryKind = cp.getEntryKind();
         switch (entryKind)
         {
         case IClasspathEntry.CPE_SOURCE:
-            return ResourceUtils.outputLocation(cp, project);
+            return Arrays.asList(new String[] { ResourceUtils.outputLocation(
+                    cp, project) });
         case IClasspathEntry.CPE_LIBRARY:
-            return Paths.absolutePathOf(cp);
+            return Arrays.asList(new String[] { Paths.absolutePathOf(cp) });
         case IClasspathEntry.CPE_PROJECT:
             // TODO unimplemented!
             break;
         case IClasspathEntry.CPE_CONTAINER:
+            List<String> resultPaths = new ArrayList<String>();
             IClasspathContainer c = JavaCore.getClasspathContainer(
                     cp.getPath(), project);
-            if (c.getKind() == IClasspathContainer.K_DEFAULT_SYSTEM
-                    || c.getKind() == IClasspathContainer.K_SYSTEM)
-                break;
             for (IClasspathEntry entry : c.getClasspathEntries())
             {
                 if (entry.getEntryKind() == IClasspathEntry.CPE_LIBRARY)
                 {
-                    return entry.getPath().makeAbsolute().toFile()
-                            .getAbsolutePath();
-                }
-                else
-                {
-                    // TODO unimplemented!
+                    resultPaths.add(entry.getPath().makeAbsolute().toFile()
+                            .getAbsolutePath());
                 }
             }
-            return "";
+            return resultPaths;
         case IClasspathEntry.CPE_VARIABLE:
             // TODO unimplemented!
-            return "";
+            break;
         }
-        return "";
+        return new ArrayList<String>();
     }
 
     /**
@@ -184,8 +181,9 @@ public class CheckerWorker extends Job
 
         for (IClasspathEntry cp : project.getRawClasspath())
         {
-            String path = pathOf(cp, project);
-            classpath.append(path);
+            List<String> paths = pathOf(cp, project);
+            for (String path : paths)
+                classpath.append(path);
         }
 
         // TODO: do we need to append the checkers.jar here?

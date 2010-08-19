@@ -30,6 +30,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
         prefs.setDefault(CheckerPreferences.PREF_CHECKER_IMPLICIT_IMPORTS,
                 false);
         prefs.setDefault(CheckerPreferences.PREF_CHECKER_ERROR_FILTER_REGEX, "");
+        prefs.setDefault(CheckerPreferences.PREF_CHECKER_JDK_PATH, "");
     }
 
 }

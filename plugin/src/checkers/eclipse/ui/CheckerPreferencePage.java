@@ -6,12 +6,18 @@ import java.util.List;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
@@ -19,6 +25,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.PlatformUI;
 
 import checkers.eclipse.CheckerPlugin;
 import checkers.eclipse.actions.CheckerActionManager;
@@ -32,6 +39,7 @@ public class CheckerPreferencePage extends PreferencePage implements
     private Text optSkipClasses;
     private Text optALint;
     private Text optFilter;
+    private Text optJDKPath;
     private Button optAutoBuild;
     private Button optWarning;
     private Button optFilenames;
@@ -97,6 +105,57 @@ public class CheckerPreferencePage extends PreferencePage implements
         GridData uiGridData = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
         uiGroup.setLayoutData(uiGridData);
 
+        // JDK options
+        Group jdkGroup = new Group(tableComposite, SWT.None);
+        jdkGroup.setText("JDK options");
+        FormLayout jdkLayout = new FormLayout();
+        jdkLayout.marginWidth = jdkLayout.marginHeight = 5;
+        jdkGroup.setLayout(jdkLayout);
+
+        Label jdkFolderLabel = new Label(jdkGroup, SWT.None);
+        jdkFolderLabel.setText("JDK Home Directory:");
+        optJDKPath = new Text(jdkGroup, SWT.SINGLE | SWT.BORDER);
+        Button browseButton = new Button(jdkGroup, SWT.PUSH);
+        browseButton.setText("Browse...");
+        browseButton.addSelectionListener(new SelectionListener()
+        {
+            @Override
+            public void widgetSelected(SelectionEvent e)
+            {
+                DirectoryDialog dirDialog = new DirectoryDialog(PlatformUI
+                        .getWorkbench().getActiveWorkbenchWindow().getShell(),
+                        SWT.OPEN);
+                String path = dirDialog.open();
+                optJDKPath.setText(path);
+            }
+
+            @Override
+            public void widgetDefaultSelected(SelectionEvent e)
+            {
+            }
+        });
+
+        FormData jdkFormData1 = new FormData();
+        jdkFormData1.left = new FormAttachment(0, 5);
+        jdkFormData1.right = new FormAttachment(100, 0);
+        jdkFolderLabel.setLayoutData(jdkFormData1);
+
+        FormData jdkFormData2 = new FormData();
+        jdkFormData2.top = new FormAttachment(jdkFolderLabel, 5);
+        jdkFormData2.left = new FormAttachment(0, 5);
+        jdkFormData2.right = new FormAttachment(80, -5);
+        optJDKPath.setLayoutData(jdkFormData2);
+
+        FormData jdkFormData3 = new FormData();
+        jdkFormData3.top = new FormAttachment(jdkFolderLabel, 5);
+        jdkFormData3.left = new FormAttachment(optJDKPath, 5);
+        browseButton.setLayoutData(jdkFormData3);
+
+        GridData jdkGridData = new GridData(SWT.FILL, SWT.BEGINNING, true,
+                false);
+        jdkGridData.widthHint = 300;
+        jdkGroup.setLayoutData(jdkGridData);
+
         // Processor options
         Group procGroup = new Group(tableComposite, SWT.None);
         procGroup.setText("Processor/build options");
@@ -142,7 +201,6 @@ public class CheckerPreferencePage extends PreferencePage implements
         javacGroup.setLayout(javacLayout);
 
         argText = new Text(javacGroup, SWT.SINGLE | SWT.BORDER);
-        argText.setTextLimit(Text.LIMIT);
 
         GridData javacGridData = new GridData(SWT.FILL, SWT.BEGINNING, true,
                 false);
@@ -187,6 +245,8 @@ public class CheckerPreferencePage extends PreferencePage implements
                 .getBoolean(CheckerPreferences.PREF_CHECKER_A_SHOW_CHECKS));
         optFilter.setText(store
                 .getString(CheckerPreferences.PREF_CHECKER_ERROR_FILTER_REGEX));
+        optJDKPath.setText(store
+                .getString(CheckerPreferences.PREF_CHECKER_JDK_PATH));
 
         /* Disabled for this release */
         /*
@@ -224,6 +284,8 @@ public class CheckerPreferencePage extends PreferencePage implements
                 optShowChecks.getSelection());
         store.setValue(CheckerPreferences.PREF_CHECKER_ERROR_FILTER_REGEX,
                 optFilter.getText());
+        store.setValue(CheckerPreferences.PREF_CHECKER_JDK_PATH,
+                optJDKPath.getText());
 
         /* Disabled for this release */
         /*
