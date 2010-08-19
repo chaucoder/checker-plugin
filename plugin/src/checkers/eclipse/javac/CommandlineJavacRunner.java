@@ -180,8 +180,19 @@ public class CommandlineJavacRunner
 
     private String javaVM()
     {
+        IPreferenceStore store = CheckerPlugin.getDefault()
+                .getPreferenceStore();
+        String jdkPath = store
+                .getString(CheckerPreferences.PREF_CHECKER_JDK_PATH);
         String sep = System.getProperty("file.separator");
-        return System.getProperty("java.home") + sep + "bin" + sep + "java";
+        String javahome;
+
+        if (jdkPath.isEmpty() || !(new File(jdkPath).exists()))
+            javahome = System.getProperty("java.home");
+        else
+            javahome = jdkPath;
+
+        return javahome + sep + "bin" + sep + "java";
     }
 
     private String javacJARlocation() throws IOException
