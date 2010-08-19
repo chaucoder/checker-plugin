@@ -148,7 +148,11 @@ by this plugin. To set the various options, go to <b>Window</b> &rarr; <b>Prefer
 <p>If you are having problems with the output from the plugin, check to see what the output on the Eclipse console indicates. The console
 will get the raw output from the compiler. Attaching the console output to a bug report can also help us figure out which component
 is reponsible for the bug.</p>
-<h2>Currently supported checkers:</h2> NonNull, Javari, IGJ, Interned, Fake Enum.
+<p>If you are finding that the plugin emits different or additional warnings that Eclipse does not that are unrelated to checkers, this
+is likely because the Eclipse compiler and Sun's javac compiler have different behaviors on certain kinds of errors. In this case, you
+can either try to fix the underlying cause for the warning or you can add a regular expression in the preferences (see the
+"Regex for warning/error filter" field) to filter the compiler output.</p>
+<h2>Currently supported checkers:</h2> All checkers bundled in the Checker Framework.
 </div>
 </body>
 </html>
