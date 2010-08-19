@@ -14,18 +14,41 @@
 			   <separator name="main"/> 
 		</menu>
 		<action
+			   class="checkers.eclipse.actions.CheckerActions$TaintingAction"
+			   id="checkers.eclipse.runCheckers.tainting"
+			   label="%action.label.9"
+			   menubarPath="checkers.eclipse/additions"
+			   tooltip="%action.tooltip.9"/>
+		<action
+			   class="checkers.eclipse.actions.CheckerActions$LinearAction"
+			   id="checkers.eclipse.runCheckers.linear"
+			   label="%action.label.10"
+			   menubarPath="checkers.eclipse/additions"
+			   tooltip="%action.tooltip.10"/>
+		<action
+			   class="checkers.eclipse.actions.CheckerActions$I18nAction"
+			   id="checkers.eclipse.runCheckers.i18n"
+			   label="%action.label.11"
+			   menubarPath="checkers.eclipse/additions"
+			   tooltip="%action.tooltip.11"/>
+		<action
+			   class="checkers.eclipse.actions.CheckerActions$LockAction"
+			   id="checkers.eclipse.runCheckers.lock"
+			   label="%action.label.12"
+			   menubarPath="checkers.eclipse/additions"
+			   tooltip="%action.tooltip.12"/>
+		<action
+			   class="checkers.eclipse.actions.CheckerActions$RegexAction"
+			   id="checkers.eclipse.runCheckers.regex"
+			   label="%action.label.13"
+			   menubarPath="checkers.eclipse/additions"
+			   tooltip="%action.tooltip.13"/>
+		<action
 			   class="checkers.eclipse.actions.CheckerActions$JavariAction"
 			   id="checkers.eclipse.runCheckers.javari"
 			   label="%action.label"
 			   menubarPath="checkers.eclipse/additions"
 			   tooltip="%action.tooltip"/>
-
-		<action
-			   class="checkers.eclipse.actions.CheckerActions$NullnessAction"
-			   id="checkers.eclipse.runCheckers.nonnull"
-			   label="%action.label.0"
-			   menubarPath="checkers.eclipse/additions"
-			   tooltip="%action.tooltip.0"/>
 
 		<action
 			   class="checkers.eclipse.actions.CheckerActions$InterningAction"
@@ -42,10 +65,16 @@
 			   tooltip="%action.tooltip.2"/>
 		<action
 			   class="checkers.eclipse.actions.CheckerActions$FenumAction"
-			   id="checkers.eclipse.runCheckers.igj"
+			   id="checkers.eclipse.runCheckers.fenum"
 			   label="%action.label.8"
 			   menubarPath="checkers.eclipse/additions"
 			   tooltip="%action.tooltip.8"/>
+		<action
+			   class="checkers.eclipse.actions.CheckerActions$NullnessAction"
+			   id="checkers.eclipse.runCheckers.nonnull"
+			   label="%action.label.0"
+			   menubarPath="checkers.eclipse/additions"
+			   tooltip="%action.tooltip.0"/>
 		<action
 			   class="checkers.eclipse.actions.ConvertProjectAction"
 			   id="checkers.eclipse.convertProject"

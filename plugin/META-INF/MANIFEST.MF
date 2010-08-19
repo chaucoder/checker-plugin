@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: checkers.eclipse;singleton:=true
-Bundle-Version: 0.0.10
+Bundle-Version: 0.0.13
 Bundle-ClassPath: lib/javac.jar,
  lib/checkers.jar,
  lib/jdk.jar,
@@ -16,7 +16,9 @@ Export-Package: checkers.basetype,
  checkers.eclipse,
  checkers.eclipse.actions,
  checkers.eclipse.builder,
+ checkers.eclipse.error,
  checkers.eclipse.javac,
+ checkers.eclipse.javac.tests,
  checkers.eclipse.marker,
  checkers.eclipse.natures,
  checkers.eclipse.prefs,
@@ -89,6 +91,17 @@ Export-Package: checkers.basetype,
  javax.lang.model.util,
  javax.tools,
  net.jcip.annotations,
+ org.apache.commons.lang3,
+ org.apache.commons.lang3.builder,
+ org.apache.commons.lang3.concurrent,
+ org.apache.commons.lang3.event,
+ org.apache.commons.lang3.exception,
+ org.apache.commons.lang3.math,
+ org.apache.commons.lang3.mutable,
+ org.apache.commons.lang3.reflect,
+ org.apache.commons.lang3.text,
+ org.apache.commons.lang3.text.translate,
+ org.apache.commons.lang3.time,
  org.jetbrains.annotations,
  org.netbeans.api.annotations.common
 Require-Bundle: org.eclipse.ui,
@@ -104,4 +117,4 @@ Require-Bundle: org.eclipse.ui,
  org.junit
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Bundle-Vendor: Checker Framework Development Team
+Bundle-Vendor: %Bundle-Vendor

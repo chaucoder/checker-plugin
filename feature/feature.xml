@@ -2,7 +2,7 @@
 <feature
       id="checkers.eclipse.feature"
       label="Checker Framework Feature"
-      version="0.0.10"
+      version="0.0.13"
       provider-name="Checker Framework Development Team">
 
    <description url="http://types.cs.washington.edu/checker-framework/eclipse">
