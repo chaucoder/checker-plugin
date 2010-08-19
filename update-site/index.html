@@ -107,7 +107,7 @@ This does not affect the checking, but to make the warning go away,
 add <a href="../lib/javac.jar">javac.jar</a> to the project's classpath.)<br>
 To perform the checking, select the checker from the context menu of a Java project, for example <b>Checker Framework</b> &rarr; <b>Run Nullness Checker</b>.<br>
 The checker will run and warnings will be added to the Problems view.<br>
-To remove the warning markers, run <b>Checker Framework</b> &rarr; <b>Clear checker markers</b><br>
+To remove the warning markers, run <b>Checker Framework</b> &rarr; <b>Clear checker markers</b>. Note that markers are cleared per project.<br>
 
 <img src="images/checker-context-menu.png" />
 
@@ -152,6 +152,9 @@ is reponsible for the bug.</p>
 is likely because the Eclipse compiler and Sun's javac compiler have different behaviors on certain kinds of errors. In this case, you
 can either try to fix the underlying cause for the warning or you can add a regular expression in the preferences (see the
 "Regex for warning/error filter" field) to filter the compiler output.</p>
+<p>In the case that you need to use a special version of the JRE, the plugin should use your system specified JRE (whatever System.getProperty("java.home") returns).
+However, if would like to use custom JDK libraries you should specify those on the Eclipse system library buildpath in the project properties. You also have the
+option of explicitly setting the java executable to use in the plugin preferences.</p>
 <h2>Currently supported checkers:</h2> All checkers bundled in the Checker Framework.
 </div>
 </body>
