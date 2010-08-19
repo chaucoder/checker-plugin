@@ -37,6 +37,17 @@ public class CheckerActionManager
                 CheckerActions.IGJ_ACTION_CLASS));
         processors.add(new CheckerProcessor(CheckerActions.FENUM_ACTION_LABEL,
                 CheckerActions.FENUM_ACTION_CLASS));
+        processors.add(new CheckerProcessor(CheckerActions.LINEAR_ACTION_LABEL,
+                CheckerActions.LINEAR_ACTION_CLASS));
+        processors.add(new CheckerProcessor(CheckerActions.LOCK_ACTION_LABEL,
+                CheckerActions.LOCK_ACTION_CLASS));
+        processors.add(new CheckerProcessor(CheckerActions.I18N_ACTION_LABEL,
+                CheckerActions.I18N_ACTION_CLASS));
+        processors.add(new CheckerProcessor(CheckerActions.REGEX_ACTION_LABEL,
+                CheckerActions.REGEX_ACTION_CLASS));
+        processors.add(new CheckerProcessor(
+                CheckerActions.TAINTING_ACTION_LABEL,
+                CheckerActions.TAINTING_ACTION_CLASS));
     }
 
     private static class Holder

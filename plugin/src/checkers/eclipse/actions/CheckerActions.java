@@ -2,10 +2,15 @@ package checkers.eclipse.actions;
 
 import checkers.basic.BasicChecker;
 import checkers.fenum.FenumChecker;
+import checkers.i18n.I18nChecker;
 import checkers.igj.IGJChecker;
 import checkers.interning.InterningChecker;
 import checkers.javari.JavariChecker;
+import checkers.linear.LinearChecker;
+import checkers.lock.LockChecker;
 import checkers.nullness.NullnessChecker;
+import checkers.regex.RegexChecker;
+import checkers.tainting.TaintingChecker;
 
 public class CheckerActions
 {
@@ -21,6 +26,16 @@ public class CheckerActions
     public static final Class<?> IGJ_ACTION_CLASS = IGJChecker.class;
     public static final String FENUM_ACTION_LABEL = "Fenum checker";
     public static final Class<?> FENUM_ACTION_CLASS = FenumChecker.class;
+    public static final Class<?> LINEAR_ACTION_CLASS = LinearChecker.class;
+    public static final String LINEAR_ACTION_LABEL = "Linear checker";
+    public static final Class<?> LOCK_ACTION_CLASS = LockChecker.class;
+    public static final String LOCK_ACTION_LABEL = "Lock checker";
+    public static final Class<?> REGEX_ACTION_CLASS = RegexChecker.class;
+    public static final String REGEX_ACTION_LABEL = "Regex checker";
+    public static final Class<?> TAINTING_ACTION_CLASS = TaintingChecker.class;
+    public static final String TAINTING_ACTION_LABEL = "Tainting checker";
+    public static final Class<?> I18N_ACTION_CLASS = I18nChecker.class;
+    public static final String I18N_ACTION_LABEL = "I18n checker";
 
     private CheckerActions()
     {
@@ -72,6 +87,46 @@ public class CheckerActions
         public FenumAction()
         {
             super(FENUM_ACTION_CLASS);
+        }
+    }
+
+    public static class LinearAction extends RunCheckerAction
+    {
+        public LinearAction()
+        {
+            super(LINEAR_ACTION_CLASS);
+        }
+    }
+
+    public static class LockAction extends RunCheckerAction
+    {
+        public LockAction()
+        {
+            super(LOCK_ACTION_CLASS);
+        }
+    }
+
+    public static class TaintingAction extends RunCheckerAction
+    {
+        public TaintingAction()
+        {
+            super(TAINTING_ACTION_CLASS);
+        }
+    }
+
+    public static class I18nAction extends RunCheckerAction
+    {
+        public I18nAction()
+        {
+            super(I18N_ACTION_CLASS);
+        }
+    }
+
+    public static class RegexAction extends RunCheckerAction
+    {
+        public RegexAction()
+        {
+            super(REGEX_ACTION_CLASS);
         }
     }
 
