@@ -13,6 +13,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import checkers.eclipse.CheckerPlugin;
 import checkers.eclipse.prefs.CheckerPreferences;
+import checkers.eclipse.util.JavaUtils;
 import checkers.eclipse.util.MutexSchedulingRule;
 
 /**
@@ -21,7 +22,8 @@ import checkers.eclipse.util.MutexSchedulingRule;
 public abstract class RunCheckerAction implements IObjectActionDelegate
 {
     private final String checkerName;
-    private boolean usePrefs;
+    protected boolean usePrefs;
+    protected boolean useCustom;
 
     /** The current selection. */
     protected IStructuredSelection selection;
@@ -34,6 +36,7 @@ public abstract class RunCheckerAction implements IObjectActionDelegate
         super();
         this.checkerName = null;
         this.usePrefs = true;
+        this.useCustom = false;
     }
 
     protected RunCheckerAction(Class<?> checker)
@@ -45,6 +48,7 @@ public abstract class RunCheckerAction implements IObjectActionDelegate
     {
         super();
         this.checkerName = checkerName;
+        this.useCustom = false;
         this.usePrefs = false;
     }
 
@@ -54,22 +58,8 @@ public abstract class RunCheckerAction implements IObjectActionDelegate
      */
     private List<String> getClassNameFromPrefs()
     {
-        boolean checkSelection = CheckerPlugin.getDefault().getPreferenceStore()
-                .getBoolean(CheckerPreferences.PREF_CHECKER_PREFS_SET);
 
-        // if preferences for individual checkers has not been set up
-        // yet then by default run them all
-        // TODO: the better behaviour would be to warn that none have
-        // been selected yet and the preferences should be consulted
-        // or to stop running
-        if (!checkSelection)
-        {
-            return CheckerActionManager.getInstance().getClassNames();
-        }
-        else
-        {
-            return CheckerActionManager.getInstance().getSelectedNames();
-        }
+        return CheckerActionManager.getInstance().getSelectedNames();
     }
 
     @Override
@@ -113,22 +103,35 @@ public abstract class RunCheckerAction implements IObjectActionDelegate
         if (element != null)
         {
             Job checkerJob;
+            String customClasses = CheckerPlugin.getDefault()
+                    .getPreferenceStore()
+                    .getString(CheckerPreferences.PREF_CHECKER_CUSTOM_CLASSES);
 
-            if (!usePrefs)
+            // Depending on how this runner was created, we will either:
+            // * just run one particular checker
+            // * use the custom configured checkers
+            // * run "selected" checkers using the action or auto build
+            if (!usePrefs && !useCustom)
             {
                 checkerJob = new CheckerWorker(element, checkerName);
             }
+            else if (!usePrefs)
+            {
+                checkerJob = new CheckerWorker(element, customClasses);
+            }
             else
             {
+
                 List<String> names = getClassNameFromPrefs();
-                checkerJob = new CheckerWorker(element,
-                        names.toArray(new String[] {}));
+
+                checkerJob = new CheckerWorker(element, JavaUtils.join(",",
+                        names));
             }
+
             checkerJob.setUser(true);
             checkerJob.setPriority(Job.BUILD);
             checkerJob.setRule(new MutexSchedulingRule());
             checkerJob.schedule();
         }
     }
-
 }

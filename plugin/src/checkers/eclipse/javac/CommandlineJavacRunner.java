@@ -7,7 +7,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.runtime.FileLocator;
@@ -37,17 +36,17 @@ public class CommandlineJavacRunner
     public static boolean VERBOSE = true;
 
     private final List<String> fileNames;
-    private final List<String> processors;
+    private final String processors;
     private final String classpath;
     private final String bootclasspath;
 
     private String checkResult;
 
-    public CommandlineJavacRunner(String[] fileNames, String[] processors,
+    public CommandlineJavacRunner(String[] fileNames, String processors,
             String classpath, String bootclasspath)
     {
         this.fileNames = Arrays.asList(fileNames);
-        this.processors = Arrays.asList(processors);
+        this.processors = processors;
         this.classpath = classpath;
         this.bootclasspath = bootclasspath;
     }
@@ -80,7 +79,7 @@ public class CommandlineJavacRunner
         return JavaUtils.join(File.pathSeparator, IMPLICIT_ARGS);
     }
 
-    private String[] options(List<String> fileNames, List<String> processors,
+    private String[] options(List<String> fileNames, String processors,
             String classpath, String bootclasspath) throws IOException
     {
         List<String> opts = new ArrayList<String>();
@@ -104,21 +103,8 @@ public class CommandlineJavacRunner
         opts.add("-classpath");
         opts.add(classpath);
 
-        // Build the processor arguments, comma separated
-        StringBuilder processorStr = new StringBuilder();
-        Iterator<String> itr = processors.iterator();
-
-        while (itr.hasNext())
-        {
-            processorStr.append(itr.next());
-            if (itr.hasNext())
-            {
-                processorStr.append(",");
-            }
-        }
-
         opts.add("-processor");
-        opts.add(processorStr.toString());
+        opts.add(processors);
 
         // add options from preferences
         String argStr = CheckerPlugin.getDefault().getPreferenceStore()

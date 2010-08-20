@@ -12,7 +12,14 @@
 			   label="%menu.label"
 			   path="additions">
 			   <separator name="main"/> 
+			   <separator name="custom"/>
 		</menu>
+		<action
+			   class="checkers.eclipse.actions.CheckerActions$CustomAction"
+			   id="checkers.eclipse.runCheckers.custom"
+			   label="Run Custom Checkers"
+			   menubarPath="checkers.eclipse/custom"
+			   tooltip="Run Custom Checkers on the selected element."/>
 		<action
 			   class="checkers.eclipse.actions.CheckerActions$TaintingAction"
 			   id="checkers.eclipse.runCheckers.tainting"
@@ -93,14 +100,6 @@
 			label = "%action.label.5"
 			menubarPath = "checkers.eclipse/main"
 			tooltip = "%action.tooltip.5" />
-			
-<!--Commented out because you need an option to pass arguments. Custom checher want -Aquals
-		<action
-			   class="checkers.eclipse.actions.RunCustomCheckerAction"
-			   id="checkers.eclipse.runCheckers.igj"
-			   label="Run Custom Checker"
-			   menubarPath="checkers.eclipse/additions"
-			   tooltip="Run the custom checker on the selected element."/> -->
 			   
 	  </objectContribution>
    </extension>
@@ -110,13 +109,11 @@
  		name="%page.name"
     	class="checkers.eclipse.ui.CheckerPreferencePage">
    	</page>
-   	<!--
    	<page id="checkers.eclipse"
    		  name="Custom Checkers"
    		  class="checkers.eclipse.ui.CustomPreferencesPage"
    		  category="checkers.eclipse.prefs.CheckerPreferences">
    	</page>
-   	-->
    </extension>
    
    <extension point="org.eclipse.core.runtime.preferences">
