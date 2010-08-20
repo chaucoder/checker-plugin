@@ -212,7 +212,7 @@ public class CheckerPreferencePage extends PreferencePage implements
     }
 
     /**
-     * Initialize the values in the table to the preference values
+     * Initialise the values in the table to the preference values
      */
     private void initValues()
     {

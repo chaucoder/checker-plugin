@@ -17,6 +17,7 @@ import checkers.eclipse.CheckerPlugin;
 import checkers.eclipse.actions.CheckerActionManager;
 import checkers.eclipse.actions.CheckerWorker;
 import checkers.eclipse.prefs.CheckerPreferences;
+import checkers.eclipse.util.JavaUtils;
 import checkers.eclipse.util.MutexSchedulingRule;
 import checkers.eclipse.util.ResourceUtils;
 
@@ -59,7 +60,8 @@ public class CheckerBuilder extends IncrementalProjectBuilder
 
     private boolean isBuildEnabled()
     {
-        IPreferenceStore store = CheckerPlugin.getDefault().getPreferenceStore();
+        IPreferenceStore store = CheckerPlugin.getDefault()
+                .getPreferenceStore();
 
         return store.getBoolean(CheckerPreferences.PREF_CHECKER_AUTO_BUILD);
     }
@@ -93,8 +95,8 @@ public class CheckerBuilder extends IncrementalProjectBuilder
             List<String> checkerNames)
     {
         Job checkerJob = new CheckerWorker(project,
-                sourceNames.toArray(new String[] {}),
-                checkerNames.toArray(new String[] {}));
+                sourceNames.toArray(new String[] {}), JavaUtils.join(",",
+                        checkerNames));
 
         checkerJob.setUser(true);
         checkerJob.setPriority(Job.BUILD);

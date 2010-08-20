@@ -1,6 +1,5 @@
 package checkers.eclipse.actions;
 
-import checkers.basic.BasicChecker;
 import checkers.fenum.FenumChecker;
 import checkers.i18n.I18nChecker;
 import checkers.igj.IGJChecker;
@@ -134,7 +133,8 @@ public class CheckerActions
     {
         public CustomAction()
         {
-            super(BasicChecker.class);
+            useCustom = true;
+            usePrefs = false;
         }
     }
 }

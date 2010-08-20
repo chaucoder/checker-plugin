@@ -31,6 +31,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
                 false);
         prefs.setDefault(CheckerPreferences.PREF_CHECKER_ERROR_FILTER_REGEX, "");
         prefs.setDefault(CheckerPreferences.PREF_CHECKER_JDK_PATH, "");
+        prefs.setDefault(CheckerPreferences.PREF_CHECKER_CUSTOM_CLASSES, "");
+        prefs.setDefault(
+                CheckerPreferences.PREF_CHECKER_CUSTOM_CLASS_AUTOBUILD, false);
     }
 
 }

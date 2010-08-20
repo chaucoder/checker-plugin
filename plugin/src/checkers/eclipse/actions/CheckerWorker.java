@@ -31,7 +31,7 @@ public class CheckerWorker extends Job
 {
 
     private final IJavaProject project;
-    private final String[] checkerNames;
+    private final String checkerNames;
     private String[] sourceFiles;
 
     /**
@@ -43,7 +43,7 @@ public class CheckerWorker extends Job
      * @param checkerNames
      */
     public CheckerWorker(IJavaProject project, String[] sourceFiles,
-            String[] checkerNames)
+            String checkerNames)
     {
         super("Running checker on " + sourceFiles.toString());
         this.project = project;
@@ -51,7 +51,7 @@ public class CheckerWorker extends Job
         this.checkerNames = checkerNames;
     }
 
-    public CheckerWorker(IJavaElement element, String[] checkerNames)
+    public CheckerWorker(IJavaElement element, String checkerNames)
     {
         super("Running checker on " + element.getElementName());
         this.project = element.getJavaProject();
@@ -65,11 +65,6 @@ public class CheckerWorker extends Job
         {
             CheckerPlugin.logException(e, e.getMessage());
         }
-    }
-
-    public CheckerWorker(IJavaElement element, String checkerName)
-    {
-        this(element, new String[] { checkerName });
     }
 
     @Override

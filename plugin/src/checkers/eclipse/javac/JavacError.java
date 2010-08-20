@@ -48,6 +48,7 @@ public class JavacError
      */
     private static final Pattern errorCountPattern = Pattern
             .compile("^[0-9]+ (error|warning)*s?$");
+    private static final Pattern notePattern = Pattern.compile("^Note: .* $");
     private static final Pattern messagePattern = Pattern
             .compile("(.*):(\\d*): (?:(?:warning|error)?: ?)?(.*)");
     private static final Pattern noProcessorPattern = Pattern
@@ -67,10 +68,20 @@ public class JavacError
         Matcher procMatcher = noProcessorPattern.matcher(lines.get(0));
         if (procMatcher.matches())
         {
-            CheckerErrorStatus status = new CheckerErrorStatus(
-                    "Checker processor "
-                            + procMatcher.group(1)
-                            + " could not be found. Try adding checkers.jar to your project build path.");
+            CheckerErrorStatus status;
+
+            if (procMatcher.group(1).equals("''"))
+            {
+                status = new CheckerErrorStatus(
+                        "No checkers configured. Try configuring checkers to use in the plugin preferences.");
+            }
+            else
+            {
+                status = new CheckerErrorStatus(
+                        "Checker processor "
+                                + procMatcher.group(1)
+                                + " could not be found. Try adding checkers.jar to your project build path.");
+            }
             StatusManager.getManager().handle(status, StatusManager.SHOW);
             return result;
         }
@@ -97,7 +108,8 @@ public class JavacError
             }
             else
             {
-                if (errorCountPattern.matcher(line).matches())
+                if (errorCountPattern.matcher(line).matches()
+                        || notePattern.matcher(line).matches())
                 {
                     JavacError error = new JavacError(errorFile, lineNum,
                             messageBuilder.toString().trim());
