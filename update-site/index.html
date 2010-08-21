@@ -101,13 +101,15 @@ Select the checkbox next to it and click <b>Next</b>.</li>
 <li> Click <b> Yes </b> to restart Eclipse.</li>
 </ol>
 <h2>How to use Checkers Feature:</h2>
-First, add <a href="../lib/checkers.jar">checkers.jar</a> to your project's classpath.<br>
+<p>First, you may add <a href="../lib/checkers.jar">checkers.jar</a> to your project's classpath.
 (Eclipse may complain about unresolved classes referenced from a classfile.
 This does not affect the checking, but to make the warning go away,
-add <a href="../lib/javac.jar">javac.jar</a> to the project's classpath.)<br>
-To perform the checking, select the checker from the context menu of a Java project, for example <b>Checker Framework</b> &rarr; <b>Run Nullness Checker</b>.<br>
-The checker will run and warnings will be added to the Problems view.<br>
-To remove the warning markers, run <b>Checker Framework</b> &rarr; <b>Clear checker markers</b>. Note that markers are cleared per project.<br>
+add <a href="../lib/javac.jar">javac.jar</a> to the project's classpath.) This is not necessary
+but will keep Eclipse from complaining about missing annotation classes. Alternatively, you can
+use the Implicit Import feature described below.</p>
+<p>To perform the checking, select the checker from the context menu of a Java project, for example <b>Checker Framework</b> &rarr; <b>Run Nullness Checker</b>.
+The checker will run and warnings will be added to the Problems view.
+To remove the warning markers, run <b>Checker Framework</b> &rarr; <b>Clear checker markers</b>. Note that markers are cleared per project.</p>
 
 <img src="images/checker-context-menu.png" />
 
@@ -154,6 +156,14 @@ preferences, which will append the input to the compiler's arguments.</p>
 
 <p>In the future, we plan to support a more fully featured method
 of adding and customizing your own checkers.</p>
+
+<h3>Development style and implicit imports</h3>
+
+<p>If you work in a team and not everyone uses the Checker Framework or if you use older versions of Java, you can use implicit imports
+to avoid creating an explicit dependency on checkers.jar. Just enable the setting in the preferences. After that, you can use annotations
+in comments as described on this page:
+<a href=http://types.cs.washington.edu/checker-framework/#annotations-in-comments>http://types.cs.washington.edu/checker-framework/#annotations-in-comments</a>.
+</p>
 
 <h2>How to report problems:</h2>
 <p>Submit bug reports at <a href="http://code.google.com/a/eclipselabs.org/p/checker-plugin/issues/list ">http://code.google.com/a/eclipselabs.org/p/checker-plugin/issues/list </a></p>
