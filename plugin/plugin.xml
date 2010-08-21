@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+		 point="org.eclipse.ui.popupMenus">
+	  <objectContribution
+			id="checkers.eclipse.JavaElementActions"
+			objectClass="org.eclipse.jdt.core.IJavaElement">
+		<menu
+			   id="checkers.eclipse"
+			   label="%menu.label"
+			   path="additions">
+			   <separator name="main"/> 
+			   <separator name="custom"/>
+		</menu>
+		<action
+			   class="checkers.eclipse.actions.CheckerActions$CustomAction"
+			   id="checkers.eclipse.runCheckers.custom"
+			   label="Run Custom Checkers"
+			   menubarPath="checkers.eclipse/custom"
+			   tooltip="Run Custom Checkers on the selected element."/>
+		<action
+			   class="checkers.eclipse.actions.CheckerActions$TaintingAction"
+			   id="checkers.eclipse.runCheckers.tainting"
+			   label="%action.label.9"
+			   menubarPath="checkers.eclipse/additions"
+			   tooltip="%action.tooltip.9"/>
+		<action
+			   class="checkers.eclipse.actions.CheckerActions$LinearAction"
+			   id="checkers.eclipse.runCheckers.linear"
+			   label="%action.label.10"
+			   menubarPath="checkers.eclipse/additions"
+			   tooltip="%action.tooltip.10"/>
+		<action
+			   class="checkers.eclipse.actions.CheckerActions$I18nAction"
+			   id="checkers.eclipse.runCheckers.i18n"
+			   label="%action.label.11"
+			   menubarPath="checkers.eclipse/additions"
+			   tooltip="%action.tooltip.11"/>
+		<action
+			   class="checkers.eclipse.actions.CheckerActions$LockAction"
+			   id="checkers.eclipse.runCheckers.lock"
+			   label="%action.label.12"
+			   menubarPath="checkers.eclipse/additions"
+			   tooltip="%action.tooltip.12"/>
+		<action
+			   class="checkers.eclipse.actions.CheckerActions$RegexAction"
+			   id="checkers.eclipse.runCheckers.regex"
+			   label="%action.label.13"
+			   menubarPath="checkers.eclipse/additions"
+			   tooltip="%action.tooltip.13"/>
+		<action
+			   class="checkers.eclipse.actions.CheckerActions$JavariAction"
+			   id="checkers.eclipse.runCheckers.javari"
+			   label="%action.label"
+			   menubarPath="checkers.eclipse/additions"
+			   tooltip="%action.tooltip"/>
+
+		<action
+			   class="checkers.eclipse.actions.CheckerActions$InterningAction"
+			   id="checkers.eclipse.runCheckers.interning"
+			   label="%action.label.1"
+			   menubarPath="checkers.eclipse/additions"
+			   tooltip="%action.tooltip.1"/>
+
+		<action
+			   class="checkers.eclipse.actions.CheckerActions$IGJAction"
+			   id="checkers.eclipse.runCheckers.igj"
+			   label="%action.label.2"
+			   menubarPath="checkers.eclipse/additions"
+			   tooltip="%action.tooltip.2"/>
+		<action
+			   class="checkers.eclipse.actions.CheckerActions$FenumAction"
+			   id="checkers.eclipse.runCheckers.fenum"
+			   label="%action.label.8"
+			   menubarPath="checkers.eclipse/additions"
+			   tooltip="%action.tooltip.8"/>
+		<action
+			   class="checkers.eclipse.actions.CheckerActions$NullnessAction"
+			   id="checkers.eclipse.runCheckers.nonnull"
+			   label="%action.label.0"
+			   menubarPath="checkers.eclipse/additions"
+			   tooltip="%action.tooltip.0"/>
+		<action
+			   class="checkers.eclipse.actions.ConvertProjectAction"
+			   id="checkers.eclipse.convertProject"
+			   label="%action.label.3"
+			   menubarPath="checkers.eclipse/main"
+			   tooltip="%action.tooltip.3"/>
+	    <action
+			   class="checkers.eclipse.actions.ClearMarkersAction"
+			   id="checkers.eclipse.removeMarkers"
+			   label="%action.label.4"
+			   menubarPath="checkers.eclipse/main"
+			   tooltip="%action.tooltip.4"/>
+		<action
+			class = "checkers.eclipse.actions.CheckerActions$CurrentAction"
+			id    = "checkers.eclipse.runCheckers.runCurrent"
+			label = "%action.label.5"
+			menubarPath = "checkers.eclipse/main"
+			tooltip = "%action.tooltip.5" />
+			   
+	  </objectContribution>
+   </extension>
+   
+   <extension point="org.eclipse.ui.preferencePages">
+ 	<page id="checkers.eclipse.prefs.CheckerPreferences"
+ 		name="%page.name"
+    	class="checkers.eclipse.ui.CheckerPreferencePage">
+   	</page>
+   	<page id="checkers.eclipse"
+   		  name="Custom Checkers"
+   		  class="checkers.eclipse.ui.CustomPreferencesPage"
+   		  category="checkers.eclipse.prefs.CheckerPreferences">
+   	</page>
+   </extension>
+   
+   <extension point="org.eclipse.core.runtime.preferences">
+			<initializer class="checkers.eclipse.prefs.PreferenceInitializer" />
+	</extension>
+	
+	<extension 
+   	id="buildnature" 
+   	name="%extension.name" 
+   	point="org.eclipse.core.resources.natures"> 
+   	  <runtime> 
+         <run class="checkers.eclipse.natures.CheckerBuildNature"/> 
+      </runtime> 
+      <builder id="checkers.eclipse.checkerbuilder"/>
+      <requires-nature id="org.eclipse.jdt.core.javanature"/>
+   </extension> 
+   
+	<extension 
+         id="checkerbuilder" 
+         name="%extension.name.0" 
+         point="org.eclipse.core.resources.builders">
+      <builder hasNature="true">
+         <run class="checkers.eclipse.builder.CheckerBuilder">
+            <parameter name="optimize" value="true"/>
+            <parameter name="comment" value="CheckerBuilder"/>
+         </run>
+      </builder>
+   </extension>
+      
+   <extension
+		 id="checkers.eclipse.marker"
+		 name="%extension.name.1"
+		 point="org.eclipse.core.resources.markers">
+	  <super type="org.eclipse.core.resources.problemmarker"/>
+	  <super type="org.eclipse.core.resources.textmarker"/>
+	  <persistent value="true"/>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.ide.markerResolution">
+      <markerResolutionGenerator
+      		markerType="checkers.eclipse.marker"
+            class="checkers.eclipse.marker.CheckerResolutionGenerator">
+      </markerResolutionGenerator>
+   </extension>
+   
+</plugin>
