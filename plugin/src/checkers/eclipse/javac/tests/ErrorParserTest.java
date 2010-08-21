@@ -24,10 +24,10 @@ public class ErrorParserTest
             .append("incompatible types.\n")
             .append("       @NonNull Integer bar = null;\n")
             .append("  found   : null\n")
-            .append("  required: @NonNull Integer\n").toString();
+            .append("  required: @NonNull Integer").toString();
     private static final String SIMPLE_ERROR_2 = new StringBuilder()
             .append("attempting to use a non-@Interned comparison operand\n")
-            .append("       else if (s1 == obj)\n").append("  found: Object\n")
+            .append("       else if (s1 == obj)\n").append("  found: Object")
             .toString();
     private static final String OTHER_TEST_INPUT = new StringBuilder()
             .append("/homes/gws/wmdietl/research/eclipse-workspaces/2010-08-icse/SwingEval/AwtSwing/java/awt/Window.java:58: warning: Disposer is internal proprietary API and may be removed in a future release\n")
@@ -39,10 +39,10 @@ public class ErrorParserTest
             .toString();
     private static final String OTHER_ERROR_1 = new StringBuilder()
             .append("Disposer is internal proprietary API and may be removed in a future release\n")
-            .append("import sun.java2d.Disposer;\n").toString();
+            .append("import sun.java2d.Disposer;").toString();
     private static final String OTHER_ERROR_2 = new StringBuilder()
             .append("Region is internal proprietary API and may be removed in a future release\n")
-            .append("import sun.java2d.pipe.Region;\n").toString();
+            .append("import sun.java2d.pipe.Region;").toString();
     private static final String W_TEST_INPUT = new StringBuilder()
             .append("/foo/bar/Baz.java:35: warning: AttributesValues is internal proprietary API and may be removed in a future release\n")
             .append("  private static void applyStyle(int style, AttributeValues values) {\n")
@@ -53,7 +53,7 @@ public class ErrorParserTest
             .toString();
     private static final String W_ERROR_2 = new StringBuilder()
             .append("package sun.java2d.cmm does not exist\n")
-            .append("import sun.java2d.cmm.ColorTransform\n").toString();
+            .append("import sun.java2d.cmm.ColorTransform").toString();
 
     @Test
     public void simpleParseTest()

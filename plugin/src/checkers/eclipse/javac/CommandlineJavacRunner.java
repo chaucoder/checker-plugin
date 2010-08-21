@@ -142,6 +142,10 @@ public class CommandlineJavacRunner
      */
     private void addProcessorOptions(List<String> opts)
     {
+        // TODO: some input validation would be nice here. Especially for
+        // the additional compiler flags, which could be checked against
+        // the compiler.
+
         IPreferenceStore store = CheckerPlugin.getDefault()
                 .getPreferenceStore();
 

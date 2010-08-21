@@ -53,6 +53,10 @@ public class JavacError
             .compile("(.*):(\\d*): (?:(?:warning|error)?: ?)?(.*)");
     private static final Pattern noProcessorPattern = Pattern
             .compile("^error: Annotation processor (.*) not found$");
+    private static final Pattern invalidFlagPattern = Pattern
+            .compile("^javac: invalid flag: (.*)$");
+    private static final Pattern missingFilePattern = Pattern
+            .compile("^error: Could not find class file for (.*)\\.$");
 
     public static List<JavacError> parse(String javacoutput)
     {
@@ -64,25 +68,8 @@ public class JavacError
         List<JavacError> result = new ArrayList<JavacError>();
         List<String> lines = Arrays.asList(javacoutput.split(Util.NL));
 
-        // special case for missing checkers.jar (or processor class)
-        Matcher procMatcher = noProcessorPattern.matcher(lines.get(0));
-        if (procMatcher.matches())
+        if (!handleErrors(lines.get(0)))
         {
-            CheckerErrorStatus status;
-
-            if (procMatcher.group(1).equals("''"))
-            {
-                status = new CheckerErrorStatus(
-                        "No checkers configured. Try configuring checkers to use in the plugin preferences.");
-            }
-            else
-            {
-                status = new CheckerErrorStatus(
-                        "Checker processor "
-                                + procMatcher.group(1)
-                                + " could not be found. Try adding checkers.jar to your project build path.");
-            }
-            StatusManager.getManager().handle(status, StatusManager.SHOW);
             return result;
         }
 
@@ -142,5 +129,60 @@ public class JavacError
         }
 
         return result;
+    }
+
+    /**
+     * Handle special error output cases for the compiler.
+     * 
+     * @return true if no errors are present, false otherwise
+     */
+    private static boolean handleErrors(String line)
+    {
+        StatusManager manager = StatusManager.getManager();
+
+        // special case for missing checkers.jar (or processor class)
+        Matcher procMatcher = noProcessorPattern.matcher(line);
+        if (procMatcher.matches())
+        {
+            CheckerErrorStatus status;
+
+            if (procMatcher.group(1).equals("''"))
+            {
+                status = new CheckerErrorStatus(
+                        "No checkers configured. Try configuring checkers to use in the plugin preferences.");
+            }
+            else
+            {
+                status = new CheckerErrorStatus(
+                        "Checker processor "
+                                + procMatcher.group(1)
+                                + " could not be found. Try adding checkers.jar to your project build path.");
+            }
+            manager.handle(status, StatusManager.SHOW);
+            return false;
+        }
+
+        // Misc errors that prevent compiler from running:
+        Matcher flagMatcher = invalidFlagPattern.matcher(line);
+        if (flagMatcher.matches())
+        {
+            manager.handle(new CheckerErrorStatus("Invalid compiler flag: "
+                    + flagMatcher.group(1)
+                    + ". Check your preferences for invalid flags."),
+                    StatusManager.SHOW);
+            return false;
+        }
+
+        Matcher missingFileMatcher = missingFilePattern.matcher(line);
+        if (missingFileMatcher.matches())
+        {
+            manager.handle(new CheckerErrorStatus("Cannot find file: "
+                    + missingFileMatcher.group(1)
+                    + ". You may have malformed input in your preferences."),
+                    StatusManager.SHOW);
+            return false;
+        }
+
+        return true;
     }
 }
