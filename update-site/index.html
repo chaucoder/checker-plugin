@@ -142,6 +142,12 @@ by this plugin. To set the various options, go to <b>Window</b> &rarr; <b>Prefer
   Documentation</a>
 </p>
 
+<h3>Custom checker</h3>
+<p>If you would like to supply your own classes to use as checkers, you can do so in the <b>Custom Checker</b> preference page. By pressing
+the <b>Search...</b> button you can select from a searchable listing of classes in the workspace. The class or classes you select must be
+on the classpath of the project you are type checking in order to work. In the future, we plan to support a more fully featured method
+of adding and customizing your own checkers.</p>
+
 <h2>How to report problems:</h2>
 <p>Submit bug reports at <a href="http://code.google.com/a/eclipselabs.org/p/checker-plugin/issues/list ">http://code.google.com/a/eclipselabs.org/p/checker-plugin/issues/list </a></p>
 <h3>Troubleshooting tips</h3>
@@ -155,7 +161,7 @@ can either try to fix the underlying cause for the warning or you can add a regu
 <p>In the case that you need to use a special version of the JRE, the plugin should use your system specified JRE (whatever System.getProperty("java.home") returns).
 However, if would like to use custom JDK libraries you should specify those on the Eclipse system library buildpath in the project properties. You also have the
 option of explicitly setting the java executable to use in the plugin preferences.</p>
-<h2>Currently supported checkers:</h2> All checkers bundled in the Checker Framework.
+<h2>Natively supported checkers:</h2> All checkers bundled in the Checker Framework.
 </div>
 </body>
 </html>
