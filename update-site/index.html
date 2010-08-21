@@ -126,7 +126,7 @@ automatic build, which is described below.
 The plugin also supports automatically typechecking your code when a change is detected. To enable
 this behavior for a project, right click on your project and run <b>Checker Framework</b> &rarr; <b>Toggle checker nature on project</b>.
 This will add the checker nature to your project (assuming it is not already present), which will cause Eclipse to automatically run
-checkers on subsequent edits.
+checkers on subsequent edits. Selecting the action again will disable the builder.
 </p>
 <p>
 The checkers that are run are those that are selected in the preferences.
@@ -139,13 +139,20 @@ by this plugin. To set the various options, go to <b>Window</b> &rarr; <b>Prefer
 <b>Checker</b> section. The options that correspond to commandline switches will be marked as such.
 </p>
 <p>For more information on the supported commandline options, see the <a href="http://types.cs.washington.edu/checker-framework/">Checker Framework
-  Documentation</a>
+  Documentation</a>.
 </p>
 
 <h3>Custom checker</h3>
 <p>If you would like to supply your own classes to use as checkers, you can do so in the <b>Custom Checker</b> preference page. By pressing
 the <b>Search...</b> button you can select from a searchable listing of classes in the workspace. The class or classes you select must be
-on the classpath of the project you are type checking in order to work. In the future, we plan to support a more fully featured method
+on the classpath of the project you are type checking in order to work. The custom class that you select will be used if you select the
+<b>Run Custom Checker</b> action from the popup menu. Note that if the preference field is empty you will get a warning message that
+no checkers were configured.</p>
+
+<p>If your checker supports extra commandline flags, you can pass these in the <b>Additional compiler parameters</b> field in the
+preferences, which will append the input to the compiler's arguments.</p>
+
+<p>In the future, we plan to support a more fully featured method
 of adding and customizing your own checkers.</p>
 
 <h2>How to report problems:</h2>
