@@ -113,9 +113,12 @@ public class JavacError
                 if (errorCountPattern.matcher(line).matches()
                         || !iter.hasNext())
                 {
-                    JavacError error = new JavacError(errorFile, lineNum,
-                            messageBuilder.toString().trim());
-                    result.add(error);
+                    if (messageBuilder.length() != 0)
+                    {
+                        JavacError error = new JavacError(errorFile, lineNum,
+                                messageBuilder.toString().trim());
+                        result.add(error);
+                    }
                 }
                 else if (!line.trim().equals("^")
                         && !notePattern.matcher(line).matches())
