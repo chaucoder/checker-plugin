@@ -70,7 +70,7 @@ public class ErrorParserTest
             .append("package sun.java2d.cmm does not exist").append(Util.NL)
             .append("import sun.java2d.cmm.ColorTransform").toString();
     private static final String WINDOWS_INPUT = new StringBuilder()
-            .append("C:/workspace/checker testing/src/GetStarted.java:8: warning: incompatible types.")
+            .append("C:\\workspace\\checker testing\\src\\GetStarted.java:8: warning: incompatible types.")
             .append(Util.NL)
             .append("       @NonNull Integer bar = null;")
             .append(Util.NL)
@@ -80,13 +80,31 @@ public class ErrorParserTest
             .append(Util.NL)
             .append("  required: @NonNull Integer")
             .append(Util.NL)
-            .append("C:/workspace/checker testing/src/GetStarted.java:16: warning: attempting to use a non-@Interned comparison operand")
+            .append("C:\\workspace\\checker testing\\src\\GetStarted.java:16: warning: attempting to use a non-@Interned comparison operand")
             .append(Util.NL).append("       else if (s1 == obj)")
             .append(Util.NL).append("                      ^").append(Util.NL)
             .append("  found: Object").append(Util.NL).append("2 warnings")
             .toString();
     private static final String WINDOWS_ERROR_MSG_1 = SIMPLE_ERROR_1;
     private static final String WINDOWS_ERROR_MSG_2 = SIMPLE_ERROR_2;
+    private static final String I18N_INPUT_1 = new StringBuilder()
+            .append("C:\\workspace\\checker testing\\src\\GetStarted.java:8: warning: incompatible types.")
+            .append(Util.NL)
+            .append("       @NonNull Integer bar = null;")
+            .append(Util.NL)
+            .append("                              ^")
+            .append(Util.NL)
+            .append("  found   : null")
+            .append(Util.NL)
+            .append("  required: @NonNull Integer")
+            .append(Util.NL)
+            .append("C:\\workspace\\checker testing\\src\\GetStarted.java:16: warning: attempting to use a non-@Interned comparison operand")
+            .append(Util.NL).append("       else if (s1 == obj)")
+            .append(Util.NL).append("                      ^").append(Util.NL)
+            .append("  found: Object").append(Util.NL).append("åxçê 2 å¬")
+            .toString();
+    private static final String I18N_ERROR_MSG_1 = SIMPLE_ERROR_1;
+    private static final String I18N_ERROR_MSG_2 = SIMPLE_ERROR_2;
 
     @Test
     public void simpleParseTest()
@@ -131,5 +149,17 @@ public class ErrorParserTest
         assertEquals(WINDOWS_ERROR_MSG_1, errors.get(0).message);
         assertEquals(16, errors.get(1).lineNumber);
         assertEquals(WINDOWS_ERROR_MSG_2, errors.get(1).message);
+    }
+
+    @Test
+    public void i18nParseTest()
+    {
+        List<JavacError> errors = JavacError.parse(I18N_INPUT_1);
+
+        assertEquals(2, errors.size());
+        assertEquals(8, errors.get(0).lineNumber);
+        assertEquals(I18N_ERROR_MSG_1, errors.get(0).message);
+        assertEquals(16, errors.get(1).lineNumber);
+        assertEquals(I18N_ERROR_MSG_2, errors.get(1).message);
     }
 }
