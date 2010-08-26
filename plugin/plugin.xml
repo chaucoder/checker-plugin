@@ -77,9 +77,14 @@
                   style="push">
             </command>
             <command
-                  commandId="checkers.eclipse.togglenature"
-                  label="Toggle Checker Nature"
-                  style="toggle">
+                  commandId="checkers.eclipse.enablenature"
+                  label="Enable Checker Nature"
+                  style="push">
+            </command>
+            <command
+                  commandId="checkers.eclipse.disablenature"
+                  label="Disable Checker Nature"
+                  style="push">
             </command>
             <separator
                   name="separator1"
@@ -195,14 +200,15 @@
                   name="Clear Project Markers">
       </command>
             <command
-                  defaultHandler="checkers.eclipse.actions.ConvertProjectAction"
-                  id="checkers.eclipse.togglenature"
-                  name="Toggle Checker Nature">
-               <state
-                     class="org.eclipse.ui.handlers.RegistryToggleState:false"
-                     id="org.eclipse.ui.commands.toggleState">
-               </state>
+                  defaultHandler="checkers.eclipse.actions.EnableNatureHandler"
+                  id="checkers.eclipse.enablenature"
+                  name="Enable Checker Nature">
       </command>
+            <command
+                  defaultHandler="checkers.eclipse.actions.DisableNatureHandler"
+                  id="checkers.eclipse.disablenature"
+                  name="Disable Checker Nature">
+            </command>
             <command
                   defaultHandler="checkers.eclipse.actions.CheckerActions$LinearAction"
                   id="checkers.eclipse.runlinear"
