@@ -50,7 +50,7 @@ public class JavacError
             .compile("^[0-9]+ (error|warning)*s?$");
     private static final Pattern notePattern = Pattern.compile("^Note: .* $");
     private static final Pattern messagePattern = Pattern
-            .compile("(.*):(\\d*): (?:(?:warning|error)?: ?)?(.*)");
+            .compile("^(.*):(\\d*): (?:(?:warning|error)?: ?)?(.*)$");
     private static final Pattern noProcessorPattern = Pattern
             .compile("^error: Annotation processor (.*) not found$");
     private static final Pattern invalidFlagPattern = Pattern
@@ -76,10 +76,12 @@ public class JavacError
         File errorFile = null;
         int lineNum = 0;
         StringBuilder messageBuilder = new StringBuilder();
+        Iterator<String> iter = lines.iterator();
 
-        for (String line : lines)
+        while (iter.hasNext())
         {
-            Matcher matcher = messagePattern.matcher(line);
+            String line = iter.next();
+            Matcher matcher = messagePattern.matcher(line.trim());
             if (matcher.matches() && matcher.groupCount() == 3)
             {
                 if (errorFile != null)
@@ -96,13 +98,17 @@ public class JavacError
             else
             {
                 if (errorCountPattern.matcher(line).matches()
-                        || notePattern.matcher(line).matches())
+                        || !iter.hasNext())
                 {
-                    JavacError error = new JavacError(errorFile, lineNum,
-                            messageBuilder.toString().trim());
-                    result.add(error);
+                    if (messageBuilder.length() != 0)
+                    {
+                        JavacError error = new JavacError(errorFile, lineNum,
+                                messageBuilder.toString().trim());
+                        result.add(error);
+                    }
                 }
-                else if (!line.trim().equals("^"))
+                else if (!line.trim().equals("^")
+                        && !notePattern.matcher(line).matches())
                 {
                     messageBuilder.append(line);
                     messageBuilder.append(Util.NL);
@@ -115,15 +121,15 @@ public class JavacError
                 .getString(CheckerPreferences.PREF_CHECKER_ERROR_FILTER_REGEX);
         if (!filterRegex.isEmpty())
         {
-            Iterator<JavacError> iter = result.iterator();
-            while (iter.hasNext())
+            Iterator<JavacError> errorIter = result.iterator();
+            while (errorIter.hasNext())
             {
-                JavacError err = iter.next();
+                JavacError err = errorIter.next();
                 Matcher filterMatcher = Pattern.compile(filterRegex,
                         Pattern.DOTALL).matcher(err.message);
                 if (filterMatcher.matches())
                 {
-                    iter.remove();
+                    errorIter.remove();
                 }
             }
         }

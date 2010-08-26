@@ -2,14 +2,11 @@ package checkers.eclipse.actions;
 
 import java.util.List;
 
+import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IActionDelegate;
-import org.eclipse.ui.IObjectActionDelegate;
-import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.handlers.HandlerUtil;
 
 import checkers.eclipse.CheckerPlugin;
 import checkers.eclipse.prefs.CheckerPreferences;
@@ -19,14 +16,11 @@ import checkers.eclipse.util.MutexSchedulingRule;
 /**
  * Superclass of all checker actions.
  */
-public abstract class RunCheckerAction implements IObjectActionDelegate
+public abstract class RunCheckerAction extends CheckerHandler
 {
     private final String checkerName;
     protected boolean usePrefs;
     protected boolean useCustom;
-
-    /** The current selection. */
-    protected IStructuredSelection selection;
 
     /** true if this action is used from editor */
     protected boolean usedInEditor;
@@ -62,43 +56,13 @@ public abstract class RunCheckerAction implements IObjectActionDelegate
         return CheckerActionManager.getInstance().getSelectedNames();
     }
 
-    @Override
-    public void selectionChanged(IAction action, ISelection newSelection)
-    {
-        if (!usedInEditor && (newSelection instanceof IStructuredSelection))
-        {
-            this.selection = (IStructuredSelection) newSelection;
-        }
-        else
-            this.selection = null;
-    }
-
     /**
-     * @see IObjectActionDelegate#setActivePart(IAction, IWorkbenchPart)
+     * 
      */
-    @Override
-    public void setActivePart(IAction action, IWorkbenchPart targetPart)
+    public Object execute(ExecutionEvent event)
     {
-        // do nothing
-    }
-
-    private IJavaElement element()
-    {
-        if (selection != null && !selection.isEmpty())
-        {
-            return (IJavaElement) selection.getFirstElement();
-        }
-
-        return null;
-    }
-
-    /**
-     * @see IActionDelegate#run(IAction)
-     */
-    @Override
-    public void run(IAction action)
-    {
-        IJavaElement element = element();
+        ISelection selection = HandlerUtil.getActiveMenuSelection(event);
+        IJavaElement element = element(selection);
 
         if (element != null)
         {
@@ -133,5 +97,7 @@ public abstract class RunCheckerAction implements IObjectActionDelegate
             checkerJob.setRule(new MutexSchedulingRule());
             checkerJob.schedule();
         }
+
+        return null;
     }
 }
