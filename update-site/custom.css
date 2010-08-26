@@ -34,6 +34,7 @@ body {
 }
 
 #data {
+  background: #fff;
   border: solid #ddd thin;
   float: right;
   margin: 5px;
