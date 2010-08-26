@@ -48,7 +48,8 @@ public class JavacError
      */
     private static final Pattern errorCountPattern = Pattern
             .compile("^[0-9]+ (error|warning)*s?$");
-    private static final Pattern notePattern = Pattern.compile("^Note: .* $");
+    private static final Pattern noncheckerPattern = Pattern
+            .compile("^(Note|warning|error): .* $");
     private static final Pattern messagePattern = Pattern
             .compile("^(.*):(\\d*): (?:(?:warning|error)?: ?)?(.*)$");
     private static final Pattern noProcessorPattern = Pattern
@@ -108,7 +109,7 @@ public class JavacError
                     }
                 }
                 else if (!line.trim().equals("^")
-                        && !notePattern.matcher(line).matches())
+                        && !noncheckerPattern.matcher(line).matches())
                 {
                     messageBuilder.append(line);
                     messageBuilder.append(Util.NL);
