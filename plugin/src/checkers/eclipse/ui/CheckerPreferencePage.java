@@ -45,9 +45,7 @@ public class CheckerPreferencePage extends PreferencePage implements
     private Button optFilenames;
     private Button optNoMsgText;
     private Button optShowChecks;
-
-    /* Disabled for this release */
-    /* private Button optImplicitImports; */
+    private Button optImplicitImports;
 
     @Override
     public void init(IWorkbench workbench)
@@ -181,13 +179,9 @@ public class CheckerPreferencePage extends PreferencePage implements
         optShowChecks = new Button(procGroup, SWT.CHECK);
         optShowChecks
                 .setText("Print debugging info for pseudo-checks (-Ashowchecks)");
-
-        /* Disabled for this release */
-        /*
-         * optImplicitImports = new Button(procGroup, SWT.CHECK);
-         * optImplicitImports
-         * .setText("Use implicit imports for annotation classes");
-         */
+        optImplicitImports = new Button(procGroup, SWT.CHECK);
+        optImplicitImports
+                .setText("Use implicit imports for annotation classes");
 
         GridData procGridData = new GridData(SWT.FILL, SWT.BEGINNING, true,
                 false);
@@ -247,12 +241,9 @@ public class CheckerPreferencePage extends PreferencePage implements
                 .getString(CheckerPreferences.PREF_CHECKER_ERROR_FILTER_REGEX));
         optJDKPath.setText(store
                 .getString(CheckerPreferences.PREF_CHECKER_JDK_PATH));
+        optImplicitImports.setSelection(store
+                .getBoolean(CheckerPreferences.PREF_CHECKER_IMPLICIT_IMPORTS));
 
-        /* Disabled for this release */
-        /*
-         * optImplicitImports.setSelection(store
-         * .getBoolean(CheckerPreferences.PREF_CHECKER_IMPLICIT_IMPORTS));
-         */
     }
 
     public boolean performOk()
@@ -286,12 +277,8 @@ public class CheckerPreferencePage extends PreferencePage implements
                 optFilter.getText());
         store.setValue(CheckerPreferences.PREF_CHECKER_JDK_PATH,
                 optJDKPath.getText());
-
-        /* Disabled for this release */
-        /*
-         * store.setValue(CheckerPreferences.PREF_CHECKER_IMPLICIT_IMPORTS,
-         * optImplicitImports.getSelection());
-         */
+        store.setValue(CheckerPreferences.PREF_CHECKER_IMPLICIT_IMPORTS,
+                optImplicitImports.getSelection());
 
         return true;
     }

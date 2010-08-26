@@ -6,5 +6,6 @@
    <feature url="features/checkers.eclipse.feature_0.0.12.jar" id="checkers.eclipse.feature" version="0.0.12"/>
    <feature url="features/checkers.eclipse.feature_0.0.13.jar" id="checkers.eclipse.feature" version="0.0.13"/>
    <feature url="features/checkers.eclipse.feature_0.0.14.jar" id="checkers.eclipse.feature" version="0.0.14"/>
-   <feature url="features/checkers.eclipse.feature_0.0.15.jar" id="checkers.eclipse.feature" version="0.0.15"/>
+   <feature url="features/checkers.eclipse.feature_0.0.16.jar" id="checkers.eclipse.feature" version="0.0.16"/>
+   <feature url="features/checkers.eclipse.feature_0.0.17.jar" id="checkers.eclipse.feature" version="0.0.17"/>
 </site>

@@ -59,30 +59,24 @@
 <div id="main-content">
 <h1 id="title">Checker Plugin for Eclipse</h1>
 <h2>What it is:</h2>
-<p><a href="http://types.cs.washington.edu/checker-framework/">Pluggable type-checkers</a>
-are bug-finding and verification tools.
-They help you to detect and prevent null pointer errors, incorrect uses of
-equality operations, and side effect errors (and other errors).</p>
-<h2>Where to get it:</h2>
-<p>The repository for the code is hosted on Eclipse Labs here: <a href="http://code.google.com/a/eclipselabs.org/p/checker-plugin/">
-  http://code.google.com/a/eclipselabs.org/p/checker-plugin/</a>. The repository is hosted using <a href="http://mercurial.selenic.com/">Mercurial</a>.
-To check the source out, use the following command:
-<code>hg clone https://hg.codespot.com/a/eclipselabs.org/checker-plugin/ checker-plugin</code></p>
-<p>Instructions on how to install the plugin from Eclipse can be found below.</p>
+<p>A <a href="http://types.cs.washington.edu/checker-framework/">pluggable type-checker</a>
+is a bug-finding and verification tool.
+It helps you to detect and prevent null pointer errors, incorrect uses of
+equality operations, and side effect errors (and other errors). The Checker Plugin
+is an Eclipse plugin that will help you use pluggable type-checkers from the Checker
+Framework to type-check your programs.</p>
 <h2>Requirements:</h2>
-<p>The plugin has been tested on Linux, <a href="http://www.eclipse.org/">Eclipse</a> 3.6.0 and <a href="http://www.java.com">Java</a> 6.</p>
+<p>The plugin has been tested on <a href="http://www.eclipse.org/">Eclipse</a> 3.6.0 and <a href="http://www.java.com">Java</a> 6.</p>
 <p>Your Eclipse must be running on a Java 6 VM or newer.
 To see what Java VM and Eclipse is running on, select from the menu <b>Help</b> &rarr; <b>About Eclipse Platform</b> &rarr; <b>Installation Details</b>.
 Depending on your installation, the menu may be <b>Help</b> &rarr; <b>About Eclipse SDK</b> &rarr; <b>Installation Details</b>.</p>
-<p>You will also need the Checker Framework, which you can download <a href="http://types.cs.washington.edu/checker-framework/">here</a></p>
-<!-- On the Mac, the menu <b>Eclipse</b> &rarr; <b>About Eclipse SDK</b> &rarr; <b>Configuration Details</b>.<br> -->
+
 <br>
-<div id="data"><!-- this is where the transformed data goes --></div>
 <h2>How to install:</h2>
 <ol>
 <li> In Eclipse, select from the menu <b> Help </b> &rarr; <b> Install New Software... </b></li>
 <li> Click <b>Add...</b>.</li>
-<li> Enter the following: </li>
+<li> Enter the following:
   <ul>
   <li><b>Name: </b>Checker Framework</li>
   <li><b>Location: </b>http://types.cs.washington.edu/checker-framework/eclipse</li>
@@ -101,17 +95,19 @@ Select the checkbox next to it and click <b>Next</b>.</li>
 <li> Click <b> Yes </b> to restart Eclipse.</li>
 </ol>
 <h2>How to use Checkers Feature:</h2>
-First, add <a href="../lib/checkers.jar">checkers.jar</a> to your project's classpath.<br>
-(Eclipse may complain about unresolved classes referenced from a classfile.
+<p>Optionally, you may add <a href="../lib/checkers.jar">checkers.jar</a> to your project's classpath.
+(After you do this, Eclipse may complain about unresolved classes referenced from a classfile.
 This does not affect the checking, but to make the warning go away,
-add <a href="../lib/javac.jar">javac.jar</a> to the project's classpath.)<br>
-To perform the checking, select the checker from the context menu of a Java project, for example <b>Checker Framework</b> &rarr; <b>Run Nullness Checker</b>.<br>
-The checker will run and warnings will be added to the Problems view.<br>
-To remove the warning markers, run <b>Checker Framework</b> &rarr; <b>Clear checker markers</b>. Note that markers are cleared per project.<br>
+add <a href="../lib/javac.jar">javac.jar</a> to the project's classpath.) This is not necessary
+but will keep Eclipse from complaining about missing annotation classes. Alternatively, you can
+use the <a href="#implicit-imports">Implicit Import</a> feature.</p>
+<p>To perform the checking, select the checker from the context menu of a Java project, for example <b>Checker Framework</b> &rarr; <b>Run Nullness Checker</b>.
+The checker will run and warnings will be added to the Problems view.
+To remove the warning markers, run <b>Checker Framework</b> &rarr; <b>Clear checker markers</b>. Note that markers are cleared per project.</p>
 
-<img src="images/checker-context-menu.png" />
+<img src="images/checker-context-menu.png" alt="Checker context menu" />
 
-<p>You can also run checkers on individual packages or files. To do this, just right click on the
+<p>You can also run a checker on individual packages or files. To do this, just right-click on the
 package or file you want to typecheck and use the context menu as documented above.</p>
 
 <p>
@@ -123,10 +119,10 @@ automatic build, which is described below.
 
 <h3>Automatic build</h3>
 <p>
-The plugin also supports automatically typechecking your code when a change is detected. To enable
+The plugin can automatically typecheck your code whenever you change it,
+much as Eclipse's built-in compiler does.  To enable
 this behavior for a project, right click on your project and run <b>Checker Framework</b> &rarr; <b>Toggle checker nature on project</b>.
-This will add the checker nature to your project (assuming it is not already present), which will cause Eclipse to automatically run
-checkers on subsequent edits.
+Selecting the action again will disable the builder.
 </p>
 <p>
 The checkers that are run are those that are selected in the preferences.
@@ -134,34 +130,75 @@ The checkers that are run are those that are selected in the preferences.
 
 <h3>Preferences</h3>
 <p>
-Most of the commandline options that can be supplied to the Checker Framework compiler are also supported
+Most of the command-line options that can be supplied to the Checker Framework compiler are also supported
 by this plugin. To set the various options, go to <b>Window</b> &rarr; <b>Preferences</b> and select the
-<b>Checker</b> section. The options that correspond to commandline switches will be marked as such.
+<b>Checker</b> section. The options that correspond to command-line switches are marked as such.
 </p>
-<p>For more information on the supported commandline options, see the <a href="http://types.cs.washington.edu/checker-framework/">Checker Framework
-  Documentation</a>
+<p>For more information on the supported command-line options, see the <a href="http://types.cs.washington.edu/checker-framework/">Checker Framework
+  Documentation</a>.
 </p>
 
-<h3>Custom checker</h3>
-<p>If you would like to supply your own classes to use as checkers, you can do so in the <b>Custom Checker</b> preference page. By pressing
+<h3>Adding support for a new checker</h3>
+
+<p>
+The plugin comes with support for all checkers bundled in the Checker
+Framework.
+</p>
+
+<p>
+To make the plugin support a new checker, use the <b>Custom Checker</b> preference page. By pressing
 the <b>Search...</b> button you can select from a searchable listing of classes in the workspace. The class or classes you select must be
-on the classpath of the project you are type checking in order to work. In the future, we plan to support a more fully featured method
+on the classpath of the project you are type-checking. The custom class that you select will be used if you select the
+<b>Run Custom Checker</b> action from the popup menu. Note that if the preference field is empty you will get a warning message that
+no checkers were configured.</p>
+
+<p>If your checker supports extra command-line flags, you can pass these in the <b>Additional compiler parameters</b> field in the
+preferences, which will append the input to the compiler's arguments.</p>
+
+<p>In the future, we plan to support a more fully featured method
 of adding and customizing your own checkers.</p>
+
+<h3 id="implicit-imports">Development style and implicit imports</h3>
+
+<p>If you work in a team and not everyone uses the Checker Framework or if you use older versions of Java, you can use implicit imports
+to avoid creating an explicit dependency on checkers.jar. Just enable the
+  setting in the preferences. After that, you can write <a href="http://types.cs.washington.edu/checker-framework/#annotations-in-comments">annotations
+in comments</a>.
+</p>
+
+<h3>Customizing the build environment</h3>
+
+<p>By default, the plugin uses your system-specified JRE (whatever <tt>System.getProperty("java.home")</tt> returns).
+However, if would like to use custom JDK libraries you should specify those on the Eclipse system library buildpath in the project properties. You also have the
+option of explicitly setting the java executable to use in the plugin preferences.</p>
 
 <h2>How to report problems:</h2>
 <p>Submit bug reports at <a href="http://code.google.com/a/eclipselabs.org/p/checker-plugin/issues/list ">http://code.google.com/a/eclipselabs.org/p/checker-plugin/issues/list </a></p>
+
+<div id="data"><!-- this is where the transformed data goes --></div>
+
 <h3>Troubleshooting tips</h3>
-<p>If you are having problems with the output from the plugin, check to see what the output on the Eclipse console indicates. The console
+<p>If you are having problems with the output from the plugin, you can check to see what the output on the built-in
+Eclipse console view, as opposed to the problems view that the Checker Plugin populates, indicates. The console
 will get the raw output from the compiler. Attaching the console output to a bug report can also help us figure out which component
 is reponsible for the bug.</p>
-<p>If you are finding that the plugin emits different or additional warnings that Eclipse does not that are unrelated to checkers, this
+<p>If you are finding that the plugin emits different or additional warnings in its problems view that Eclipse does not that are 
+unrelated to checkers, this
 is likely because the Eclipse compiler and Sun's javac compiler have different behaviors on certain kinds of errors. In this case, you
 can either try to fix the underlying cause for the warning or you can add a regular expression in the preferences (see the
 "Regex for warning/error filter" field) to filter the compiler output.</p>
-<p>In the case that you need to use a special version of the JRE, the plugin should use your system specified JRE (whatever System.getProperty("java.home") returns).
-However, if would like to use custom JDK libraries you should specify those on the Eclipse system library buildpath in the project properties. You also have the
-option of explicitly setting the java executable to use in the plugin preferences.</p>
-<h2>Natively supported checkers:</h2> All checkers bundled in the Checker Framework.
+
+<h2>Where to get the source code:</h2>
+<p>To install and use the Checker Plugin you will not need to access or compile the source code. However, if you would like to make
+changes or browse the source code, it is publicly available.
+The repository for the code is hosted on Eclipse Labs here: <a href="http://code.google.com/a/eclipselabs.org/p/checker-plugin/">
+  http://code.google.com/a/eclipselabs.org/p/checker-plugin/</a>. The repository is hosted using <a href="http://mercurial.selenic.com/">Mercurial</a>.
+To check the source out, use the following command:
+<code>hg clone https://hg.codespot.com/a/eclipselabs.org/checker-plugin/ checker-plugin</code></p>
+
+<p>Additionally, if you would like to access older releases or would like to manually download releases of the
+plugin, you can do so through the sidebar</p>
+
 </div>
 </body>
 </html>

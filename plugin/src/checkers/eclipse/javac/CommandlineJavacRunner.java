@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
@@ -31,7 +32,10 @@ public class CommandlineJavacRunner
     public static final String JSR308ALL_LOCATION = "lib/jsr308-all.jar";
     public static final List<String> IMPLICIT_ARGS = Arrays.asList(
             "checkers.nullness.quals.*", "checkers.igj.quals.*",
-            "checkers.javari.quals.*", "checkers.interning.quals.*");
+            "checkers.javari.quals.*", "checkers.interning.quals.*",
+            "checkers.lock.quals.*", "checkers.fenum.quals.*",
+            "checkers.i18n.quals.*", "checkers.linear.quals.*",
+            "checkers.regex.quals.*", "checkers.tainting.quals.*");
 
     public static boolean VERBOSE = true;
 
@@ -85,13 +89,13 @@ public class CommandlineJavacRunner
         List<String> opts = new ArrayList<String>();
         opts.add(javaVM());
 
-        if (usingImplicitAnnotations())
-        {
-            opts.add("-Djsr308_imports=\"" + implicitAnnotations() + "\"");
-        }
-
         opts.add("-ea:com.sun.tools");
         opts.add("-Xbootclasspath/p:" + javacJARlocation());
+
+        if (usingImplicitAnnotations())
+        {
+            opts.add("-Djsr308_imports=" + implicitAnnotations());
+        }
 
         opts.add("-jar");
         opts.add(javacJARlocation());
@@ -100,8 +104,16 @@ public class CommandlineJavacRunner
         opts.add("-proc:only");
         opts.add("-bootclasspath");
         opts.add(bootclasspath + File.pathSeparator + javacJARlocation());
+
         opts.add("-classpath");
-        opts.add(classpath);
+        if (checkersOnClassspath())
+        {
+            opts.add(classpath);
+        }
+        else
+        {
+            opts.add(classpath + File.pathSeparator + checkersJARlocation());
+        }
 
         opts.add("-processor");
         opts.add(processors);
@@ -129,6 +141,11 @@ public class CommandlineJavacRunner
         return opts.toArray(new String[opts.size()]);
     }
 
+    private boolean checkersOnClassspath()
+    {
+        return Pattern.matches(".*checkers.jar(:|$).*", classpath);
+    }
+
     private boolean usingImplicitAnnotations()
     {
         return CheckerPlugin.getDefault().getPreferenceStore()
@@ -142,6 +159,10 @@ public class CommandlineJavacRunner
      */
     private void addProcessorOptions(List<String> opts)
     {
+        // TODO: some input validation would be nice here. Especially for
+        // the additional compiler flags, which could be checked against
+        // the compiler.
+
         IPreferenceStore store = CheckerPlugin.getDefault()
                 .getPreferenceStore();
 
