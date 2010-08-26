@@ -93,16 +93,18 @@ public class ErrorParserTest
             .append(Util.NL).append("warning: foo bar (non-checker error)")
             .toString();
     private static final String WARNING_TEST_MSG_1 = new StringBuilder()
-            .append("incompatible types.").append(Util.NL)
-            .append("       @NonNull Integer bar = null;").toString();
+            .append("incompatible types.")
+            .append(Util.NL).append("       @NonNull Integer bar = null;")
+            .toString();
     private static final String NOTE_TEST_INPUT = new StringBuilder()
             .append("/home/asumu/gsoc-workspace-4/checker testing/src/GetStarted.java:8: warning: incompatible types.")
             .append(Util.NL).append("       @NonNull Integer bar = null;")
             .append(Util.NL).append("Note: foo bar (non-checker error)")
             .toString();
     private static final String NOTE_TEST_MSG_1 = new StringBuilder()
-            .append("incompatible types.").append(Util.NL)
-            .append("       @NonNull Integer bar = null;").toString();
+            .append("incompatible types.")
+            .append(Util.NL).append("       @NonNull Integer bar = null;")
+            .toString();
 
     @Test
     public void emptyTest()
