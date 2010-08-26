@@ -87,6 +87,22 @@ public class ErrorParserTest
             .toString();
     private static final String WINDOWS_ERROR_MSG_1 = SIMPLE_ERROR_1;
     private static final String WINDOWS_ERROR_MSG_2 = SIMPLE_ERROR_2;
+    private static final String WARNING_TEST_INPUT = new StringBuilder()
+            .append("/home/asumu/gsoc-workspace-4/checker testing/src/GetStarted.java:8: warning: incompatible types.")
+            .append(Util.NL).append("       @NonNull Integer bar = null;")
+            .append(Util.NL).append("warning: foo bar (non-checker error)")
+            .toString();
+    private static final String WARNING_TEST_MSG_1 = new StringBuilder()
+            .append("incompatible types.").append(Util.NL)
+            .append("       @NonNull Integer bar = null;").toString();
+    private static final String NOTE_TEST_INPUT = new StringBuilder()
+            .append("/home/asumu/gsoc-workspace-4/checker testing/src/GetStarted.java:8: warning: incompatible types.")
+            .append(Util.NL).append("       @NonNull Integer bar = null;")
+            .append(Util.NL).append("Note: foo bar (non-checker error)")
+            .toString();
+    private static final String NOTE_TEST_MSG_1 = new StringBuilder()
+            .append("incompatible types.").append(Util.NL)
+            .append("       @NonNull Integer bar = null;").toString();
 
     @Test
     public void emptyTest()
@@ -139,5 +155,23 @@ public class ErrorParserTest
         assertEquals(WINDOWS_ERROR_MSG_1, errors.get(0).message);
         assertEquals(16, errors.get(1).lineNumber);
         assertEquals(WINDOWS_ERROR_MSG_2, errors.get(1).message);
+    }
+
+    @Test
+    public void warningParseTest()
+    {
+        List<JavacError> errors = JavacError.parse(WARNING_TEST_INPUT);
+
+        assertEquals(1, errors.size());
+        assertEquals(WARNING_TEST_MSG_1, errors.get(0).message);
+    }
+
+    @Test
+    public void noteParseTest()
+    {
+        List<JavacError> errors = JavacError.parse(NOTE_TEST_INPUT);
+
+        assertEquals(1, errors.size());
+        assertEquals(NOTE_TEST_MSG_1, errors.get(0).message);
     }
 }
