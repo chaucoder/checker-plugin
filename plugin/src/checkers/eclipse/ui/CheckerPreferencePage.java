@@ -94,7 +94,7 @@ public class CheckerPreferencePage extends PreferencePage implements
         uiGroup.setLayout(uiLayout);
 
         optAutoBuild = new Button(uiGroup, SWT.CHECK);
-        optAutoBuild.setText("Automatically process annotations");
+        optAutoBuild.setText("Automatically run type-checkers");
 
         Label filterLabel = new Label(uiGroup, SWT.None);
         filterLabel.setText("Regex for warning/error filter:");
