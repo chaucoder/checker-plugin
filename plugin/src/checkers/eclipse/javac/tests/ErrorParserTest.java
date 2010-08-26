@@ -89,6 +89,14 @@ public class ErrorParserTest
     private static final String WINDOWS_ERROR_MSG_2 = SIMPLE_ERROR_2;
 
     @Test
+    public void emptyTest()
+    {
+        List<JavacError> errors = JavacError.parse("");
+
+        assert (errors.isEmpty());
+    }
+
+    @Test
     public void simpleParseTest()
     {
         List<JavacError> errors = JavacError.parse(SIMPLE_TEST_INPUT);
