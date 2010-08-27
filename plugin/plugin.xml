@@ -241,4 +241,8 @@
             </command>
    </extension>
    
+   <extension point="org.eclipse.help.toc">
+      <toc file="toc.xml" primary="true" />
+   </extension>
+   
 </plugin>
