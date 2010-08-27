@@ -28,7 +28,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 
 import checkers.eclipse.CheckerPlugin;
-import checkers.eclipse.actions.CheckerActionManager;
+import checkers.eclipse.actions.CheckerManager;
 import checkers.eclipse.prefs.CheckerPreferences;
 
 public class CheckerPreferencePage extends PreferencePage implements
@@ -79,7 +79,7 @@ public class CheckerPreferencePage extends PreferencePage implements
         GridData data2 = new GridData(SWT.FILL, SWT.FILL, true, true);
         procTable.setLayoutData(data2);
 
-        for (String label : CheckerActionManager.getInstance()
+        for (String label : CheckerManager.getInstance()
                 .getCheckerLabels())
         {
             TableItem item = new TableItem(procTable, SWT.None);
