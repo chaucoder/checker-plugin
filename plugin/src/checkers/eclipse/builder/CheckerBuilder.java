@@ -14,7 +14,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import checkers.eclipse.CheckerPlugin;
-import checkers.eclipse.actions.CheckerActionManager;
+import checkers.eclipse.actions.CheckerManager;
 import checkers.eclipse.actions.CheckerWorker;
 import checkers.eclipse.prefs.CheckerPreferences;
 import checkers.eclipse.util.JavaUtils;
@@ -79,7 +79,7 @@ public class CheckerBuilder extends IncrementalProjectBuilder
         }
 
         runWorker(JavaCore.create(getProject()), visitor.getBuildFiles(),
-                CheckerActionManager.getInstance().getSelectedNames());
+                CheckerManager.getInstance().getSelectedNames());
     }
 
     private void fullBuild() throws CoreException
@@ -87,7 +87,7 @@ public class CheckerBuilder extends IncrementalProjectBuilder
         IJavaProject project = JavaCore.create(getProject());
         List<String> sourceNames = ResourceUtils.sourceFilesOf(project);
 
-        runWorker(project, sourceNames, CheckerActionManager.getInstance()
+        runWorker(project, sourceNames, CheckerManager.getInstance()
                 .getSelectedNames());
     }
 
