@@ -53,7 +53,7 @@ public abstract class RunCheckerAction extends CheckerHandler
     private List<String> getClassNameFromPrefs()
     {
 
-        return CheckerActionManager.getInstance().getSelectedNames();
+        return CheckerManager.getInstance().getSelectedNames();
     }
 
     /**

@@ -1,11 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/checkers.eclipse.feature_0.0.9.jar" id="checkers.eclipse.feature" version="0.0.9"/>
-   <feature url="features/checkers.eclipse.feature_0.0.10.jar" id="checkers.eclipse.feature" version="0.0.10"/>
-   <feature url="features/checkers.eclipse.feature_0.0.11.jar" id="checkers.eclipse.feature" version="0.0.11"/>
-   <feature url="features/checkers.eclipse.feature_0.0.12.jar" id="checkers.eclipse.feature" version="0.0.12"/>
-   <feature url="features/checkers.eclipse.feature_0.0.13.jar" id="checkers.eclipse.feature" version="0.0.13"/>
-   <feature url="features/checkers.eclipse.feature_0.0.14.jar" id="checkers.eclipse.feature" version="0.0.14"/>
-   <feature url="features/checkers.eclipse.feature_0.0.16.jar" id="checkers.eclipse.feature" version="0.0.16"/>
-   <feature url="features/checkers.eclipse.feature_0.0.17.jar" id="checkers.eclipse.feature" version="0.0.17"/>
+   <feature url="features/checkers.eclipse.feature_1.0.0.jar" id="checkers.eclipse.feature" version="1.0.0"/>
 </site>

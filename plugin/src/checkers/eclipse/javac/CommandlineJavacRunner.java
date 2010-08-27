@@ -18,6 +18,7 @@ import org.eclipse.ui.console.MessageConsoleStream;
 import org.osgi.framework.Bundle;
 
 import checkers.eclipse.CheckerPlugin;
+import checkers.eclipse.actions.CheckerManager;
 import checkers.eclipse.prefs.CheckerPreferences;
 import checkers.eclipse.util.Command;
 import checkers.eclipse.util.JavaUtils;
@@ -30,12 +31,6 @@ public class CommandlineJavacRunner
     public static final String CHECKERS_LOCATION = "lib/checkers.jar";
     public static final String JAVAC_LOCATION = "lib/javac.jar";
     public static final String JSR308ALL_LOCATION = "lib/jsr308-all.jar";
-    public static final List<String> IMPLICIT_ARGS = Arrays.asList(
-            "checkers.nullness.quals.*", "checkers.igj.quals.*",
-            "checkers.javari.quals.*", "checkers.interning.quals.*",
-            "checkers.lock.quals.*", "checkers.fenum.quals.*",
-            "checkers.i18n.quals.*", "checkers.linear.quals.*",
-            "checkers.regex.quals.*", "checkers.tainting.quals.*");
 
     public static boolean VERBOSE = true;
 
@@ -80,7 +75,8 @@ public class CommandlineJavacRunner
 
     private String implicitAnnotations()
     {
-        return JavaUtils.join(File.pathSeparator, IMPLICIT_ARGS);
+        return JavaUtils.join(File.pathSeparator, CheckerManager.getInstance()
+                .getSelectedQuals());
     }
 
     private String[] options(List<String> fileNames, String processors,
