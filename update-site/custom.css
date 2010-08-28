@@ -1,0 +1,50 @@
+/* Additional CSS rules for checker plugin index page */
+
+img { 
+  float: right; 
+  margin: 20px;
+}
+
+code {
+  background: #eef;
+  display: block;
+  font-family: monospace;
+  margin: 5px;
+  padding: 5px;
+}
+
+body {
+  background: #eee;
+  padding: 0;
+}
+
+#title {
+  color: #569;
+  font-size: xx-large;
+  text-align: center;
+  font-family: 'Josefin Sans Std Light', Arial, sans-serif;
+  text-shadow: 1px 1px 1px #ccc;
+}
+
+#main-content {
+  background: #fff;
+  margin: 0 auto;
+  padding: 20px;
+  width: 760px;
+}
+
+#data {
+  background: #fff;
+  border: solid #ddd thin;
+  float: right;
+  margin: 5px;
+  padding: 15px;
+  width: 200px;
+  /* CSS3 hackery */
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+}
+
+h2 { font-weight: bold; font-size: small; }
+h3 { font-weight: bold; font-size: smaller; }
