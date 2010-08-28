@@ -164,7 +164,10 @@ of adding and customizing your own checkers.</p>
 <p>If you work in a team and not everyone uses the Checker Framework or if you use older versions of Java, you can use implicit imports
 to avoid creating an explicit dependency on checkers.jar. Just enable the
   setting in the preferences. After that, you can write <a href="http://types.cs.washington.edu/checker-framework/#annotations-in-comments">annotations
-in comments</a>.
+in comments</a>. The annotation classes that will be imported will be
+those that correspond to checkers selected in the preferences. Note that
+if no checkers are set, the type-checker will not see any type annotations
+in comments.
 </p>
 
 <h3>Customizing the build environment</h3>
