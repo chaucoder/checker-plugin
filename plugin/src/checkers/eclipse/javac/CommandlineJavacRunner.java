@@ -139,7 +139,7 @@ public class CommandlineJavacRunner
 
     private boolean checkersOnClassspath()
     {
-        return Pattern.matches(".*checkers.jar(:|$).*", classpath);
+        return Pattern.matches(".*checkers(-quals)?.jar(:|$).*", classpath);
     }
 
     private boolean usingImplicitAnnotations()
