@@ -10,16 +10,30 @@
 		// NSCP 7.1+ / Mozilla 1.4.1+ / Safari
 		// Use the standard DOM Level 2 technique, if it is supported
 		if (document.implementation && document.implementation.createDocument) {
-			xmlFile = document.implementation.createDocument("", "", null);
-			stylesheet = document.implementation.createDocument("", "", null);
-			if (xmlFile.load){
-				xmlFile.load("site.xml");
-				stylesheet.load("web/site.xsl");
-			} else {
-				alert("Document could not be loaded by browser.");
+		        try { 
+		          xmlFile = document.implementation.createDocument("", "", null);
+			  stylesheet = document.implementation.createDocument("", "", null);
+			  xmlFile.load("site.xml");
+			  stylesheet.load("web/site.xsl");
+			  xmlFile.addEventListener("load", transformSync, false);
+			  stylesheet.addEventListener("load", transformSync, false);
 			}
-			xmlFile.addEventListener("load", transform, false);
-			stylesheet.addEventListener("load", transform, false);
+			catch (e) {
+			  try {
+			   var xmlhttp = new window.XMLHttpRequest();
+			   xmlhttp.open("GET","site.xml",false);
+			   xmlhttp.send(null);
+			   xmlFile = xmlhttp.responseXML.documentElement;
+			   xmlhttp = new window.XMLHttpRequest();
+			   xmlhttp.open("GET","web/site.xsl",false);
+			   xmlhttp.send(null);
+			   stylesheet = xmlhttp.responseXML.documentElement;
+			   transform()
+			  }
+			  catch (e) {
+			    alert("Document could not be loaded by browser.");
+			  }
+			}
 		}
 		//IE 6.0+ solution
 		else if (window.ActiveXObject) {
@@ -41,14 +55,18 @@
 		processor.transform();
 		data.innerHTML = processor.output;
 	}
-	// separate transformation function for NSCP 7.1+ and Mozilla 1.4.1+
-	function transform(){
-		returnval+=1;
-		if (returnval==2){
+        // separate transformation function for Chrome
+        function transform() {
 			var processor = new XSLTProcessor();
 			processor.importStylesheet(stylesheet);
 			doc = processor.transformToDocument(xmlFile);
 			document.getElementById("data").innerHTML = doc.documentElement.innerHTML;
+        }
+	// separate transformation function for NSCP 7.1+ and Mozilla 1.4.1+
+	function transformSync(){
+		returnval+=1;
+		if (returnval==2){
+		  transform();
 		}
 	}
       </script>
