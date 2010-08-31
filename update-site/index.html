@@ -77,12 +77,20 @@
 <div id="main-content">
 <h1 id="title">Checker Plugin for Eclipse</h1>
 <h2>What it is:</h2>
-<p>A <a href="http://types.cs.washington.edu/checker-framework/">pluggable type-checker</a>
+<p>
+The Checker Plugin
+is an Eclipse plugin that will help you use pluggable type-checkers from the Checker
+Framework to type-check your programs.
+A pluggable type-checker
 is a bug-finding and verification tool.
 It helps you to detect and prevent null pointer errors, incorrect uses of
-equality operations, and side effect errors (and other errors). The Checker Plugin
-is an Eclipse plugin that will help you use pluggable type-checkers from the Checker
-Framework to type-check your programs.</p>
+equality operations, and side effect errors (and other errors).
+This document describes how to use the Checker Plugin to run pluggable
+type-checking from within Eclipse.  For details about pluggable
+type-checking itself, see the 
+<a href="http://types.cs.washington.edu/checker-framework/">Checker
+  Framework documentation</a>.
+</p>
 <h2>Requirements:</h2>
 <p>The plugin has been tested on <a href="http://www.eclipse.org/">Eclipse</a> 3.6.0 and <a href="http://www.java.com">Java</a> 6.</p>
 <p>Your Eclipse must be running on a Java 6 VM or newer.
@@ -182,7 +190,10 @@ of adding and customizing your own checkers.</p>
 <p>If you work in a team and not everyone uses the Checker Framework or if you use older versions of Java, you can use implicit imports
 to avoid creating an explicit dependency on checkers.jar. Just enable the
   setting in the preferences. After that, you can write <a href="http://types.cs.washington.edu/checker-framework/#annotations-in-comments">annotations
-in comments</a>. The imports that are included implicitly are annotation classes for checkers currently selected in the preferences.
+in comments</a>. The annotation classes that will be imported will be
+those that correspond to checkers selected in the preferences. Note that
+if no checkers are set, the type-checker will not see any type annotations
+in comments.
 </p>
 
 <h3>Customizing the build environment</h3>
