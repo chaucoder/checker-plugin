@@ -86,6 +86,22 @@
                   label="Disable Automatic Checking"
                   style="push">
             </command>
+            <command
+                  commandId="checkers.eclipse.addcheckers"
+                  label="Add checkers-quals.jar to project"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="activeMenuSelection">
+                     <iterate>
+                        <adapt
+                              type="org.eclipse.core.resources.IProject">
+                        </adapt>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
             <separator
                   name="separator1"
                   visible="true">
@@ -238,6 +254,11 @@
                   defaultHandler="checkers.eclipse.actions.CheckerActions$FenumAction"
                   id="checkers.eclipse.runfenum"
                   name="Run Fenum Checker">
+            </command>
+            <command
+                  defaultHandler="checkers.eclipse.actions.AddCheckersHandler"
+                  id="checkers.eclipse.addcheckers"
+                  name="Add checkers-quals.jar to project">
             </command>
    </extension>
    
