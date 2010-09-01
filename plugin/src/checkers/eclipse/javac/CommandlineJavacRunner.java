@@ -108,7 +108,8 @@ public class CommandlineJavacRunner
         }
         else
         {
-            opts.add(classpath + File.pathSeparator + checkersJARlocation());
+            opts.add(classpath + File.pathSeparator
+                    + locatePluginFile(CHECKERS_LOCATION));
         }
 
         opts.add("-processor");
@@ -139,7 +140,7 @@ public class CommandlineJavacRunner
 
     private boolean checkersOnClassspath()
     {
-        return Pattern.matches(".*checkers(-quals)?.jar(:|$).*", classpath);
+        return Pattern.matches(".*checkers.jar(:|$).*", classpath);
     }
 
     private boolean usingImplicitAnnotations()
@@ -231,15 +232,11 @@ public class CommandlineJavacRunner
         return javacFile.getAbsolutePath();
     }
 
-    // This used to be used. Now we just scan the classpath. The checkers.jar
-    // must be on the classpath anyway.
-    // XXX The problem is what to do if the checkers.jar on the classpath is
-    // different from the one in the plugin.
-    public static String checkersJARlocation()
+    public static String locatePluginFile(String path)
     {
         Bundle bundle = Platform.getBundle(CheckerPlugin.PLUGIN_ID);
 
-        Path checkersJAR = new Path(CHECKERS_LOCATION);
+        Path checkersJAR = new Path(path);
         URL checkersJarURL;
         try
         {
