@@ -122,6 +122,8 @@ Select the checkbox next to it and click <b>Next</b>.</li>
 </ol>
 <h2>How to use Checkers Feature:</h2>
 <p>Optionally, you may add <a href="../lib/checkers.jar">checkers.jar</a> to your project's classpath.
+You can have the plugin do this automatically by using the <b>Add checkers-quals.jar to project</b>
+command from the plugin menu.
 (After you do this, Eclipse may complain about unresolved classes referenced from a classfile.
 This does not affect the checking, but to make the warning go away,
 add <a href="../lib/javac.jar">javac.jar</a> to the project's classpath.) This is not necessary
@@ -129,7 +131,7 @@ but will keep Eclipse from complaining about missing annotation classes. Alterna
 use the <a href="#implicit-imports">Implicit Import</a> feature.</p>
 <p>To perform the checking, select the checker from the context menu of a Java project, for example <b>Checker Framework</b> &rarr; <b>Run Nullness Checker</b>.
 The checker will run and warnings will be added to the Problems view.
-To remove the warning markers, run <b>Checker Framework</b> &rarr; <b>Clear checker markers</b>. Note that markers are cleared per project.</p>
+To remove the warning markers, run <b>Checker Framework</b> &rarr; <b>Clear checker markers</b> (or Shift+Ctrl+C). Note that markers are cleared per project.</p>
 
 <img src="images/checker-context-menu.png" alt="Checker context menu" />
 
@@ -137,7 +139,7 @@ To remove the warning markers, run <b>Checker Framework</b> &rarr; <b>Clear chec
 package or file you want to typecheck and use the context menu as documented above.</p>
 
 <p>
-If you want to run multiple checkers at once, you can do so using the <b>Run selected checkers</b> action.
+If you want to run multiple checkers at once, you can do so using the <b>Run selected checkers</b> action (or Ctrl+Alt+C).
 This will run the checkers that are selected in the <b>Checkers</b> section in the preferences, which
 are accessible through <b>Window</b> &rarr; <b>Preferences</b>. These selections are also used for
 automatic build, which is described below.
@@ -164,6 +166,8 @@ by this plugin. To set the various options, go to <b>Window</b> &rarr; <b>Prefer
 <p>For more information on the supported command-line options, see the <a href="http://types.cs.washington.edu/checker-framework/">Checker Framework
   Documentation</a>.
 </p>
+<p>To customize keyboard shortcuts for plugin commands, go to <b>Preferences</b> &rarr; <b>General</b> &rarr; <b>Keys</b> and search
+for "Checker Plugin". This should show all the plugin commands and allow shortcut rebinding.</p>
 
 <h3>Adding support for a new checker</h3>
 
