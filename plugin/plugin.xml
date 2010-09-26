@@ -293,6 +293,12 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="Ctrl+Alt+C">
       </key>
+      <key
+            commandId="checkers.eclipse.clearmarkers"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="Shift+Ctrl+C">
+      </key>
    </extension>
    
 </plugin>
