@@ -209,8 +209,6 @@ option of explicitly setting the java executable to use in the plugin preference
 <h2>How to report problems:</h2>
 <p>Submit bug reports at <a href="http://code.google.com/a/eclipselabs.org/p/checker-plugin/issues/list ">http://code.google.com/a/eclipselabs.org/p/checker-plugin/issues/list </a></p>
 
-<div id="data"><!-- this is where the transformed data goes --></div>
-
 <h3>Troubleshooting tips</h3>
 <p>If you are having problems with the output from the plugin, you can check to see what the output on the built-in
 Eclipse console view, as opposed to the problems view that the Checker Plugin populates, indicates. The console
@@ -221,6 +219,8 @@ unrelated to checkers, this
 is likely because the Eclipse compiler and Sun's javac compiler have different behaviors on certain kinds of errors. In this case, you
 can either try to fix the underlying cause for the warning or you can add a regular expression in the preferences (see the
 "Regex for warning/error filter" field) to filter the compiler output.</p>
+
+<div id="data"><!-- this is where the transformed data goes --></div>
 
 <h2>Where to get the source code:</h2>
 <p>To install and use the Checker Plugin you will not need to access or compile the source code. However, if you would like to make
