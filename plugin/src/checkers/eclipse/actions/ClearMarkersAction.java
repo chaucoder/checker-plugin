@@ -14,7 +14,6 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.handlers.HandlerUtil;
 
 import checkers.eclipse.CheckerPlugin;
 import checkers.eclipse.util.MarkerUtil;
@@ -35,7 +34,7 @@ public class ClearMarkersAction extends CheckerHandler
      */
     public Object execute(ExecutionEvent event)
     {
-        ISelection selection = HandlerUtil.getActiveMenuSelection(event);
+        ISelection selection = getSelection(event);
 
         if (selection instanceof IStructuredSelection)
             currSelection = (IStructuredSelection) selection;

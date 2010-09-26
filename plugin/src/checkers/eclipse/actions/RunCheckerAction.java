@@ -6,7 +6,6 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.ui.handlers.HandlerUtil;
 
 import checkers.eclipse.CheckerPlugin;
 import checkers.eclipse.prefs.CheckerPreferences;
@@ -61,7 +60,7 @@ public abstract class RunCheckerAction extends CheckerHandler
      */
     public Object execute(ExecutionEvent event)
     {
-        ISelection selection = HandlerUtil.getActiveMenuSelection(event);
+        ISelection selection = getSelection(event);
         IJavaElement element = element(selection);
 
         if (element != null)

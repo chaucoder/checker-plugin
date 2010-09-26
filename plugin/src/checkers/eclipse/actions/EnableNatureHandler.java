@@ -7,7 +7,6 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.ui.handlers.HandlerUtil;
 
 import checkers.eclipse.CheckerPlugin;
 
@@ -15,7 +14,7 @@ public class EnableNatureHandler extends ProjectNatureHandler
 {
     public Object execute(ExecutionEvent event) throws ExecutionException
     {
-        ISelection selection = HandlerUtil.getActiveMenuSelection(event);
+        ISelection selection = getSelection(event);
         IJavaElement element = element(selection);
 
         try
