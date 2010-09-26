@@ -14,7 +14,6 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.statushandlers.StatusManager;
 
 import checkers.eclipse.error.CheckerErrorStatus;
@@ -26,7 +25,7 @@ public class AddCheckersHandler extends CheckerHandler
 
     public Object execute(ExecutionEvent event) throws ExecutionException
     {
-        ISelection selection = HandlerUtil.getActiveMenuSelection(event);
+        ISelection selection = getSelection(event);
         IJavaElement element = element(selection);
         if (element instanceof IJavaProject)
         {

@@ -181,89 +181,118 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
+            categoryId="checkers.eclipse.category"
             defaultHandler="checkers.eclipse.actions.CheckerActions$NullnessAction"
             id="checkers.eclipse.runnullness"
             name="Run Nullness Checker">
       </command>
       <command
+            categoryId="checkers.eclipse.category"
             defaultHandler="checkers.eclipse.actions.CheckerActions$IGJAction"
             id="checkers.eclipse.runigj"
             name="Run IGJ Checker">
       </command>
       <command
+            categoryId="checkers.eclipse.category"
             defaultHandler="checkers.eclipse.actions.CheckerActions$CustomAction"
             id="checkers.eclipse.runcustom"
             name="Run Custom Checker(s)">
       </command>
       <command
+            categoryId="checkers.eclipse.category"
             defaultHandler="checkers.eclipse.actions.CheckerActions$LockAction"
             id="checkers.eclipse.runlock"
             name="Run Lock Checker">
       </command>
             <command
+                  categoryId="checkers.eclipse.category"
                   defaultHandler="checkers.eclipse.actions.CheckerActions$InterningAction"
                   id="checkers.eclipse.runinterning"
                   name="Run Interning Checker">
       </command>
             <command
+                  categoryId="checkers.eclipse.category"
                   defaultHandler="checkers.eclipse.actions.CheckerActions$JavariAction"
                   id="checkers.eclipse.runjavari"
                   name="Run Javari Checker">
       </command>
             <command
+                  categoryId="checkers.eclipse.category"
                   defaultHandler="checkers.eclipse.actions.ClearMarkersAction"
                   id="checkers.eclipse.clearmarkers"
                   name="Clear Project Markers">
       </command>
             <command
+                  categoryId="checkers.eclipse.category"
                   defaultHandler="checkers.eclipse.actions.EnableNatureHandler"
                   id="checkers.eclipse.enablenature"
                   name="Enable Automatic Checking">
       </command>
             <command
+                  categoryId="checkers.eclipse.category"
                   defaultHandler="checkers.eclipse.actions.DisableNatureHandler"
                   id="checkers.eclipse.disablenature"
                   name="Disable Automatic Checking">
             </command>
             <command
+                  categoryId="checkers.eclipse.category"
                   defaultHandler="checkers.eclipse.actions.CheckerActions$LinearAction"
                   id="checkers.eclipse.runlinear"
                   name="Run Linear Checker">
       </command>
             <command
+                  categoryId="checkers.eclipse.category"
                   defaultHandler="checkers.eclipse.actions.CheckerActions$I18nAction"
                   id="checkers.eclipse.runi18n"
                   name="Run I18n Checker">
       </command>
             <command
+                  categoryId="checkers.eclipse.category"
                   defaultHandler="checkers.eclipse.actions.CheckerActions$RegexAction"
                   id="checkers.eclipse.runregex"
                   name="Run Regex Checker">
       </command>
             <command
+                  categoryId="checkers.eclipse.category"
                   defaultHandler="checkers.eclipse.actions.CheckerActions$TaintingAction"
                   id="checkers.eclipse.runtainting"
                   name="Run Tainting Checker">
       </command>
             <command
+                  categoryId="checkers.eclipse.category"
                   defaultHandler="checkers.eclipse.actions.CheckerActions$CurrentAction"
                   id="checkers.eclipse.runselected"
                   name="Run Selected Checkers">
       </command>
             <command
+                  categoryId="checkers.eclipse.category"
                   defaultHandler="checkers.eclipse.actions.CheckerActions$FenumAction"
                   id="checkers.eclipse.runfenum"
                   name="Run Fenum Checker">
             </command>
             <command
+                  categoryId="checkers.eclipse.category"
                   defaultHandler="checkers.eclipse.actions.AddCheckersHandler"
                   id="checkers.eclipse.addcheckers"
                   name="Add checkers-quals.jar to project">
             </command>
+            <category
+                  id="checkers.eclipse.category"
+                  name="Checker Plugin">
+            </category>
    </extension>
    
    <extension point="org.eclipse.help.toc">
       <toc file="toc.xml" primary="true" />
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="checkers.eclipse.runselected"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="Ctrl+Alt+C">
+      </key>
    </extension>
    
 </plugin>
