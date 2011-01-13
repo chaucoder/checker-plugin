@@ -3,7 +3,6 @@
 	<name>checker-plugin-compiler-api</name>
 	<comment>JavaCC Nature</comment>
 	<projects>
-		<project>update-site</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
