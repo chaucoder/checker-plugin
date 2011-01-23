@@ -82,13 +82,14 @@ public class CommandlineJavacRunner
     private String[] options(List<String> fileNames, String processors,
             String classpath, String bootclasspath) throws IOException
     {
+        boolean usingImplicitAnnotations = usingImplicitAnnotations();
         List<String> opts = new ArrayList<String>();
         opts.add(javaVM());
 
         opts.add("-ea:com.sun.tools");
         opts.add("-Xbootclasspath/p:" + javacJARlocation());
 
-        if (usingImplicitAnnotations())
+        if (usingImplicitAnnotations)
         {
             opts.add("-Djsr308_imports=" + implicitAnnotations());
         }
@@ -114,6 +115,11 @@ public class CommandlineJavacRunner
 
         opts.add("-processor");
         opts.add(processors);
+
+        if (usingImplicitAnnotations)
+        {
+            opts.add("-implicit:class");
+        }
 
         // add options from preferences
         String argStr = CheckerPlugin.getDefault().getPreferenceStore()
@@ -209,11 +215,7 @@ public class CommandlineJavacRunner
         Bundle bundle = CheckerPlugin.getDefault().getBundle();
         URL javacJarURL;
 
-        if (usingImplicitAnnotations())
-            javacJarURL = bundle.getEntry(JSR308ALL_LOCATION);
-        else
-            javacJarURL = bundle.getEntry(JAVAC_LOCATION);
-
+        javacJarURL = bundle.getEntry(JSR308ALL_LOCATION);
         javacJarURL = FileLocator.toFileURL(javacJarURL);
 
         // hack to get around broken URI encoding in FileLocator
