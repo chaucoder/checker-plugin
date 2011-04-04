@@ -1,7 +1,9 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Checker Framework Eclipse Plugin</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <style>@import url("web/site.css");</style>
 <script type="text/javascript">
 	var returnval = 0;
@@ -62,32 +64,31 @@
 are bug-finding and verification tools.
 They help you to detect and prevent null pointer errors, incorrect uses of
 equality operations, and side effect errors (and other errors).
-<br>
-<br>
+
 <h2>Requirements:</h2>
-The plugin has been tested on Linux, Eclipse 3.6.0 and Java 6.<br>
-Your Eclipse must be running on a Java 6 VM or newer.<br>
-To see what Java VM and Eclipse is running on, select from the menu <b>Help</b> -&gt; <b>About Eclipse Platform</b> -&gt; <b>Configuration Details</b>.<br>
-Depending on your installation, the menu may be <b>Help</b> -&gt; <b>About Eclipse SDK</b> -&gt; <b>Configuration Details</b>.<br>
-<!-- On the Mac, the menu <b>Eclipse</b> -&gt; <b>About Eclipse SDK</b> -&gt; <b>Configuration Details</b>.<br> -->
-<br>
+The plugin has been tested on Linux, Eclipse 3.6.0 and Java 6.<br />
+Your Eclipse must be running on a Java 6 VM or newer.<br />
+To see what Java VM and Eclipse is running on, select from the menu <b>Help</b> -&gt; <b>About Eclipse Platform</b> -&gt; <b>Configuration Details</b>.<br />
+Depending on your installation, the menu may be <b>Help</b> -&gt; <b>About Eclipse SDK</b> -&gt; <b>Configuration Details</b>.<br />
+<!-- On the Mac, the menu <b>Eclipse</b> -&gt; <b>About Eclipse SDK</b> -&gt; <b>Configuration Details</b>.<br /> -->
+
 <h2>How to install:</h2>
 <ol>
 <li> In Eclipse, select from the menu <b> Help </b> -&gt; <b> Install New Software... </b></li>
 <li> Choose the <b> Search for new features to install </b> option, and click <b> Next</b>.</li>
 <li> Click <b> New Remote Site</b>.</li>
-<li> Enter the following: </li>
+<li> Enter the following:
   <ul>
   <li><b>Name: </b>Checker Framework</li>
   <li><b>URL: </b>http://types.cs.washington.edu/checker-framework/eclipse</li>
   </ul>
 and click <b>OK</b>.</li>
 
-<li> Under <b> Sites to include in search</b>, you should see "Checker Framework".<br>
+<li> Under <b> Sites to include in search</b>, you should see "Checker Framework".<br />
 Select the checkbox next to it and click <b>Finish</b>.</li>
 <li> Under <b> Select features to install</b>, you should see "Checker Framework" (for running the checkers)
-and "JSR 308 Skeleton Generator" (for generating skeleton files). <br>
-(You may have to expand the tree to make the feature visible.)<br>
+and "JSR 308 Skeleton Generator" (for generating skeleton files). <br />
+(You may have to expand the tree to make the feature visible.)<br />
 Select the checkbox next to it and click <b>Next</b>.</li>
 <li> Select the <b>I accept the terms in the license agreement</b> option and click <b> Next</b>.</li>
 <li> Select the location.
@@ -96,13 +97,16 @@ The default (your workspace) should be fine. Click <b>Finish</b>.</li>
 <li> Click <b> Yes </b> to restart Eclipse.</li>
 </ol>
 <h2>How to use Checkers Feature:</h2>
-First, add <a href="lib/checkers.jar">checkers.jar</a> to your project's classpath.<br>
+
+<p>
+First, add <a href="lib/checkers.jar">checkers.jar</a> to your project's classpath.<br />
 (Eclipse may complain about unresolved classes referenced from a classfile.
 This does not affect the checking, but to make the warning go away,
-add <a href="lib/javac.jar">javac.jar</a> to the project's classpath.)<br>
-To perform the checking, select the checker from the context menu of a Java project, for example <b>Checker Framework</b> -&gt; <b>Run Nullness</b>.<br>
-The checker will run and warnings will be added to the Problems view.<br>
-To remove the warning markers, run <b>Checker Framework</b> -&gt; <b>Remove Markers</b><br>
+add <a href="lib/javac.jar">javac.jar</a> to the project's classpath.)<br />
+To perform the checking, select the checker from the context menu of a Java project, for example <b>Checker Framework</b> -&gt; <b>Run Nullness</b>.<br />
+The checker will run and warnings will be added to the Problems view.<br />
+To remove the warning markers, run <b>Checker Framework</b> -&gt; <b>Remove Markers</b>
+</p>
 
 <p>
 If you want to run multiple checkers at once, you can do so using the <b>Run selected checkers</b> action.
@@ -121,7 +125,7 @@ checkers on subsequent edits.
 <p>
 The checkers that are run are those that are selected in the preferences.
 </p>
-<br>
+
 <h2>How to use the Skeleton Generator Feature:</h2>
 <ol>
     <li>Create a new Eclipse project containing the desired packages. The plug-in performs in-place modifications to the files. They need to be in the source path (usually in <b>src</b> directory), but do not need to have the classpath configured properly.</li>
@@ -131,9 +135,14 @@ The checkers that are run are those that are selected in the preferences.
 </ol>
 
 <h2>How to report problems:</h2>
-Submit bug reports at <a href="http://code.google.com/p/checker-framework/issues/list">http://code.google.com/p/checker-framework/issues/list</a> <br>
-<br>
-<h2>Currently supported checkers:</h2> NonNull, Javari, IGJ, Interned
-<br>
+<p>
+Submit bug reports at <a href="http://code.google.com/p/checker-framework/issues/list">http://code.google.com/p/checker-framework/issues/list</a>
+</p>
+
+<h2>Currently supported checkers:</h2>
+<p>
+NonNull, Javari, IGJ, Interned
+</p>
+
 </body>
 </html>
