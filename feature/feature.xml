@@ -382,8 +382,8 @@ as provided by Sun in the LICENSE file that accompanied this code.&quot;
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.jdt.core"/>
       <import plugin="org.eclipse.jdt.launching"/>
-      <import plugin="org.eclipse.ui.console" version="3.5.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.jdt.ui" version="3.6.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.console"/>
+      <import plugin="org.eclipse.jdt.ui"/>
       <import plugin="org.eclipse.ui.ide"/>
    </requires>
 
