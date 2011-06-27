@@ -36,7 +36,7 @@ public class CheckerPreferencePage extends PreferencePage implements
 {
     private Table procTable;
     private Text argText;
-    private Text optSkipClasses;
+    private Text optSkipUses;
     private Text optALint;
     private Text optFilter;
     private Text optJDKPath;
@@ -162,10 +162,10 @@ public class CheckerPreferencePage extends PreferencePage implements
         procGroup.setLayout(procLayout);
 
         Label skipLabel = new Label(procGroup, SWT.None);
-        skipLabel.setText("Classes to skip (-AskipClasses):");
-        optSkipClasses = new Text(procGroup, SWT.SINGLE | SWT.BORDER);
-        optSkipClasses
-                .setToolTipText("Classes to skip during type checking (-AskipClasses)");
+        skipLabel.setText("Classes to skip (-AskipUses):");
+        optSkipUses = new Text(procGroup, SWT.SINGLE | SWT.BORDER);
+        optSkipUses
+                .setToolTipText("Classes to skip during type checking (-AskipUses)");
         Label lintLabel = new Label(procGroup, SWT.None);
         lintLabel.setText("Lint options:");
         optALint = new Text(procGroup, SWT.SINGLE | SWT.BORDER);
@@ -225,7 +225,7 @@ public class CheckerPreferencePage extends PreferencePage implements
         argText.setText(store.getString(CheckerPreferences.PREF_CHECKER_ARGS));
         optAutoBuild.setSelection(store
                 .getBoolean(CheckerPreferences.PREF_CHECKER_AUTO_BUILD));
-        optSkipClasses.setText(store
+        optSkipUses.setText(store
                 .getString(CheckerPreferences.PREF_CHECKER_A_SKIP_CLASSES));
         optALint.setText(store
                 .getString(CheckerPreferences.PREF_CHECKER_A_LINT));
@@ -262,7 +262,7 @@ public class CheckerPreferencePage extends PreferencePage implements
         store.setValue(CheckerPreferences.PREF_CHECKER_AUTO_BUILD,
                 optAutoBuild.getSelection());
         store.setValue(CheckerPreferences.PREF_CHECKER_A_SKIP_CLASSES,
-                optSkipClasses.getText());
+                optSkipUses.getText());
         store.setValue(CheckerPreferences.PREF_CHECKER_A_LINT,
                 optALint.getText());
         store.setValue(CheckerPreferences.PREF_CHECKER_A_WARNS,
