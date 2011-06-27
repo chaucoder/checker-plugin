@@ -148,11 +148,11 @@ public class JavacRunner
     {
         IPreferenceStore store = CheckerPlugin.getDefault().getPreferenceStore();
 
-        String skipClasses = store
+        String skipUses = store
                 .getString(CheckerPreferences.PREF_CHECKER_A_SKIP_CLASSES);
-        if (!skipClasses.isEmpty())
+        if (!skipUses.isEmpty())
         {
-            opts.add("-AskipClasses=" + skipClasses);
+            opts.add("-AskipUses=" + skipUses);
         }
 
         String lintOpts = store
