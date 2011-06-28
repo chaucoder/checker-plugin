@@ -2,12 +2,12 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: checkers.eclipse;singleton:=true
-Bundle-Version: 1.1.2
+Bundle-Version: 1.1.3
 Bundle-ClassPath: lib/javac.jar,
  lib/checkers.jar,
  lib/jdk.jar,
- lib/commons-lang3-3.0-beta.jar,
- .
+ lib/jsr308-all.jar,
+ bin/
 Bundle-Activator: checkers.eclipse.CheckerPlugin
 Export-Package: checkers.basetype,
  checkers.basic,
@@ -91,17 +91,6 @@ Export-Package: checkers.basetype,
  javax.lang.model.util,
  javax.tools,
  net.jcip.annotations,
- org.apache.commons.lang3,
- org.apache.commons.lang3.builder,
- org.apache.commons.lang3.concurrent,
- org.apache.commons.lang3.event,
- org.apache.commons.lang3.exception,
- org.apache.commons.lang3.math,
- org.apache.commons.lang3.mutable,
- org.apache.commons.lang3.reflect,
- org.apache.commons.lang3.text,
- org.apache.commons.lang3.text.translate,
- org.apache.commons.lang3.time,
  org.jetbrains.annotations,
  org.netbeans.api.annotations.common
 Require-Bundle: org.eclipse.ui,
@@ -111,8 +100,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.launching,
  org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.ui.console;bundle-version="3.5.0",
- org.eclipse.jdt.ui;bundle-version="3.6.0",
+ org.eclipse.ui.console,
+ org.eclipse.jdt.ui,
  org.eclipse.ui.ide,
  org.junit
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

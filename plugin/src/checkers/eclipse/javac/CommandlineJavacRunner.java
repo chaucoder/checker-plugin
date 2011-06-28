@@ -28,9 +28,13 @@ import checkers.eclipse.util.JavaUtils;
  */
 public class CommandlineJavacRunner
 {
+    // TODO: some constants are here, some in JavacRunner
+    // TODO: what is the relation between those classes?
+    
     public static final String CHECKERS_LOCATION = "lib/checkers.jar";
     public static final String JAVAC_LOCATION = "lib/javac.jar";
     public static final String JSR308ALL_LOCATION = "lib/jsr308-all.jar";
+    public static final String JDKJAR_LOCATION = "lib/jdk.jar";
 
     public static boolean VERBOSE = true;
 
@@ -100,7 +104,7 @@ public class CommandlineJavacRunner
         // opts.add("-verbose");
         opts.add("-proc:only");
         opts.add("-bootclasspath");
-        opts.add(bootclasspath + File.pathSeparator + javacJARlocation());
+        opts.add(annojdkJARlocation() + File.pathSeparator + bootclasspath + File.pathSeparator + javacJARlocation());
 
         opts.add("-classpath");
         if (checkersOnClassspath())
@@ -212,10 +216,19 @@ public class CommandlineJavacRunner
 
     private String javacJARlocation() throws IOException
     {
+        return findJARlocation(JSR308ALL_LOCATION);
+    }
+
+    private String annojdkJARlocation() throws IOException
+    {
+        return findJARlocation(JDKJAR_LOCATION);
+    }
+    
+    private String findJARlocation(String name) throws IOException {
         Bundle bundle = CheckerPlugin.getDefault().getBundle();
         URL javacJarURL;
 
-        javacJarURL = bundle.getEntry(JSR308ALL_LOCATION);
+        javacJarURL = bundle.getEntry(name);
         javacJarURL = FileLocator.toFileURL(javacJarURL);
 
         // hack to get around broken URI encoding in FileLocator
