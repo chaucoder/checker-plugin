@@ -7,7 +7,8 @@ Bundle-ClassPath: lib/javac.jar,
  lib/checkers.jar,
  lib/jdk.jar,
  lib/jsr308-all.jar,
- bin/
+ bin/,
+ .
 Bundle-Activator: checkers.eclipse.CheckerPlugin
 Export-Package: checkers.basetype,
  checkers.basic,
